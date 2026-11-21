@@ -423,7 +423,7 @@ public final class LootManager {
                      + " <gray>"
                      + String.format(Locale.ROOT, "%.2f%%", pct * ex.weight() / sum)
                      + dropInfo
-                     + (d.limit() > 0 ? " <red>(únicos: " + this.plugin.data().created(d.id()) + "/" + d.limit() + ")" : "")
+                     + (d.limit() > 0 ? " <red>(выдано: " + this.plugin.data().created(d.id()) + "/" + d.limit() + ")" : "")
                );
             }
          }

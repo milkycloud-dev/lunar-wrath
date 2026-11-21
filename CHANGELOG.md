@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.14 (2026-11-21)
+
+- `/luna chances`: limited items show `(выдано: N/M)` instead of the Spanish `(únicos: N/M)`.
+
 ## 1.0.13 (2026-11-21)
 
 - Rarer legendary and mythic drops: base weights 10 to 7 and 1.5 to 1, every table's `LEGENDARIO` and `MITICO` weight cut by 30%, pity lowered (legendary 0.03 per roll up to 150 stacks, mythic 0.05 up to 200).
