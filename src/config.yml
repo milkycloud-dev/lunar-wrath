@@ -476,6 +476,14 @@ quit-penalty:
     reconnect-message: "<dark_red><bold>☠ You were executed for fleeing the Blood Moon!</bold></dark_red>"
 
 # ------------------------------------------------------------
+#  ADMIN LIGHTNING (/luna lightning)
+# ------------------------------------------------------------
+lightning:
+  # Highest storm rate in strikes per second for /luna lightning storm and frequency (0 = no limit).
+  # Very high values spawn a lot of lightning entities and can lag the server.
+  max-strikes-per-second: 0
+
+# ------------------------------------------------------------
 #  DIFFICULTY
 #  Multiplier N (x1 base, x100, x1000 ...). For each stat:
 #      value = base * (1 + (N - 1) * factor)

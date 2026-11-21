@@ -202,7 +202,7 @@ text:
     m039: "<red>Player '{input}' not found.</red>"
     m040: "<green>✔ All storms and targeted lightning stopped for everyone.</green>"
     m041: "<yellow>Usage: /luna lightning frequency <storm|smite> <player|all> <value></yellow>"
-    m042: "<gray>storm: strikes per second around the player (0.05-50). smite: seconds between targeted strikes (from 0.1).</gray>"
+    m042: "<gray>storm: strikes per second around the player (from 0.05, cap in config lightning.max-strikes-per-second). smite: seconds between targeted strikes (from 0.1).</gray>"
     m043: "<red>Player '{input}' not found.</red>"
     m044: "<red>The value must be a number: {input}</red>"
     m045: "<gray>No active {type} effects for <yellow>{target-name}</yellow>.</gray>"

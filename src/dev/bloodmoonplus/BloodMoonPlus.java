@@ -189,6 +189,9 @@ public final class BloodMoonPlus extends JavaPlugin {
       if (this.elytraWrath != null) {
          this.elytraWrath.reload();
       }
+      if (this.lightning != null) {
+         this.lightning.reload();
+      }
       if (this.containerWrath != null) {
          this.containerWrath.reload();
       }

@@ -21,7 +21,6 @@ import org.bukkit.scheduler.BukkitTask;
 public final class LightningEffectManager implements Listener {
    public static final UUID ALL_PLAYERS = new UUID(0L, 0L);
    public static final double MIN_STORM_RATE = 0.05;
-   public static final double MAX_STORM_RATE = 50.0;
    public static final double MIN_SMITE_INTERVAL = 0.1;
 
    public static class SmiteTask {
@@ -59,10 +58,21 @@ public final class LightningEffectManager implements Listener {
    private final Map<UUID, SmiteTask> smites = new ConcurrentHashMap<>();
    private final Map<UUID, AmbientStorm> storms = new ConcurrentHashMap<>();
    private final Map<UUID, Long> lastSmiteDamageMs = new ConcurrentHashMap<>();
+   private double maxStormRate = 0.0;
 
    public LightningEffectManager(BloodMoonPlus plugin) {
       this.plugin = plugin;
+      this.reload();
       this.startTask();
+   }
+
+   public void reload() {
+      this.maxStormRate = Math.max(0.0, this.plugin.getConfig().getDouble("lightning.max-strikes-per-second", 0.0));
+   }
+
+   public double clampStormRate(double strikesPerSec) {
+      double v = Math.max(MIN_STORM_RATE, strikesPerSec);
+      return this.maxStormRate > 0.0 ? Math.min(this.maxStormRate, v) : v;
    }
 
    public void startTask() {
@@ -83,7 +93,7 @@ public final class LightningEffectManager implements Listener {
    }
 
    public void startStorm(UUID target, double strikesPerSec, double radius, long durationSeconds) {
-      this.storms.put(target, new AmbientStorm(target, strikesPerSec, radius, durationSeconds));
+      this.storms.put(target, new AmbientStorm(target, this.clampStormRate(strikesPerSec), radius, durationSeconds));
    }
 
    public boolean stopStorm(UUID target) {
@@ -91,7 +101,7 @@ public final class LightningEffectManager implements Listener {
    }
 
    public int setStormRate(UUID target, double strikesPerSec) {
-      double v = Math.max(MIN_STORM_RATE, Math.min(MAX_STORM_RATE, strikesPerSec));
+      double v = this.clampStormRate(strikesPerSec);
       int n = 0;
       for (AmbientStorm st : this.storms.values()) {
          if (target == null || st.playerId.equals(target)) {

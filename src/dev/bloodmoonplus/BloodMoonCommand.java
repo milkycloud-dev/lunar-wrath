@@ -1007,7 +1007,7 @@ public final class BloodMoonCommand implements TabExecutor {
 
             double rate = 3.0;
             if (a.length > argIdx) {
-               try { rate = Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, Double.parseDouble(a[argIdx]))); } catch (NumberFormatException ignored) {}
+               try { rate = lm.clampStormRate(Double.parseDouble(a[argIdx])); } catch (NumberFormatException ignored) {}
                argIdx++;
             }
 
@@ -1140,7 +1140,7 @@ public final class BloodMoonCommand implements TabExecutor {
             if (changed == 0) {
                s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m045", "target-name", String.valueOf(targetName), "type", String.valueOf((storm ? "storm" : "smite")))));
             } else if (storm) {
-               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m046", "target-name", String.valueOf(targetName), "value", String.valueOf(Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, value))), "changed", String.valueOf(changed))));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m046", "target-name", String.valueOf(targetName), "value", String.valueOf(lm.clampStormRate(value)), "changed", String.valueOf(changed))));
             } else {
                s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m047", "target-name", String.valueOf(targetName), "value", String.valueOf(Math.max(LightningEffectManager.MIN_SMITE_INTERVAL, value)), "changed", String.valueOf(changed))));
             }

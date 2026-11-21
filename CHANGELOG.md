@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 (2026-11-21)
+
+- `/luna lightning storm` and `/luna lightning frequency` no longer cap the storm at 50 strikes per second. New option `lightning.max-strikes-per-second` in `config.yml`: `0` (default) means no limit, any positive value sets a cap. Applied on `/luna reload`.
+
 ## 1.1.0 (2026-11-21)
 
 - Full English translation for the public release. English is the default language; bundled `config.yml`, `items.yml`, `loot.yml`, `bosses.yml`, the world template and the MythicMobs example are in English, and every chat, title and admin message goes through `locales/<lang>.yml` (about 150 new keys under `text`, `moon`, `time`, `mob`).
