@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.13 (2026-11-21)
+
+- Rarer legendary and mythic drops: base weights 10 to 7 and 1.5 to 1, every table's `LEGENDARIO` and `MITICO` weight cut by 30%, pity lowered (legendary 0.03 per roll up to 150 stacks, mythic 0.05 up to 200).
+- Difficulty no longer inflates loot without limit: `rarity-luck` 0.6 to 0.45, and `rarity-luck` and `loot-chance` stop growing above x5 (`*-max-difficulty: 5.0`). Needed since camping difficulty became uncapped in 1.0.11.
+- Difficulty decay message names up to three players with the most moon-mob kills since the previous decay (`{players}`, also `{player}` for the last kill).
+- Loot broadcasts, the legendary action bar, the mythic title and `/luna chances` show vanilla items by their translated name (`<lang:...>`) instead of the raw material id such as `NETHERITE_SCRAP`; mob kill messages show translated mob names.
+
 ## 1.0.12 (2026-11-21)
 
 - Full-screen titles and subtitles shortened so they fit the screen at GUI scale 4 on 1920x1080 (title up to 15 bold characters, subtitle up to about 35 regular): quit warning, join warning, countdown, dangerous and lethal warnings, black and purple moon, moon start, mythic drop. Bold removed from subtitles, emoji removed from titles.

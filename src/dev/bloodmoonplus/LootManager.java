@@ -280,7 +280,7 @@ public final class LootManager {
       if (player == null || ra == null || !ra.broadcast() || !this.plugin.messages().announce("loot", true)) {
          return;
       }
-      String itemName = d.name() != null ? d.name() : d.material().name();
+      String itemName = d.name() != null ? d.name() : "<lang:" + d.material().translationKey() + ">";
       String rid = rarityId != null ? rarityId.toUpperCase(Locale.ROOT) : "";
       Location loc = player.getLocation();
       World w = player.getWorld();
@@ -415,7 +415,7 @@ public final class LootManager {
 
             for (LootManager.Entry ex : es) {
                ItemFactory.ItemDef d = this.plugin.items().get(ex.item());
-               String nm = d.name() != null ? d.name() : d.material().name();
+               String nm = d.name() != null ? d.name() : "<lang:" + d.material().translationKey() + ">";
                String dropInfo = ex.dropChance() < 1.0 ? " <gray>· drop: <white>" + String.format(Locale.ROOT, "%.0f%%", ex.dropChance() * 100.0) : "";
                lines.add(
                   "   <dark_gray>- <reset>"

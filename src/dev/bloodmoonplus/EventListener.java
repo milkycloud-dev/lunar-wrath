@@ -346,10 +346,10 @@ public final class EventListener implements Listener {
                if (ThreadLocalRandom.current().nextInt(5) == 0) {
                   Player killer = e.getEntity().getKiller();
                   if (killer != null) {
-                     String mobName = e.getEntity().customName() != null
-                        ? PlainTextComponentSerializer.plainText().serialize(e.getEntity().customName())
-                        : e.getEntity().getType().name().toLowerCase().replace('_', ' ');
-                     this.plugin.messages().all("event.mob-slain", "player", killer.getName(), "mob", Util.MM.escapeTags(mobName.replace('§', '&')));
+                     String mob = e.getEntity().customName() != null
+                        ? Util.MM.escapeTags(PlainTextComponentSerializer.plainText().serialize(e.getEntity().customName()).replace('§', '&'))
+                        : "<lang:" + e.getEntity().getType().translationKey() + ">";
+                     this.plugin.messages().all("event.mob-slain", "player", killer.getName(), "mob", mob);
                   }
                }
             }

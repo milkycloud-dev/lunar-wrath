@@ -18,18 +18,18 @@ rarities:
     pity-max-stacks: 150
   LEGENDARIO:
     display: <gold>Легендарный
-    weight: 10
+    weight: 7
+    luck-affected: true
+    broadcast: true
+    pity-per-roll: 0.03
+    pity-max-stacks: 150
+  MITICO:
+    display: <red><bold>Мифический
+    weight: 1
     luck-affected: true
     broadcast: true
     pity-per-roll: 0.05
     pity-max-stacks: 200
-  MITICO:
-    display: <red><bold>Мифический
-    weight: 1.5
-    luck-affected: true
-    broadcast: true
-    pity-per-roll: 0.08
-    pity-max-stacks: 300
 tables:
   mob_horde:
     drop-chance: 0.6
@@ -39,8 +39,8 @@ tables:
       POCO_COMUN: 260
       RARO: 110
       EPICO: 32
-      LEGENDARIO: 5
-      MITICO: 0.5
+      LEGENDARIO: 3.5
+      MITICO: 0.35
     entries:
     - item: carne
       weight: 40
@@ -201,8 +201,8 @@ tables:
       POCO_COMUN: 250
       RARO: 200
       EPICO: 90
-      LEGENDARIO: 14
-      MITICO: 1.2
+      LEGENDARIO: 9.8
+      MITICO: 0.84
   survivors:
     inherits: mob_horde
     drop-chance: 1.0
@@ -212,8 +212,8 @@ tables:
       POCO_COMUN: 300
       RARO: 200
       EPICO: 90
-      LEGENDARIO: 14
-      MITICO: 1.2
+      LEGENDARIO: 9.8
+      MITICO: 0.84
   boss_rey_zombi:
     inherits: mob_horde
     drop-chance: 1.0
@@ -228,8 +228,8 @@ tables:
       POCO_COMUN: 0
       RARO: 200
       EPICO: 150
-      LEGENDARIO: 55
-      MITICO: 6
+      LEGENDARIO: 38.5
+      MITICO: 4.2
   boss_arquera:
     inherits: mob_horde
     drop-chance: 1.0
@@ -244,8 +244,8 @@ tables:
       POCO_COMUN: 0
       RARO: 200
       EPICO: 150
-      LEGENDARIO: 60
-      MITICO: 7
+      LEGENDARIO: 42
+      MITICO: 4.9
   boss_verdugo:
     inherits: mob_horde
     drop-chance: 1.0
@@ -260,8 +260,8 @@ tables:
       POCO_COMUN: 0
       RARO: 140
       EPICO: 200
-      LEGENDARIO: 90
-      MITICO: 12
+      LEGENDARIO: 63
+      MITICO: 8.4
   boss_top_damage:
     inherits: mob_horde
     drop-chance: 1.0
@@ -271,5 +271,5 @@ tables:
       POCO_COMUN: 0
       RARO: 0
       EPICO: 60
-      LEGENDARIO: 75
-      MITICO: 22
+      LEGENDARIO: 52.5
+      MITICO: 15.4

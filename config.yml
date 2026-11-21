@@ -402,7 +402,8 @@ dynamic-difficulty:
   announcement:
     escalate: "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Игрок <yellow>{player}</yellow> отсиживается вместо боя, и Луна распаляется! Сложность возросла до <yellow>x{difficulty}</yellow>!</red>"
     camper-warning: "<gradient:#ff0000:#aa0000><bold>☠ Кровавая Луна чует ваш страх! Вы прячетесь от боя! Сражайтесь или навлечёте беду!</bold></gradient>"
-    decay: "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green>Ярость Кровавой Луны стихает благодаря активному бою! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
+    # {players} = до трёх игроков с наибольшим числом убийств с прошлого снижения, {player} = сделавший последнее убийство
+    decay: "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green><yellow>{players}</yellow> истребляют порождения луны, и её ярость стихает! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
 
 # ------------------------------------------------------------
 #  ТИПЫ ПРЕДУПРЕЖДЕНИЙ О НАМЕЧЕННОЙ ЛУНЕ (WARNING TYPES)
@@ -568,7 +569,9 @@ difficulty:
     spawn-speed: 0.15    # прирост частоты волн орды (до x5)
     spawn-speed-max-difficulty: 5.0 # кап частоты волн орды (не ускоряется выше x5)
     loot-chance: 0.35    # шанс выпадения лута
-    rarity-luck: 0.6     # удача для редких категорий лута
+    loot-chance-max-difficulty: 5.0 # выше x5 шанс лута не растёт
+    rarity-luck: 0.45    # удача для редких категорий лута
+    rarity-luck-max-difficulty: 5.0 # выше x5 удача не растёт (сложность теперь без потолка)
   epic-effects:
     enabled: true
     min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3

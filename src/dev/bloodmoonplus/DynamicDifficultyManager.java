@@ -56,6 +56,7 @@ public final class DynamicDifficultyManager implements Listener {
 
    // Combat kill counters & base difficulty per world
    private final Map<String, Integer> killCounterPerWorld = new ConcurrentHashMap<>();
+   private final Map<String, Map<String, Integer>> killersPerWorld = new ConcurrentHashMap<>();
    private final Map<String, Double> baseDifficultyPerWorld = new ConcurrentHashMap<>();
 
    public DynamicDifficultyManager(BloodMoonPlus plugin) {
@@ -92,7 +93,7 @@ public final class DynamicDifficultyManager implements Listener {
       );
       this.broadcastDecay = cfg.getString(
          "dynamic-difficulty.announcement.decay",
-         "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green>Ярость Кровавой Луны стихает благодаря активному бою! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
+         "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green><yellow>{players}</yellow> истребляют порождения луны, и её ярость стихает! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
       );
    }
 
@@ -114,6 +115,7 @@ public final class DynamicDifficultyManager implements Listener {
       this.lastEscalateSec.clear();
       this.lastCamperWarnSec.clear();
       this.killCounterPerWorld.clear();
+      this.killersPerWorld.clear();
       this.baseDifficultyPerWorld.clear();
    }
 
@@ -247,8 +249,16 @@ public final class DynamicDifficultyManager implements Listener {
       }
 
       int kills = this.killCounterPerWorld.merge(w.getName(), 1, Integer::sum);
+      Map<String, Integer> killers = this.killersPerWorld.computeIfAbsent(w.getName(), k -> new ConcurrentHashMap<>());
+      killers.merge(killer.getName(), 1, Integer::sum);
       if (kills >= this.killsForDecay) {
          this.killCounterPerWorld.put(w.getName(), 0);
+         String players = killers.entrySet().stream()
+            .sorted((x, y) -> Integer.compare(y.getValue(), x.getValue()))
+            .limit(3)
+            .map(en -> en.getKey() + " (" + en.getValue() + ")")
+            .collect(java.util.stream.Collectors.joining(", "));
+         killers.clear();
          double base = this.baseDifficultyPerWorld.getOrDefault(w.getName(), 1.0);
          if (s.difficulty > base) {
             double nextDiff = Math.max(base, Math.round((s.difficulty - this.decayStep) * 100.0) / 100.0);
@@ -257,7 +267,10 @@ public final class DynamicDifficultyManager implements Listener {
                this.plugin.data().saveActive(s.world.getName(), s.startMs, s.endMs, s.difficulty, s.moonType);
 
                if (this.broadcastChat && this.broadcastDecay != null && !this.broadcastDecay.isEmpty()) {
-                  String msg = this.broadcastDecay.replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
+                  String msg = this.broadcastDecay
+                     .replace("{players}", players)
+                     .replace("{player}", killer.getName())
+                     .replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
                   Bukkit.broadcast(Util.mini(msg));
                }
             }
