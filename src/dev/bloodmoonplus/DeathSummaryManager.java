@@ -43,7 +43,7 @@ public final class DeathSummaryManager implements Listener {
       this.windowSeconds = Math.max(10, cfg.getInt("death-summary.window-seconds", 60));
       this.summaryMessage = cfg.getString(
          "death-summary.message",
-         "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>погиб ещё <yellow>{count}</yellow> раз за последнюю минуту.</red>"
+         "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>died <yellow>{count}</yellow> more times in the last minute.</red>"
       );
    }
 

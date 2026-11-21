@@ -324,7 +324,7 @@ public final class EventListener implements Listener {
 
             String actionbarText = this.plugin.locales().get("event.player-died-actionbar", "player", p.getName());
             if (!this.plugin.locales().has("event.player-died-actionbar")) {
-               actionbarText = "<dark_red>☠ <white>" + p.getName() + "</white> погиб во время Кровавой Луны!</dark_red>";
+               actionbarText = "<dark_red>☠ <white>" + p.getName() + "</white> died during the Blood Moon!</dark_red>";
             }
             Component abComp = Util.mini(actionbarText);
 
@@ -417,7 +417,7 @@ public final class EventListener implements Listener {
       e.setCancelled(true);
       String msg = this.plugin.getConfig().getString(
          "block-placement.deny-message",
-         "<red>☠ Темная магия Кровавой Луны сковывает землю: строительство запрещено!</red>"
+         "<red>☠ The Blood Moon's dark magic binds the ground: building is forbidden!</red>"
       );
       if (msg != null && !msg.isEmpty()) {
          p.sendMessage(Util.mini(msg));

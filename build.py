@@ -55,7 +55,7 @@ with zipfile.ZipFile(OUT_JAR, "w", zipfile.ZIP_DEFLATED) as z:
             rel_path = os.path.relpath(full_path, CLASSES_DIR).replace("\\", "/")
             z.write(full_path, rel_path)
 
-    for item in ["plugin.yml", "config.yml", "bosses.yml", "items.yml", "loot.yml", "messages.yml"]:
+    for item in ["plugin.yml", "config.yml", "bosses.yml", "items.yml", "loot.yml"]:
         item_path = os.path.join(SRC_DIR, item)
         if os.path.exists(item_path):
             z.write(item_path, item)

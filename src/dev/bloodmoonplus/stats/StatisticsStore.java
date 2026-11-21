@@ -27,7 +27,7 @@ public final class StatisticsStore {
 
    public void load() {
       if (!this.file.exists()) {
-         this.plugin.getLogger().info("statistics.yml no existe, se crea con valores por defecto.");
+         this.plugin.getLogger().info("statistics.yml not found, creating it with defaults.");
          this.saveNow();
       } else {
          this.lock.lock();

@@ -151,7 +151,7 @@ public final class LightningEffectManager implements Listener {
       if (damage > 0.0) {
          this.lastSmiteDamageMs.put(p.getUniqueId(), System.currentTimeMillis());
          p.damage(damage);
-         p.sendActionBar(Util.mini("<red>⚡ Прицельный удар молнии! (-" + (damage / 2.0) + " ❤)</red>"));
+         p.sendActionBar(Util.mini(this.plugin.locales().get("text.lightning.m001", "damage", String.valueOf((damage / 2.0)))));
       }
    }
 
@@ -220,7 +220,7 @@ public final class LightningEffectManager implements Listener {
                if (smite.damage > 0.0) {
                   this.lastSmiteDamageMs.put(p.getUniqueId(), now);
                   p.damage(smite.damage);
-                  p.sendActionBar(Util.mini("<red>⚡ Прицельный разряд молнии! (-" + (smite.damage / 2.0) + " ❤)</red>"));
+                  p.sendActionBar(Util.mini(this.plugin.locales().get("text.lightning.m002", "damage", String.valueOf((smite.damage / 2.0)))));
                }
             }
          }
@@ -232,7 +232,7 @@ public final class LightningEffectManager implements Listener {
       Player p = e.getPlayer();
       Long t = this.lastSmiteDamageMs.get(p.getUniqueId());
       if (t != null && (System.currentTimeMillis() - t) <= 2500L) {
-         e.deathMessage(Util.mini("<gradient:#ff2200:#880000><bold>☠ Игрок <yellow>" + p.getName() + "</yellow> был испепелен карой молний!</bold></gradient>"));
+         e.deathMessage(Util.mini(this.plugin.locales().get("text.lightning.m003", "player", String.valueOf(p.getName()))));
       }
    }
 

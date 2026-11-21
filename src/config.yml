@@ -1,19 +1,21 @@
 # ============================================================
-#  BloodMoonPlus - configuración principal
+#  LunarWrath: main configuration
+#  Texts use MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#  Apply changes with /luna reload
 # ============================================================
 
-# Mundos donde ocurre el evento (si un horario no define los suyos).
+# Worlds where the moon happens (unless a schedule entry lists its own).
 worlds:
   - world
 
 # ------------------------------------------------------------
-#  PROGRAMACIÓN DEL EVENTO - 2 MODOS
+#  SCHEDULE (2 MODES)
 # ------------------------------------------------------------
 #
-#  MODO 1: "weekly" (por defecto)
-#  Por día de la semana a hora fija en zona horaria (hora México).
-#  Cada día puede tener una o varias horas. Un día sin entrada NO tiene evento.
-#  Ejemplo: cada LUNES a las 14:00 hora México:
+#  MODE 1: "weekly" (default)
+#  Fixed times on chosen weekdays in the given timezone.
+#  A day can have one or more times. A day without entries has no moon.
+#  Example, every Monday at 14:00:
 #
 #    schedule:
 #      mode: weekly
@@ -21,307 +23,243 @@ worlds:
 #        MONDAY:
 #          - "14:00"
 #
-#  MODO 2: "interval"
-#  Cada N horas reales (ej. cada 72h = cada 3 días reales).
-#  El temporizador corre aunque el servidor esté apagado.
-#  Ejemplo: cada 72 horas:
+#  MODE 2: "interval"
+#  Every N real hours (72 = every 3 real days).
+#  The timer keeps running while the server is offline.
 #
 #    schedule:
 #      mode: interval
 #      interval-hours: 72
 #
-#  Las horas SIEMPRE entre comillas: "21:30"  (formato 24 h).
-#  En modo weekly, cada hora puede ser texto simple o un bloque con opciones:
+#  Always quote times: "21:30" (24-hour format).
+#  In weekly mode a time can be plain text or a block with options:
 #        - time: "20:40"
-#          difficulty: 3          # x3 (triple)
+#          difficulty: 3          # x3
 #          duration-minutes: 15
-#          worlds: [world]        # opcional
+#          worlds: [world]        # optional
 # ------------------------------------------------------------
 schedule:
   enabled: true
   mode: weekly                   # weekly | interval
-  timezone: "Europe/Moscow"
-  interval-hours: 72            # solo para modo interval
-  grace-seconds: 180            # si el servidor estaba apagado a la hora exacta, aún se dispara dentro de este margen
-  skip-if-no-players: true      # no inicia el evento si el mundo está vacío
-  warnings-minutes: [10]        # оповещения перед запланированным стартом (только за 10 мин)
+  timezone: "UTC"
+  interval-hours: 72            # interval mode only
+  grace-seconds: 180            # if the server was down at the exact time, still start within this margin
+  skip-if-no-players: true      # do not start when the world is empty
+  warnings-minutes: [10]        # warnings before a scheduled start
   days:
-    MONDAY:
-      - time: "14:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
-        duration-minutes: 15
-    TUESDAY:
-      - time: "14:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
-        duration-minutes: 15
-    WEDNESDAY:
-      - time: "14:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
-        duration-minutes: 15
-    THURSDAY:
-      - time: "14:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
-        duration-minutes: 15
     FRIDAY:
-      - time: "14:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
+      - time: "21:00"
+        difficulty: 1.5
         duration-minutes: 15
     SATURDAY:
-      - time: "14:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
-        duration-minutes: 15
-    SUNDAY:
-      - time: "14:00"
-        difficulty: 1.4
-        duration-minutes: 15
-      - time: "19:00"
-        difficulty: 1.6
-        duration-minutes: 15
-      - time: "23:00"
-        difficulty: 1.6
+      - time: "21:00"
+        difficulty: 2.0
         duration-minutes: 15
 
 # ------------------------------------------------------------
-#  EVENTO
+#  EVENT
 # ------------------------------------------------------------
 event:
   duration-minutes: 15
-  global: true                 # true: el evento arranca en TODOS los mundos cargados al mismo tiempo
-                               #       (hordas, jefes, barra, noche y participantes en cada mundo).
-                               # false: solo en los mundos de la lista "worlds" de abajo.
-  lock-night: true              # fija la noche durante el evento
+  global: true                 # true: the moon starts in ALL loaded worlds at once
+                               #       (hordes, bosses, boss bar, night and participants per world).
+                               # false: only in the "worlds" list above.
+  lock-night: true              # keep it night during the moon
   night-time-ticks: 18000
-  end-time-ticks: 23000         # hora del mundo al terminar (amanecer cercano)
+  end-time-ticks: 23000         # world time when the moon ends (close to dawn)
   clear-weather: true
-  first-wave-delay-seconds: 3   # segundos exactos del arranque a la primera horda
+  first-wave-delay-seconds: 3   # seconds from the start to the first horde
   remove-mobs-on-end: true
-  force-difficulty: true           # sube la dificultad del mundo a EASY si está en Pacífico (necesario para spawnear mobs); se restaura al terminar
-  protect-terrain: true            # las explosiones de mobs (creepers, etc.) NO rompen bloques; el jefe de la Luna SÍ los rompe (como el Wither vanilla)
-  block-wither-spawn: false        # bloquea el spawn de CUALQUIER Wither excepto el jefe de la Luna (tag bloodmoon_boss); desactívalo si quieres Withers normales
-  ignore-ops: true                 # Игнорировать игроков с OP (мобы не агрятся, орда не спавнится на админов, разрешен GM 3)
-  reward-on-stop: false         # dar recompensa a supervivientes si se detiene con /luna stop
-  commands-on-start: []         # consola; {world}
+  force-difficulty: true           # raise world difficulty to EASY if it is Peaceful (mobs need it); restored at the end
+  protect-terrain: true            # mob explosions (creepers etc.) do not break blocks
+  block-wither-spawn: false        # block EVERY Wither except moon bosses; leave false for normal Withers
+  ignore-ops: true                 # ignore OP players (mobs do not target them, no hordes on admins, spectator allowed)
+  reward-on-stop: false         # reward survivors when stopped with /luna stop
+  commands-on-start: []         # console; {world}
   commands-on-end: []
-  survivor-commands: []         # consola, por superviviente; {player}  ej: "eco give {player} 500"
+  survivor-commands: []         # console, once per survivor; {player}  e.g. "eco give {player} 500"
   start-announcement:
-    # Заголовок титула при старте
-    title: "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>"
-    # Подзаголовок без параметров (когда warning.show-parameters: false)
-    subtitle: "<red>Выживите до рассвета...</red>"
-    # Подзаголовок с параметрами (когда warning.show-parameters: true)
-    subtitle-with-params: "<red>Выживите до рассвета <gray>(x{difficulty})</gray></red>"
-    # Сообщение в чат без параметров
-    chat: "<red><bold>🌙 Кровавая Луна началась!</bold> <gray>Выживите до рассвета...</gray>"
-    # Сообщение в чат с параметрами
-    chat-with-params: "<red><bold>🌙 Кровавая Луна началась!</bold> <gray>Сложность <red>x{difficulty}</red> · Длительность <white>{minutes} мин</white></gray>"
+    # Start title
+    title: "<dark_red><bold>BLOOD MOON</bold></dark_red>"
+    # Subtitle without parameters (warning.show-parameters: false)
+    subtitle: "<red>Survive until dawn...</red>"
+    # Subtitle with parameters (warning.show-parameters: true)
+    subtitle-with-params: "<red>Survive until dawn <gray>(x{difficulty})</gray></red>"
+    # Chat message without parameters
+    chat: "<red><bold>🌙 The Blood Moon has risen!</bold> <gray>Survive until dawn...</gray>"
+    # Chat message with parameters
+    chat-with-params: "<red><bold>🌙 The Blood Moon has risen!</bold> <gray>Difficulty <red>x{difficulty}</red> · Duration <white>{minutes} min</white></gray>"
 
-# Управление Иссушителем: запрещен в мирное время, разрешен во время Кровавой Луны
+# Wither control: forbidden in peacetime, allowed during the moon
 wither-control:
   enabled: true
-  # Разрешать призыв и спавн Иссушителя ТОЛЬКО во время активной Кровавой Луны
+  # Allow summoning and spawning the Wither ONLY while a moon is active
   allow-only-during-bloodmoon: true
-  # Автоматически снимать/возвращать флаг deny-spawn в WorldGuard для региона __global__
+  # Toggle the WorldGuard deny-spawn flag of the __global__ region automatically
   sync-worldguard: true
-  # Миры, для которых действует ограничение
+  # Worlds this applies to
   worlds:
     - world
-  # Другие мобы из deny-spawn региона __global__, которые должны оставаться запрещены всегда (кроме Иссушителя)
+  # Other mobs in the __global__ deny-spawn flag that must always stay denied (besides the Wither)
   keep-deny-spawn: []
 
 # ------------------------------------------------------------
-#  УСТАНОВКА БЛОКОВ ВО ВРЕМЯ КРОВАВОЙ ЛУНЫ (BLOCK PLACEMENT)
+#  BLOCK PLACEMENT DURING THE MOON
 # ------------------------------------------------------------
 block-placement:
-  # Разрешить ли игрокам ставить блоки во время Кровавой Луны
-  # true = игроки могут свободно строить и ставить блоки
-  # false = установка блоков запрещена (запрещает застраиваться и столбиться от мобов)
+  # Allow players to place blocks during the moon
+  # true = players can build freely
+  # false = placing blocks is denied (no pillaring or walling in)
   allow: true
-  # Разрешать ли ставить блоки игрокам в творческом режиме (креатив) и спектаторам
+  # Let creative and spectator players place blocks anyway
   exempt-creative: true
-  # Право для обхода запрета строительства
+  # Permission that bypasses the ban
   bypass-permission: "bloodmoon.bypass.blockplace"
-  # Сообщение при попытке поставить блок (если allow: false)
-  deny-message: "<red>☠ Темная магия Кровавой Луны сковывает землю: строительство запрещено!</red>"
+  # Message when a block is denied (allow: false)
+  deny-message: "<red>☠ The Blood Moon's dark magic binds the ground: building is forbidden!</red>"
 
 # ------------------------------------------------------------
-#  ПРЕДУПРЕЖДЕНИЯ И ОБРАТНЫЙ ОТСЧЕТ (WARNINGS & COUNTDOWN)
+#  WARNINGS & COUNTDOWN
 # ------------------------------------------------------------
 warning:
-  # Отображать ли параметры Кровавой Луны (сложность и длительность) в предупреждениях.
-  # По умолчанию: false (параметры скрыты, чтобы игроки не знали точную сложность заранее).
+  # Show moon parameters (difficulty and duration) in warnings.
+  # Default false: players do not learn the exact difficulty in advance.
   show-parameters: false
-  # Устрашающий звук при предупреждении (entity.wither.ambient, entity.ender_dragon.growl, ambient.cave и т.д.)
+  # Warning sound (entity.wither.ambient, entity.ender_dragon.growl, ambient.cave ...)
   sound: "entity.wither.ambient"
   sound-volume: 1.0
   sound-pitch: 0.6
 
 countdown:
-  # Отправлять ли промежуточные периодические оповещения во время отсчета
-  # Если false (по умолчанию): отправляется СТРОГО ОДНО уведомление в момент запуска команды,
-  # и больше никаких уведомлений до самого восхода луны не спамит в чат.
+  # Send periodic alerts during the countdown
+  # false (default): exactly ONE notice when the command runs, nothing more until the moon rises.
   periodic-alerts: false
-  # Отображать ли параметры в обратном отсчете (по умолчанию false)
+  # Show parameters in the countdown (default false)
   show-parameters: false
-  # Устрашающий звук при оповещениях обратного отсчета
+  # Countdown alert sound
   sound: "entity.ender_dragon.growl"
   sound-volume: 1.0
   sound-pitch: 0.6
-  # Секунды, на которых выводятся предупреждения в чат и на экран
+  # Seconds at which chat and screen alerts are shown
   alert-seconds: [300, 180, 120, 60, 30, 15, 10, 5, 4, 3, 2, 1]
-  # Звук отсчета на последних 5 секундах (5, 4, 3, 2, 1)
+  # Tick sound for the last 5 seconds
   tick-sound: "block.note_block.basedrum"
-  # Сообщение в чат (без параметров)
-  chat: "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! Приготовьтесь к кошмару!</red>"
-  # Сообщение в чат (с параметрами, если show-parameters: true)
-  chat-with-params: "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! <gray>(Сложность <red>x{difficulty}</red> · Длительность <white>{duration} мин</white>)</gray></red>"
-  # Заголовок на экране
-  title: "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>"
-  subtitle: "<red>Начало через {time}...</red>"
-  subtitle-with-params: "<red>Начало через {time} <gray>(x{difficulty})</gray></red>"
+  # Chat message (no parameters)
+  chat: "<dark_red><bold>☠ WARNING:</bold></dark_red> <red>The Blood Moon rises in <yellow>{time}</yellow>! Prepare for the nightmare!</red>"
+  # Chat message (with parameters, show-parameters: true)
+  chat-with-params: "<dark_red><bold>☠ WARNING:</bold></dark_red> <red>The Blood Moon rises in <yellow>{time}</yellow>! <gray>(Difficulty <red>x{difficulty}</red> · Duration <white>{duration} min</white>)</gray></red>"
+  # Screen title. Keep titles short (about 15 bold characters) so they fit any screen.
+  title: "<dark_red><bold>BLOOD MOON</bold></dark_red>"
+  subtitle: "<red>Rises in {time}...</red>"
+  subtitle-with-params: "<red>Rises in {time} <gray>(x{difficulty})</gray></red>"
 
 # ------------------------------------------------------------
-#  БЛОКИРОВКА РЕЖИМА НАБЛЮДАТЕЛЯ (GM 3 / SPECTATOR BLOCK)
+#  SPECTATOR BLOCK
 # ------------------------------------------------------------
 spectator-block:
-  # Запретить ли переход в режим наблюдателя (gm 3) во время Кровавой Луны и обратного отсчета
+  # Forbid spectator mode during the moon and its countdown
   enabled: true
-  # Принудительно возвращать игроков из GM 3 в режим выживания при старте Луны или обратного отсчета
+  # Move players out of spectator into survival when the moon or countdown starts
   kick-existing: true
-  # Право на обход блокировки (игроки с OP всегда имеют право на обход и свободный переход в GM 3)
+  # Bypass permission (OPs always bypass)
   bypass-permission: ""
-  # Сообщение при попытке переключиться в GM 3
-  deny-message: "<red><bold>☠ Темные силы Кровавой Луны запрещают режим наблюдателя (GM 3)! Сражайтесь или погибните!</bold></red>"
-  # Сообщение при принудительном переводе из GM 3 в выживание
-  kick-message: "<red><bold>☠ Кровавая Луна началась: режим наблюдателя отключен, вы возвращены в режим выживания!</bold></red>"
+  # Message when switching to spectator is denied
+  deny-message: "<red><bold>☠ The Blood Moon forbids spectator mode! Fight or perish!</bold></red>"
+  # Message when a player is moved out of spectator
+  kick-message: "<red><bold>☠ The Blood Moon has risen: spectator mode is off, you are back in survival!</bold></red>"
 
 # ------------------------------------------------------------
-#  ГНЕВ ИЗМЕРЕНИЙ (DIMENSION WRATH / АНТИ-ОТСИЖИВАНИЕ В АДУ И ЭНДЕ)
+#  DIMENSION WRATH (NO HIDING IN THE NETHER OR THE END)
 # ------------------------------------------------------------
 dimension-wrath:
-  # Включить ли кару игроков, пытающихся отсидеться в других измерениях во время Кровавой Луны
+  # Punish players who try to wait out the moon in other dimensions
   enabled: true
-  # Применять ли кару в Незере (Аду)
+  # Punish in the Nether
   apply-to-nether: true
-  # Применять ли кару в Крае (Энде)
+  # Punish in the End
   apply-to-end: true
-  # Интервал ударов прицельной молнией (в секундах)
+  # Seconds between targeted lightning strikes
   strike-interval-seconds: 2
-  # Урон за один удар (4.0 = 2 полных сердца, увеличено в 4 раза по сравнению со старым 1.0)
+  # Damage per strike (4.0 = 2 hearts)
   damage: 4.0
-  # Транслировать ли предупреждения в общий чат (false = только личное сообщение нарушителю)
+  # Announce in public chat (false = private message to the offender only)
   broadcast-chat: true
-  # Интервал сообщений в общий чат (в секундах)
+  # Seconds between chat announcements
   broadcast-interval-seconds: 30
-  # Освобождать ли игроков в креативе и спектаторе
+  # Exempt creative and spectator players
   exempt-creative: true
-  # Право для обхода кары измерений
+  # Bypass permission
   bypass-permission: "bloodmoon.bypass.dimensionwrath"
-  # Сообщения для Незера
+  # Nether messages
   nether:
-    broadcast-message: "<gradient:#ff4500:#990000><bold>⚡ ГНЕВ НЕЗЕРА:</bold></gradient> <red>В преисподней нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен адской молнией за попытку отсидеться в аду!</red>"
-    actionbar-message: "<gradient:#ff5500:#aa0000><bold>⚡ Разряд Незера поражает вас за бегство в ад! (-{hearts} ❤)</bold></gradient>"
-    death-message: "<gradient:#ff4500:#990000><bold>☠ Игрок <yellow>{player}</yellow> пытался спастись в аду от Кровавой Луны, но был испепелен адской молнией!</gradient>"
-  # Сообщения для Энда
+    broadcast-message: "<gradient:#ff4500:#990000><bold>⚡ NETHER WRATH:</bold></gradient> <red>There is no escape from the Blood Moon in the Nether! <yellow>{player}</yellow> was struck by hellish lightning for hiding there!</red>"
+    actionbar-message: "<gradient:#ff5500:#aa0000><bold>⚡ Nether lightning strikes you for fleeing! (-{hearts} ❤)</bold></gradient>"
+    death-message: "<gradient:#ff4500:#990000><bold>☠ <yellow>{player}</yellow> tried to hide from the Blood Moon in the Nether and was burned to ash!</gradient>"
+  # End messages
   end:
-    broadcast-message: "<gradient:#b000ff:#440077><bold>⚡ ГНЕВ ЭНДА:</bold></gradient> <red>В пустоте Края нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен астральной молнией за попытку отсидеться в Энде!</red>"
-    actionbar-message: "<gradient:#c033ff:#660099><bold>⚡ Пустотный разряд Энда поражает вас за бегство в Край! (-{hearts} ❤)</bold></gradient>"
-    death-message: "<gradient:#b000ff:#440077><bold>☠ Игрок <yellow>{player}</yellow> пытался укрыться в Энде от Кровавой Луны, но был поглощен астральной молнией!</gradient>"
+    broadcast-message: "<gradient:#b000ff:#440077><bold>⚡ END WRATH:</bold></gradient> <red>There is no escape from the Blood Moon in the void! <yellow>{player}</yellow> was struck by astral lightning for hiding in the End!</red>"
+    actionbar-message: "<gradient:#c033ff:#660099><bold>⚡ Void lightning strikes you for fleeing to the End! (-{hearts} ❤)</bold></gradient>"
+    death-message: "<gradient:#b000ff:#440077><bold>☠ <yellow>{player}</yellow> tried to hide from the Blood Moon in the End and was consumed by astral lightning!</gradient>"
 
 # ------------------------------------------------------------
-#  ГНЕВ НЕБЕС (ELYTRA WRATH / АНТИ-ПОЛЕТ НА ЭЛИТРАХ В НЕБЕСАХ)
+#  ELYTRA WRATH (NO FLYING HIGH ON ELYTRA)
 # ------------------------------------------------------------
 elytra-wrath:
-  # Включить ли сбивание и кару игроков, парящих на элитрах высоко в небе
+  # Knock down and punish players gliding high on elytra
   enabled: true
-  # Минимальная высота Y, начиная с которой полет считается уклонением
+  # Minimum Y where flying counts as escaping
   min-altitude: 90.0
-  # Сколько секунд непрерывного полета разрешено до первого удара молнии
+  # Seconds of continuous flight allowed before the first strike
   flight-time-seconds: 3
-  # Интервал повторных ударов молнией (в секундах)
+  # Seconds between strikes
   strike-interval-seconds: 2
-  # Урон первого удара молнии (4.0 = 2 полных сердца)
+  # Damage of the first strike (4.0 = 2 hearts)
   damage: 4.0
-  # Множитель урона за каждый следующий удар подряд (1.5 = +50%: 4, 6, 9, 13.5, 20 ...)
+  # Damage multiplier for every following strike in a row (1.5 = +50%: 4, 6, 9, 13.5, 20 ...)
   damage-multiplier: 1.5
-  # Потолок урона одного удара
+  # Damage cap for a single strike
   max-damage: 40.0
-  # Через сколько секунд без ударов счетчик усиления сбрасывается (приземление его не сбрасывает)
+  # Seconds without strikes before the streak resets (landing does not reset it)
   streak-reset-seconds: 60
-  # С какого урона следующего удара игрок получает предупреждение в чат (0 = не предупреждать)
+  # Warn in chat once the next strike would deal this much damage (0 = never)
   warn-damage: 8.0
-  # Предупреждение в чат, {hearts} = урон следующего удара в сердцах
-  warn-message: "<dark_red><bold>⚠ Небо отвергает вас!</bold></dark_red> <red>Каждый новый удар молнии сильнее прежнего: следующий отнимет <yellow>{hearts} ❤</yellow>. Немедленно приземлитесь!</red>"
-  # Складывать ли крылья элитр (принудительно прерывать планирование)
+  # Chat warning, {hearts} = damage of the next strike in hearts
+  warn-message: "<dark_red><bold>⚠ The sky rejects you!</bold></dark_red> <red>Every strike hits harder than the last: the next one takes <yellow>{hearts} ❤</yellow>. Land now!</red>"
+  # Force the elytra closed (stop gliding)
   disrupt-flight: true
-  # Транслировать ли предупреждения в общий чат (false = только личное сообщение нарушителю)
+  # Announce in public chat (false = private message to the offender only)
   broadcast-chat: true
-  # Интервал сообщений в общий чат (в секундах)
+  # Seconds between chat announcements
   broadcast-interval-seconds: 30
-  # Освобождать ли игроков в креативе и спектаторе
+  # Exempt creative and spectator players
   exempt-creative: true
-  # Право для обхода кары элитр
+  # Bypass permission
   bypass-permission: "bloodmoon.bypass.elytrawrath"
-  # Сообщение в общий чат
-  broadcast-message: "<gradient:#00e5ff:#0055ff><bold>⚡ ГНЕВ НЕБЕС:</bold></gradient> <red>В небесах нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен небесной молнией за попытку летать на элитрах!</red>"
-  # Сообщение в экшн-бар
-  actionbar-message: "<gradient:#00e5ff:#0088ff><bold>⚡ Небесный разряд Кровавой Луны сбивает вас с небес! (-{hearts} ❤)</bold></gradient>"
-  # Сообщение о смерти игрока от небесной молнии
-  death-message: "<gradient:#00e5ff:#0055ff><bold>☠ Игрок <yellow>{player}</yellow> пытался скрыться от Кровавой Луны в небесах на элитрах, но был испепелен молнией!</gradient>"
+  # Public chat message
+  broadcast-message: "<gradient:#00e5ff:#0055ff><bold>⚡ WRATH OF THE SKY:</bold></gradient> <red>There is no escape from the Blood Moon in the sky! <yellow>{player}</yellow> was struck by lightning for flying on elytra!</red>"
+  # Action bar message
+  actionbar-message: "<gradient:#00e5ff:#0088ff><bold>⚡ The Blood Moon's lightning knocks you out of the sky! (-{hearts} ❤)</bold></gradient>"
+  # Death message
+  death-message: "<gradient:#00e5ff:#0055ff><bold>☠ <yellow>{player}</yellow> tried to escape the Blood Moon on elytra and was burned by lightning!</gradient>"
 
 # ------------------------------------------------------------
-#  СВОДКА СМЕРТЕЙ (DEATH SUMMARY / АНТИСПАМ ПОВТОРНЫХ СМЕРТЕЙ)
+#  DEATH SUMMARY (NO SPAM FROM REPEATED DEATHS)
 # ------------------------------------------------------------
 death-summary:
-  # Первая смерть игрока объявляется как обычно, следующие в пределах окна не пишутся в чат, а собираются в одну сводку
+  # A player's first death is announced as usual; further deaths inside the window are hidden and summed up
   enabled: true
-  # Длина окна в секундах, сводка выходит не чаще одного раза за окно
+  # Window length in seconds, at most one summary per window
   window-seconds: 60
-  # Сводка в общий чат, {player}, {count} = сколько смертей скрыто, {seconds} = длина окна
-  message: "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>погиб ещё <yellow>{count}</yellow> раз за последнюю минуту.</red>"
+  # Summary line, {player}, {count} = hidden deaths, {seconds} = window length
+  message: "<dark_red>☠</dark_red> <white><bold>{player}</bold></white> <red>died <yellow>{count}</yellow> more times in the last minute.</red>"
 
 # ------------------------------------------------------------
-#  ГНЕВ ХРАНИЛИЩ (CONTAINER WRATH / ЗАПРЕТ СУНДУКОВ ВО ВРЕМЯ ЛУНЫ)
+#  CONTAINER WRATH (CHESTS ARE SEALED DURING THE MOON)
 # ------------------------------------------------------------
 container-wrath:
-  # Запрещать ли открывать хранилища в мире с активной луной
+  # Forbid opening storage in a world with an active moon
   enabled: true
-  # Какие блоки запечатаны (если удалить список, берутся сундуки, бочки, эндер-сундуки и все шалкеры)
+  # Sealed blocks (remove the list to use chests, barrels, ender chests and all shulker boxes)
   blocks:
     - CHEST
     - TRAPPED_CHEST
@@ -344,248 +282,243 @@ container-wrath:
     - GREEN_SHULKER_BOX
     - RED_SHULKER_BOX
     - BLACK_SHULKER_BOX
-  # Запрещать ли вагонетки с сундуком и воронкой
+  # Also seal chest and hopper minecarts
   block-minecarts: true
-  # Сколько попыток заканчиваются только предупреждением, прежде чем появится босс
+  # Attempts that only warn before a boss appears
   warnings-before-punish: 1
-  # Не чаще одного босса на игрока за это число секунд
+  # At most one boss per player per this many seconds
   punish-cooldown-seconds: 180
-  # Призывать ли босса после предупреждений
+  # Summon a boss after the warnings
   boss-enabled: true
-  # Босс из bosses.yml, который вырывается из хранилища
+  # Boss from bosses.yml that bursts out of the container
   boss: "wither_sombra"
-  # Взрыв печати при попытке, когда босс не появляется: блоки не ломает, бьёт только открывшего
+  # Seal blast on attempts that do not summon the boss: breaks no blocks, hits only the opener
   explosion:
     enabled: true
-    # Урон игроку (6.0 = 3 сердца, броня снижает)
+    # Damage to the player (6.0 = 3 hearts, armor reduces it)
     damage: 6.0
-  # Освобождать ли игроков в креативе и спектаторе
+  # Exempt creative and spectator players
   exempt-creative: true
-  # Право для обхода запрета
+  # Bypass permission
   bypass-permission: "bloodmoon.bypass.containerwrath"
-  # Личное предупреждение при попытке открыть хранилище
-  warn-message: "<dark_red><bold>⚠ Не открывайте сундуки во время Кровавой Луны!</bold></dark_red> <red>Хранилища запечатаны, печать взрывается при касании. Следующая попытка пробудит то, что спит внутри.</red>"
-  # Сообщение, когда из хранилища появляется босс
-  punish-message: "<dark_red><bold>☠ Вы потревожили запечатанное хранилище!</bold></dark_red> <red>Из него вырывается страж Кровавой Луны.</red>"
+  # Private warning when someone tries to open a container
+  warn-message: "<dark_red><bold>⚠ Do not open chests during the Blood Moon!</bold></dark_red> <red>Storage is sealed and the seal explodes when touched. Try again and you wake what sleeps inside.</red>"
+  # Message when a boss bursts out
+  punish-message: "<dark_red><bold>☠ You disturbed a sealed container!</bold></dark_red> <red>A guardian of the Blood Moon breaks free.</red>"
 
 # ------------------------------------------------------------
-#  ДИНАМИЧЕСКАЯ СЛОЖНОСТЬ (DYNAMIC DIFFICULTY / АНТИ-ОТСИЖИВАНИЕ БЕЗ БОЯ)
+#  DYNAMIC DIFFICULTY (CAMPING RAISES THE DIFFICULTY)
 # ------------------------------------------------------------
 dynamic-difficulty:
-  # Включить ли автоматическое увеличение сложности при отсиживании игроков
+  # Raise the difficulty when players hide instead of fighting
   enabled: true
-  # Время бездействия в бою (в секундах), после которого игрок считается отсиживающимся
+  # Seconds without combat after which a player counts as camping
   inactivity-seconds: 45
-  # Радиус проверки стояния на месте (в блоках, кемпинг в убежище)
+  # Standing-still radius in blocks
   camping-radius: 4.0
-  # Интервал эскалации сложности (в секундах)
+  # Seconds between escalations
   escalation-interval-seconds: 25
-  # Шаг увеличения сложности за каждое бездействие
+  # Difficulty added per escalation
   difficulty-step: 0.25
-  # Максимальная сложность, до которой может вырасти Луна (0 = без ограничения)
+  # Highest difficulty camping can reach (0 = no limit)
   max-difficulty: 0
-  # Спавнить ли карательную орду монстров вокруг прячущегося игрока
+  # Spawn a punishment horde around the camper
   spawn-punishment-horde: true
-  # Количество мобов в карательной орде
+  # Mobs in the punishment horde
   punishment-horde-count: 5
-  # Снижать ли сложность при активных убийствах монстров игроками
+  # Lower the difficulty while players actively kill monsters
   decay-on-combat: true
-  # Количество убийств монстров, необходимое для снижения сложности на 1 шаг
+  # Monster kills needed for one decay step
   kills-for-decay: 10
-  # Шаг снижения сложности при активном бое
+  # Difficulty removed per decay step
   decay-step: 0.1
-  # Освобождать ли игроков в креативе и спектаторе
+  # Exempt creative and spectator players
   exempt-creative: true
-  # Транслировать ли рост сложности в общий чат с ником виновника (false = сообщение только самому игроку)
+  # Announce changes in public chat with the player's name (false = private message only)
   broadcast-chat: true
   bypass-permission: "bloodmoon.bypass.dynamicdifficulty"
   announcement:
-    escalate: "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Игрок <yellow>{player}</yellow> отсиживается вместо боя, и Луна распаляется! Сложность возросла до <yellow>x{difficulty}</yellow>!</red>"
-    camper-warning: "<gradient:#ff0000:#aa0000><bold>☠ Кровавая Луна чует ваш страх! Вы прячетесь от боя! Сражайтесь или навлечёте беду!</bold></gradient>"
-    # {players} = до трёх игроков с наибольшим числом убийств с прошлого снижения, {player} = сделавший последнее убийство
-    decay: "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green><yellow>{players}</yellow> истребляют порождения луны, и её ярость стихает! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
+    escalate: "<gradient:#ff2200:#ff8800><bold>⚡ BLOOD MOON FURY:</bold></gradient> <red><yellow>{player}</yellow> is hiding instead of fighting and the moon grows angry! Difficulty rose to <yellow>x{difficulty}</yellow>!</red>"
+    camper-warning: "<gradient:#ff0000:#aa0000><bold>☠ The Blood Moon smells your fear! Stop hiding and fight!</bold></gradient>"
+    # {players} = up to three players with the most kills since the last decay, {player} = the last killer
+    decay: "<gradient:#00ff88:#00aa55><bold>✔ SURVIVORS' WILL:</bold></gradient> <green><yellow>{players}</yellow> are slaying the moon's spawn and its fury fades! Difficulty dropped to <yellow>x{difficulty}</yellow>.</green>"
 
 # ------------------------------------------------------------
-#  ТИПЫ ПРЕДУПРЕЖДЕНИЙ О НАМЕЧЕННОЙ ЛУНЕ (WARNING TYPES)
+#  WARNING TYPES (/luna warn)
 # ------------------------------------------------------------
 warning-types:
-  # 1. Обычная Кровавая Луна (/luna warn 10m normal)
+  # 1. Normal moon (/luna warn 10m normal)
   normal:
     default-difficulty: 1.0
-    chat: "<gradient:#ff4500:#b30000><bold>🌙 ЗНАМЕНИЕ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Небо на горизонте окрашивается в багровый цвет... Через <yellow>{time}</yellow> взойдет Кровавая Луна! Готовьте оружие и укрепляйте убежища!</red>"
-    title: "<gradient:#ff5555:#aa0000><bold>КРОВАВАЯ ЛУНА</bold></gradient>"
-    subtitle: "<gray>Взойдет через <yellow>{time}</yellow></gray>"
+    chat: "<gradient:#ff4500:#b30000><bold>🌙 OMEN OF THE BLOOD MOON:</bold></gradient> <red>The horizon turns crimson... The Blood Moon rises in <yellow>{time}</yellow>! Ready your weapons and fortify your shelters!</red>"
+    title: "<gradient:#ff5555:#aa0000><bold>BLOOD MOON</bold></gradient>"
+    subtitle: "<gray>Rises in <yellow>{time}</yellow></gray>"
     sound: "ambient.cave"
     volume: 1.0
     pitch: 0.8
-  # 2. Опасная Кровавая Луна (/luna warn 10m dangerous)
+  # 2. Dangerous moon (/luna warn 10m dangerous)
   dangerous:
     default-difficulty: 2.5
-    chat: "<gradient:#ff0055:#990022><bold>☠ ЗЛОВЕЩЕЕ ПРЕДЗНАМЕНОВАНИЕ:</bold></gradient> <red>Воздух наполняется запахом пепла и серы... Приближается <bold><dark_red>ОПАСНАЯ Кровавая Луна</dark_red></bold> через <yellow>{time}</yellow>! Полчища древних тварей жаждут крови!</red>"
-    title: "<gradient:#ff0033:#770011><bold>ОПАСНАЯ ЛУНА</bold></gradient>"
-    subtitle: "<red>Через <yellow>{time}</yellow>! Спасайтесь!</red>"
+    chat: "<gradient:#ff0055:#990022><bold>☠ OMINOUS SIGN:</bold></gradient> <red>The air smells of ash and sulfur... A <bold><dark_red>DANGEROUS Blood Moon</dark_red></bold> rises in <yellow>{time}</yellow>! Ancient hordes thirst for blood!</red>"
+    title: "<gradient:#ff0033:#770011><bold>DANGEROUS MOON</bold></gradient>"
+    subtitle: "<red>In <yellow>{time}</yellow>! Run!</red>"
     sound: "entity.ender_dragon.growl"
     volume: 1.0
     pitch: 0.9
-  # 3. Смертельная Кровавая Луна (/luna warn 10m lethal)
+  # 3. Lethal moon (/luna warn 10m lethal)
   lethal:
     default-difficulty: 5.0
-    chat: "<gradient:#880000:#ff0000><bold>⚡ СМЕРТОНОСНЫЙ РОК:</bold></gradient> <red><bold>Земля содрогается, а небеса плачут кровью...</bold> Через <yellow>{time}</yellow> взойдет <gradient:#ff0000:#330000><bold>СМЕРТЕЛЬНАЯ Кровавая Луна</bold></gradient>! Шансов выжить почти нет. Никакой пощады не будет!</red>"
-    title: "<gradient:#330000:#ff0000><bold>ЛУНА СМЕРТИ</bold></gradient>"
-    subtitle: "<dark_red>Через {time}. Живым не уйдёт никто</dark_red>"
+    chat: "<gradient:#880000:#ff0000><bold>⚡ DEADLY DOOM:</bold></gradient> <red><bold>The ground shakes and the sky weeps blood...</bold> In <yellow>{time}</yellow> a <gradient:#ff0000:#330000><bold>LETHAL Blood Moon</bold></gradient> rises! Almost no one survives. There will be no mercy!</red>"
+    title: "<gradient:#330000:#ff0000><bold>MOON OF DEATH</bold></gradient>"
+    subtitle: "<dark_red>In {time}. No one leaves alive</dark_red>"
     sound: "entity.wither.spawn"
     volume: 1.0
     pitch: 0.6
 
 # ------------------------------------------------------------
-#  РАЗНОВИДНОСТИ ЛУНЫ (MOON TYPES: BLACK MOON & PURPLE MOON)
+#  MOON TYPES (BLACK MOON & PURPLE MOON)
 # ------------------------------------------------------------
 moon-types:
   black:
-    display-name: "Чёрная Луна"
+    display-name: "Black Moon"
     bar-color: PURPLE
     health-multiplier: 1.5
     damage-multiplier: 1.5
     speed-multiplier: 1.15
     horde-size-multiplier: 1.5
     announcement:
-      chat: "<gradient:#222222:#880088><bold>🌑 ЗАТМЕНИЕ ЧЁРНОЙ ЛУНЫ:</bold></gradient> <dark_gray><bold>Тьма поглотила небеса...</bold></dark_gray> <red>Взошла ЧЁРНАЯ ЛУНА! Порождения мрака стали на 50% сильнее и многочисленнее!</red>"
-      title: "<gradient:#111111:#660066><bold>ЧЁРНАЯ ЛУНА</bold></gradient>"
-      subtitle: "<gray>Тьма накрыла мир. Сражайтесь!</gray>"
+      chat: "<gradient:#222222:#880088><bold>🌑 ECLIPSE OF THE BLACK MOON:</bold></gradient> <dark_gray><bold>Darkness swallowed the sky...</bold></dark_gray> <red>The BLACK MOON has risen! Its spawn are 50% stronger and more numerous!</red>"
+      title: "<gradient:#111111:#660066><bold>BLACK MOON</bold></gradient>"
+      subtitle: "<gray>Darkness covers the world. Fight!</gray>"
       sound: "entity.wither.spawn"
       volume: 1.0
       pitch: 0.5
   purple:
-    display-name: "Фиолетовая Луна"
+    display-name: "Purple Moon"
     bar-color: PURPLE
     health-multiplier: 1.3
     damage-multiplier: 1.3
     speed-multiplier: 1.25
     horde-size-multiplier: 1.25
     announcement:
-      chat: "<gradient:#9900ff:#e000ff><bold>🔮 РАЗРЫВ ПУСТОТЫ:</bold></gradient> <light_purple>Небесный свод раскололся фиолетовым сиянием... Взошла ФИОЛЕТОВАЯ ЛУНА! Астральные твари проникли в этот мир!</light_purple>"
-      title: "<gradient:#8800ff:#ff00ff><bold>ФИОЛЕТОВАЯ ЛУНА</bold></gradient>"
-      subtitle: "<light_purple>Разрыв пустоты открыт!</light_purple>"
+      chat: "<gradient:#9900ff:#e000ff><bold>🔮 VOID RIFT:</bold></gradient> <light_purple>The sky splits with a violet glow... The PURPLE MOON has risen! Astral creatures have entered this world!</light_purple>"
+      title: "<gradient:#8800ff:#ff00ff><bold>PURPLE MOON</bold></gradient>"
+      subtitle: "<light_purple>The void rift is open!</light_purple>"
       sound: "entity.ender_dragon.growl"
       volume: 1.0
       pitch: 1.1
 
 # ------------------------------------------------------------
-#  ANUNCIOS DE CHAT
-#  Por defecto SOLO se anuncian hordas, jefes y loot. Todo lo demás
-#  (muertes de mobs, muertes de jugadores, inicio/fin del evento,
-#  especiales, supervivientes y avisos) está apagado para que el chat
-#  no se sature. Cambia a true lo que quieras volver a ver.
-#  Efectivo con /luna reload
+#  CHAT ANNOUNCEMENTS
+#  Turn categories on or off. Apply with /luna reload
 # ------------------------------------------------------------
 announce:
-  horde: false                # "Орда нападает на игрока" (false: личный Actionbar и рык атакуемому игроку без спама в чат)
-  bosses: true                # появление боссов, их падение и топ урона
-  loot: true                  # оповещение о выпадении эпических, легендарных и мифических наград
-  mob-kills: false            # оповещение об убийстве обычных мобов (1 из 5)
-  player-deaths: true         # оповещение о гибели игрока во время Кровавой Луны с раскатом грома
-  event: true                 # начало, конец и итоги события
-  specials: false             # eclipse, tormenta, niebla, silencio
-  survivors: true            # resultados de supervivientes
-  warnings: true             # avisos 10/5/1 min antes de que empiece
+  horde: false                # "a horde attacks <player>" (false: private action bar and roar for the target, no chat spam)
+  bosses: true                # boss spawns, deaths and top damage
+  loot: true                  # epic, legendary and mythic drops
+  mob-kills: false            # kills of regular moon mobs (1 in 5)
+  player-deaths: true         # player deaths during the moon, with thunder
+  event: true                 # start, end and results of the moon
+  specials: false             # eclipse, storm, fog, silence
+  survivors: true             # survivor results
+  warnings: true              # warnings before a scheduled start
 
 # ------------------------------------------------------------
-#  ЭВОЛЮЦИЯ КРОВАВОЙ ЛУНЫ: НАКАЗАНИЕ ЗА ВЫХОД (QUIT PENALTY)
-#  Игроки, которые выходят с сервера в течение опасного периода
-#  после старта Кровавой Луны, погибают на месте выхода.
+#  QUIT PENALTY
+#  Players who leave the server during the danger window
+#  after the moon starts die where they logged out.
 # ------------------------------------------------------------
 quit-penalty:
   enabled: true
-  # Длительность опасного периода в секундах после начала Кровавой Луны (60 = 1 минута).
-  # Если указано 0 или -1, наказание действует на протяжении ВСЕЙ Кровавой Луны.
+  # Danger window in seconds after the start (60 = 1 minute).
+  # 0 or -1 = the penalty lasts the WHOLE moon.
   duration-seconds: 60
-  # Не наказывать игроков в творческом режиме (креатив) и зрителей (спектэйтор)
+  # Do not punish creative and spectator players
   exempt-creative: true
-  # Право на обход наказания
+  # Bypass permission
   bypass-permission: "bloodmoon.bypass.quitpenalty"
-  # Оповещения при старте Кровавой Луны
+  # Announcements at the start of the moon
   announcement:
-    # Сообщение в общий чат страшным шрифтом
-    chat: "<gradient:#ff0000:#880000><bold>☠ Эволюция кровавой луны:</bold></gradient> <red><bold>при выходе с сервера после начала кровавой луны вы умрёте!</bold></red>"
-    # Задержка перед показом титула на экране (в секундах, чтобы не перебивать заставку Луны)
+    # Public chat message
+    chat: "<gradient:#ff0000:#880000><bold>☠ The Blood Moon evolves:</bold></gradient> <red><bold>leave the server after the moon rises and you die!</bold></red>"
+    # Delay before the screen title (seconds, so it does not cover the moon intro)
     title-delay-seconds: 3
-    # Заголовок на весь экран
-    title: "<dark_red><bold>НЕ ВЫХОДИТЕ!</bold></dark_red>"
-    # Подзаголовок на экран
-    subtitle: "<red>Выход из игры сейчас = смерть</red>"
-    # Тайминги анимации титула в тиках (20 тиков = 1 сек)
+    # Screen title
+    title: "<dark_red><bold>DON'T LEAVE!</bold></dark_red>"
+    # Screen subtitle
+    subtitle: "<red>Leaving now means death</red>"
+    # Title animation in ticks (20 ticks = 1 second)
     title-times:
       fade-in: 10
       stay: 120
       fade-out: 20
-    # Звук устрашения при старте
+    # Sound at the start
     sound: "entity.ender_dragon.growl"
-    # Предупреждение в чат игроку при входе на сервер во время опасного периода
-    join-warning: "<gradient:#ff0000:#770000><bold>☠ ВНИМАНИЕ:</bold></gradient> <red>Идёт Кровавая Луна! Выход с сервера в течение {remaining}с приведёт к немедленной смерти!</red>"
-    # Экранный титул при входе
-    join-title: "<dark_red><bold>ЛУНА АКТИВНА</bold></dark_red>"
-    join-subtitle: "<red>Не выходите ещё {remaining} с</red>"
-  # Действия при выходе из игры:
+    # Chat warning for players joining during the danger window
+    join-warning: "<gradient:#ff0000:#770000><bold>☠ WARNING:</bold></gradient> <red>A Blood Moon is active! Leaving within {remaining}s means instant death!</red>"
+    # Screen title on join
+    join-title: "<dark_red><bold>MOON IS ACTIVE</bold></dark_red>"
+    join-subtitle: "<red>Don't leave for {remaining}s</red>"
+  # What happens on quit
   on-quit:
-    # Убивать игрока при выходе
+    # Kill the player
     kill: true
-    # Дропать инвентарь на землю (по правилам сервера)
+    # Drop the inventory (follows server rules)
     drop-items: true
-    # Принудительно выбить все вещи на землю, даже если включен keepInventory
+    # Drop everything even with keepInventory on
     force-drop-items: false
-    # Удар молнии и частицы на месте выхода
+    # Lightning and particles where the player left
     lightning: true
-    # Оповещение в общий чат о смерти трусливого игрока
+    # Announce the coward's death in chat
     broadcast: true
-    death-message: "<gradient:#ff2222:#880000><bold>☠ Игрок <yellow>{player}</yellow> струсил и попытался сбежать от Кровавой Луны, но был настигнут смертью!</gradient>"
-    # Сообщение игроку при следующем заходе на сервер
-    reconnect-message: "<dark_red><bold>☠ Вы были казнены за попытку побега от Кровавой Луны!</bold></dark_red>"
+    death-message: "<gradient:#ff2222:#880000><bold>☠ <yellow>{player}</yellow> tried to flee the Blood Moon, but death caught up!</gradient>"
+    # Message on the next join
+    reconnect-message: "<dark_red><bold>☠ You were executed for fleeing the Blood Moon!</bold></dark_red>"
 
 # ------------------------------------------------------------
-#  DIFICULTAD / СЛОЖНОСТЬ
-#  Множитель N (x1 базовый, x100, x1000...). Каждая характеристика:
-#      значение = базовая * (1 + (N - 1) * factor)
-#  Все параметры полностью настраиваются без пересборки плагина.
+#  DIFFICULTY
+#  Multiplier N (x1 base, x100, x1000 ...). For each stat:
+#      value = base * (1 + (N - 1) * factor)
 # ------------------------------------------------------------
 difficulty:
   default: 1.0
-  max: 1000.0             # максимальная настраиваемая сложность (до x1000)
-  speed-cap: 1.35         # жесткий лимит скорости мобов (не выше +35%, защищает от глитчей сквозь стены)
-  max-health-cap: 2048.0  # максимальное здоровье мобов (2048 HP в соответствии с лимитами ядра Paper)
-  max-horde-size-multiplier: 1.5 # лимит размера волны орды (защищает от лагов и переполнения сущностей)
+  max: 1000.0             # highest difficulty you can set (up to x1000)
+  speed-cap: 1.35         # hard cap on mob speed (+35%, prevents glitching through walls)
+  max-health-cap: 2048.0  # mob health cap (2048 HP, Paper's limit)
+  max-horde-size-multiplier: 1.5 # horde size cap (prevents lag and entity overload)
   level:
-    enabled: true         # отображение уровня мобов на основе сложности
-    format: "<gray>[<gradient:#ff5555:#ffaa00>Ур. {level}</gradient>] {name}" # формат титула моба
-    always-visible: false # true = видеть имя сквозь блоки, false = ванильное наведение
-    store-pdc: true       # сохранять уровень в PDC (Keys.LEVEL и levelledmobs:level)
+    enabled: true         # show mob levels based on difficulty
+    format: "<gray>[<gradient:#ff5555:#ffaa00>Lv. {level}</gradient>] {name}" # mob name format
+    always-visible: false # true = name visible through blocks, false = vanilla behaviour
+    store-pdc: true       # store the level in PDC (Keys.LEVEL and levelledmobs:level)
   bosses:
-    scale-count-max: 1    # строго 1 босс за спавн (масштабируются только характеристики и награды)
+    scale-count-max: 1    # exactly 1 boss per spawn (only stats and rewards scale)
   scaling:
-    health: 0.35         # здоровье мобов (+35% за уровень сложности)
-    damage: 0.35         # урон мобов (+35% за уровень сложности)
-    speed: 0.05          # прирост скорости (ограничен speed-cap)
-    horde-size: 0.15     # прирост размера орды (до x5)
-    horde-size-max-difficulty: 5.0 # кап масштабирования размера орды (выше x5 не растет)
-    spawn-speed: 0.15    # прирост частоты волн орды (до x5)
-    spawn-speed-max-difficulty: 5.0 # кап частоты волн орды (не ускоряется выше x5)
-    loot-chance: 0.35    # шанс выпадения лута
-    loot-chance-max-difficulty: 5.0 # выше x5 шанс лута не растёт
-    rarity-luck: 0.45    # удача для редких категорий лута
-    rarity-luck-max-difficulty: 5.0 # выше x5 удача не растёт (сложность теперь без потолка)
+    health: 0.35         # mob health (+35% per difficulty level)
+    damage: 0.35         # mob damage (+35% per difficulty level)
+    speed: 0.05          # speed gain (capped by speed-cap)
+    horde-size: 0.15     # horde size gain
+    horde-size-max-difficulty: 5.0 # horde size stops growing above x5
+    spawn-speed: 0.15    # horde wave frequency gain
+    spawn-speed-max-difficulty: 5.0 # wave frequency stops growing above x5
+    loot-chance: 0.35    # loot drop chance
+    loot-chance-max-difficulty: 5.0 # loot chance stops growing above x5
+    rarity-luck: 0.45    # luck for rare loot categories
+    rarity-luck-max-difficulty: 5.0 # luck stops growing above x5
   epic-effects:
     enabled: true
-    min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3
-    prevent-mob-infighting: true # предотвращает драки между мобами орды (friendly fire), фокусируя их на игроках
-    rain-min-difficulty: 100.0 # сильный дождь и гроза включаются только со сложности x100
+    min-difficulty: 3.0   # epic effects from x3
+    prevent-mob-infighting: true # horde mobs do not fight each other, they focus players
+    rain-min-difficulty: 100.0 # heavy rain and thunder only from x100
     red-sky:
       enabled: true
       red-vignette: true
     lightning:
       enabled: true
-      base-strikes-per-sec: 0.46 # частота на минимальной сложности (x3) (~1.3x увеличение)
-      max-strikes-per-sec: 45.5  # частота на экстремальной сложности (x1000) (~1.3x увеличение)
-      min-radius: 8.0            # минимальное расстояние от игрока
-      max-radius: 28.0           # максимальный радиус зоны молний
+      base-strikes-per-sec: 0.46 # frequency at the lowest epic difficulty (x3)
+      max-strikes-per-sec: 45.5  # frequency at extreme difficulty (x1000)
+      min-radius: 8.0            # minimum distance from the player
+      max-radius: 28.0           # maximum radius of the lightning zone
     particles:
       ambient-blood-spores: true
     fireworks:
@@ -596,7 +529,7 @@ difficulty:
       skeleton-levitation:
         enabled: true
         chance: 0.20
-        duration-ticks: 40 # 2 секунды левитации
+        duration-ticks: 40 # 2 seconds of levitation
         amplifier: 0
       zombie-lightning:
         enabled: true
@@ -611,13 +544,13 @@ difficulty:
         rocket-count: 3
   incendium:
     enabled: true
-    chance-in-horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
+    chance-in-horde: 0.20 # chance of a paratrooper, pyromancer or crossbowman in a wave
     pyromancer:
-      min-difficulty: 6.0 # Пиромант появляется только со сложности x6 и выше
-      temp-fire: true     # автоматическое тушение огня и очистка при завершении луны
+      min-difficulty: 6.0 # pyromancers appear only from x6
+      temp-fire: true     # fire is put out and cleaned up when the moon ends
 
 # ------------------------------------------------------------
-#  HORDAS
+#  HORDES
 # ------------------------------------------------------------
 horde:
   enabled: true
@@ -637,7 +570,7 @@ horde:
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
-      name: "<red>Кровавый зомби"
+      name: "<red>Blood Zombie"
       equipment: { head: IRON_HELMET, main-hand: IRON_SWORD }
       equipment-chance: 0.4
     - type: SKELETON
@@ -645,7 +578,7 @@ horde:
       health: 35
       damage-multiplier: 1.4
       speed-multiplier: 1.02
-      name: "<red>Кровавый скелет"
+      name: "<red>Blood Skeleton"
       equipment: { head: IRON_HELMET }
       equipment-chance: 0.4
     - type: HUSK
@@ -653,47 +586,47 @@ horde:
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
-      name: "<gold>Багровый кадавер"
+      name: "<gold>Crimson Cadaver"
     - type: SPIDER
       weight: 15
       health: 30
       damage-multiplier: 1.4
       speed-multiplier: 1.05
-      name: "<red>Кровавый паук"
+      name: "<red>Blood Spider"
     - type: DROWNED
       weight: 10
       health: 40
       damage-multiplier: 1.4
-      name: "<blue>Бездный утопленник"
+      name: "<blue>Abyssal Drowned"
     - type: STRAY
       weight: 8
       health: 35
       damage-multiplier: 1.4
-      name: "<gray>Ледяной зимогор"
+      name: "<gray>Frost Wanderer"
     - type: BOGGED
       weight: 8
       health: 30
       damage-multiplier: 1.35
-      name: "<green>Болотный скелет"
+      name: "<green>Swamp Skeleton"
     - type: PILLAGER
       weight: 8
       health: 40
       damage-multiplier: 1.4
       equipment: { main-hand: CROSSBOW }
       equipment-chance: 0.6
-      name: "<dark_gray>Лунный разбойник"
+      name: "<dark_gray>Moon Raider"
     - type: VINDICATOR
       weight: 4
       health: 48
       damage-multiplier: 1.3
       equipment: { main-hand: IRON_AXE }
       equipment-chance: 0.4
-      name: "<red>Багровый поборник"
+      name: "<red>Crimson Zealot"
     - type: WITHER_SKELETON
       weight: 3
       health: 40
       damage-multiplier: 1.35
-      name: "<dark_red>Малый палач"
+      name: "<dark_red>Lesser Executioner"
       loot-table: mob_elite
 
 # ------------------------------------------------------------
@@ -702,7 +635,7 @@ horde:
 loot:
   default-table: mob_horde
   survivor-table: survivors
-  direct-to-inventory: false    # true: el loot va directo al inventario del que mata
+  direct-to-inventory: false    # true: loot goes straight into the killer's inventory
   require-player-kill: true
   keep-vanilla-drops: false
-  glow-rarities: [LEGENDARIO, MITICO]   # items que brillan e ignoran lava/explosiones al caer
+  glow-rarities: [LEGENDARIO, MITICO]   # these items glow and ignore lava and explosions when dropped

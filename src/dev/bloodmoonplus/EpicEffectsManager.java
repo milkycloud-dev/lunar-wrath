@@ -169,7 +169,7 @@ public final class EpicEffectsManager implements Listener {
       List<Player> players = w.getPlayers();
       if (players.isEmpty()) return;
 
-      // 1. Погода и красное небо (дождь ТОЛЬКО со сложности 100+, никакой автоматической тьмы)
+      // 1. Weather and red sky (rain ONLY from difficulty 100+, no automatic darkness)
       if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.red-sky.enabled", true)) {
          double rainMinDiff = this.plugin.getConfig().getDouble("difficulty.epic-effects.rain-min-difficulty", 100.0);
          if (s.difficulty >= rainMinDiff) {
@@ -201,7 +201,7 @@ public final class EpicEffectsManager implements Listener {
          }
       }
 
-      // 3. Кровавые споры и частицы вокруг игроков и мобов
+      // 3. Blood spores and particles around players and mobs
       if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.particles.ambient-blood-spores", true)) {
          if (now / 1000L % 2L == 0L) {
             for (Player p : players) {
@@ -211,7 +211,7 @@ public final class EpicEffectsManager implements Listener {
          }
       }
 
-      // 4. Запуск фейерверков-снарядов по игрокам
+      // 4. Firework projectiles fired at players
       if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.fireworks.enabled", true)) {
          long fireworkInterval = this.plugin.getConfig().getLong("difficulty.epic-effects.fireworks.interval-seconds", 12) * 1000L;
          if (now - this.lastFireworkBarrageMs >= fireworkInterval) {
@@ -241,7 +241,7 @@ public final class EpicEffectsManager implements Listener {
          }
       }
 
-      // 5. Тик AI кастомных мобов Инцендиума
+      // 5. AI tick for custom Incendium mobs
       this.tickIncendiumMobs(s, now);
    }
 
@@ -263,12 +263,12 @@ public final class EpicEffectsManager implements Listener {
                nearest = p;
             }
          }
-         if (nearest == null || nearestDistSq > 1024.0) continue; // далее 32 блоков
+         if (nearest == null || nearestDistSq > 1024.0) continue; // farther than 32 blocks
 
          Long lastAction = this.lastActionMap.getOrDefault(le.getUniqueId(), 0L);
 
          if ("paratrooper".equalsIgnoreCase(incType)) {
-            // Пиглин-десантник: затяжной прыжок на элитрах и выстрел ракетой
+            // Piglin paratrooper: long elytra jump and rocket shot
             if (now - lastAction >= 5000L) {
                this.lastActionMap.put(le.getUniqueId(), now);
                Vector toPlayer = nearest.getLocation().toVector().subtract(le.getLocation().toVector()).normalize();
@@ -288,7 +288,7 @@ public final class EpicEffectsManager implements Listener {
                }, 18L);
             }
          } else if ("pyromancer".equalsIgnoreCase(incType)) {
-            // Пиглин-пиромант: веерный залп огненных снарядов
+            // Piglin pyromancer: fan of fire projectiles
             if (now - lastAction >= 4000L && nearestDistSq <= 400.0) {
                this.lastActionMap.put(le.getUniqueId(), now);
                w.playSound(le.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.0F, 0.8F);
@@ -421,10 +421,10 @@ public final class EpicEffectsManager implements Listener {
          }
 
          String rawName = "paratrooper".equalsIgnoreCase(incType)
-            ? "<gradient:#ff4444:#ffaa00>Пиглин-десантник</gradient>"
+            ? this.plugin.locales().get("mob.paratrooper")
             : ("pyromancer".equalsIgnoreCase(incType)
-               ? "<gradient:#ff7700:#ff2200>Пиглин-пиромант</gradient>"
-               : "<gradient:#ff5555:#ffff55>Адский арбалетчик</gradient>");
+               ? this.plugin.locales().get("mob.pyromancer")
+               : this.plugin.locales().get("mob.crossbowman"));
 
          String formattedName = rawName;
          if (this.plugin.isLevelEnabled()) {
@@ -505,7 +505,7 @@ public final class EpicEffectsManager implements Listener {
                      b.setType(Material.AIR);
                      this.bloodMoonFires.remove(loc);
                   }
-               }, 120L); // автоматически тушим через 6 секунд
+               }, 120L); // put out automatically after 6 seconds
             }
          }
       }
@@ -540,7 +540,7 @@ public final class EpicEffectsManager implements Listener {
    @EventHandler(priority = EventPriority.HIGH)
    public void onBlockBurn(BlockBurnEvent e) {
       if (isEpic(e.getBlock().getWorld())) {
-         e.setCancelled(true); // блоки никогда не уничтожаются огнем
+         e.setCancelled(true); // fire never destroys blocks
       }
    }
 
@@ -563,7 +563,7 @@ public final class EpicEffectsManager implements Listener {
          PersistentDataContainer pdc = ent.getPersistentDataContainer();
          String incType = pdc.get(this.KEY_INCENDIUM_TYPE, PersistentDataType.STRING);
          if ("pyromancer".equalsIgnoreCase(incType)) {
-            // Пиромант погиб: тушим огонь вокруг него в радиусе 15 блоков
+            // Pyromancer died: put out fire within 15 blocks
             Location loc = ent.getLocation();
             World w = loc.getWorld();
             if (w != null) {
@@ -596,10 +596,10 @@ public final class EpicEffectsManager implements Listener {
       LivingEntity target = e.getTarget();
       if (target == null) return;
 
-      // Если цель уже игрок, всё в порядке
+      // Target is already a player, nothing to do
       if (target instanceof Player) return;
 
-      // Если моб пытается взять в таргет другого моба/союзника:
+      // Mob tries to target another mob or ally:
       if (target instanceof Mob) {
          Player nearest = getNearestPlayer(mob.getLocation(), 48.0);
          if (nearest != null) {
@@ -626,8 +626,8 @@ public final class EpicEffectsManager implements Listener {
       }
       Entity directOrShooter = shooter != null ? shooter : damager;
 
-      // Предотвращение междоусобицы мобов (friendly fire) во время Кровавой Луны:
-      // Скелеты, зомби, пиглины не должны бить друг друга и отвлекаться от игроков
+      // Prevent mob infighting (friendly fire) during the moon:
+      // Skeletons, zombies and piglins must not hit each other or lose focus on players
       if (victim instanceof Mob victimMob && directOrShooter instanceof Mob) {
          if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.prevent-mob-infighting", true)) {
             e.setCancelled(true);
@@ -647,7 +647,7 @@ public final class EpicEffectsManager implements Listener {
       if (!(victim instanceof Player target)) return;
       if (!isEpic(target.getWorld())) return;
 
-      // 1. Левитация от стрел скелета на 2 секунды (40 тиков)
+      // 1. Levitation from skeleton arrows for 2 seconds (40 ticks)
       if (shooter instanceof AbstractSkeleton skeleton && EventManager.isTagged(skeleton)) {
          if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.mob-abilities.skeleton-levitation.enabled", true)) {
             double chance = this.plugin.getConfig().getDouble("difficulty.epic-effects.mob-abilities.skeleton-levitation.chance", 0.20);
@@ -661,7 +661,7 @@ public final class EpicEffectsManager implements Listener {
          }
       }
 
-      // 2. Шоковый удар зомби (молния и дополнительный урон)
+      // 2. Zombie shock hit (lightning and bonus damage)
       if (directOrShooter instanceof Zombie zombie && EventManager.isTagged(zombie)) {
          if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.mob-abilities.zombie-lightning.enabled", true)) {
             double chance = this.plugin.getConfig().getDouble("difficulty.epic-effects.mob-abilities.zombie-lightning.chance", 0.15);
@@ -673,7 +673,7 @@ public final class EpicEffectsManager implements Listener {
          }
       }
 
-      // 3. Замедление и тьма от пауков
+      // 3. Slowness and darkness from spiders
       if (directOrShooter instanceof Spider spider && EventManager.isTagged(spider)) {
          if (this.plugin.getConfig().getBoolean("difficulty.epic-effects.mob-abilities.spider-slowness.enabled", true)) {
             double chance = this.plugin.getConfig().getDouble("difficulty.epic-effects.mob-abilities.spider-slowness.chance", 0.20);
@@ -690,7 +690,7 @@ public final class EpicEffectsManager implements Listener {
    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
    public void onCreeperExplode(EntityExplodeEvent e) {
       if (e.getEntity() instanceof Creeper creeper && EventManager.isTagged(creeper)) {
-         // Защита от разрушения блоков
+         // Block protection
          e.blockList().clear();
          e.setYield(0.0F);
 

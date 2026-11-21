@@ -43,13 +43,13 @@ public final class LocaleManager {
       }
 
       YamlConfiguration cfg = YamlConfiguration.loadConfiguration(cfgFile);
-      this.language = cfg.getString("Language", "ru").toLowerCase(Locale.ROOT);
+      this.language = cfg.getString("Language", "en").toLowerCase(Locale.ROOT);
       this.useBundled = cfg.getBoolean("UseBundledLocales", true);
       this.active = YamlConfiguration.loadConfiguration(new File(this.localesDir, this.language + ".yml"));
       this.fallback = YamlConfiguration.loadConfiguration(new File(this.localesDir, "en.yml"));
       this.attachBundled(this.active, this.language);
       this.attachBundled(this.fallback, "en");
-      this.plugin.getLogger().info("Idioma activo: " + this.language);
+      this.plugin.getLogger().info("Language: " + this.language);
    }
 
    private void attachBundled(YamlConfiguration target, String lang) {

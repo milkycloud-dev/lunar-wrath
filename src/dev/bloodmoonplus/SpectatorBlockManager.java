@@ -33,11 +33,11 @@ public final class SpectatorBlockManager implements Listener {
       this.bypassPermission = cfg.getString("spectator-block.bypass-permission", "");
       this.denyMessage = cfg.getString(
          "spectator-block.deny-message",
-         "<red><bold>☠ Темные силы Кровавой Луны запрещают режим наблюдателя (GM 3)! Сражайтесь или погибните!</bold></red>"
+         "<red><bold>☠ The Blood Moon forbids spectator mode! Fight or perish!</bold></red>"
       );
       this.kickMessage = cfg.getString(
          "spectator-block.kick-message",
-         "<red><bold>☠ Кровавая Луна началась: режим наблюдателя отключен, вы возвращены в режим выживания!</bold></red>"
+         "<red><bold>☠ The Blood Moon has risen: spectator mode is off, you are back in survival!</bold></red>"
       );
    }
 

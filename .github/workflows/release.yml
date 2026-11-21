@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -25,6 +29,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Check version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          pip install -q pyyaml paramiko
+          python tools/check.py --tag "$GITHUB_REF_NAME"
 
       - name: Fetch Paper API
         run: |
@@ -56,6 +66,13 @@ jobs:
           python build.py
           ls -l LunarWrath.jar
 
+      - name: Package
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd presets/ru && zip -qr "$GITHUB_WORKSPACE/LunarWrath-russian-preset.zip" . && cd "$GITHUB_WORKSPACE"
+          cp src/locales/ru.yml ru.yml && zip -q LunarWrath-russian-preset.zip ru.yml && rm ru.yml
+          zip -sf LunarWrath-russian-preset.zip
+
       - name: Release notes
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
@@ -64,7 +81,17 @@ jobs:
           v = os.environ["GITHUB_REF_NAME"].lstrip("v")
           s = open("CHANGELOG.md", encoding="utf-8").read()
           m = re.search(r"^## " + re.escape(v) + r" \(.*?\)\n(.*?)(?=^## |\Z)", s, re.S | re.M)
-          open("notes.md", "w", encoding="utf-8").write(m.group(1).strip() + "\n" if m else "See CHANGELOG.md\n")
+          body = m.group(1).strip() if m else "See CHANGELOG.md"
+          install = (
+              "### Install\n\n"
+              "1. Download `LunarWrath.jar` below and put it in `plugins/`.\n"
+              "2. Restart the server (Paper or Purpur, Java 21). Configs appear in `plugins/BloodMoonPlus/`.\n"
+              "3. Optional: PlaceholderAPI, WorldGuard, MythicMobs. Run `/luna help` in game.\n\n"
+              "Updating: replace the jar and restart. Your configs are kept; new options fall back to defaults.\n"
+              "Russian server? Unzip `LunarWrath-russian-preset.zip` into `plugins/BloodMoonPlus/` (move `ru.yml` into `locales/`).\n\n"
+              "### Changes\n\n"
+          )
+          open("notes.md", "w", encoding="utf-8").write(install + body + "\n")
           PY
 
       - name: Publish
@@ -73,7 +100,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" LunarWrath.jar --clobber
+            gh release upload "$GITHUB_REF_NAME" LunarWrath.jar LunarWrath-russian-preset.zip --clobber
           else
-            gh release create "$GITHUB_REF_NAME" LunarWrath.jar --title "LunarWrath $GITHUB_REF_NAME" --notes-file notes.md
+            gh release create "$GITHUB_REF_NAME" LunarWrath.jar LunarWrath-russian-preset.zip --title "LunarWrath $GITHUB_REF_NAME" --notes-file notes.md --latest
           fi
+
+      - name: Deploy
+        if: startsWith(github.ref, 'refs/tags/v') && vars.DEPLOY_ENABLED == 'true'
+        env:
+          DEPLOY_SFTP_HOST: ${{ secrets.DEPLOY_SFTP_HOST }}
+          DEPLOY_SFTP_PORT: ${{ secrets.DEPLOY_SFTP_PORT }}
+          DEPLOY_SFTP_USER: ${{ secrets.DEPLOY_SFTP_USER }}
+          DEPLOY_SFTP_KEY: ${{ secrets.DEPLOY_SFTP_KEY }}
+          DEPLOY_JAR_PATH: ${{ secrets.DEPLOY_JAR_PATH }}
+          DEPLOY_DATA_DIR: ${{ secrets.DEPLOY_DATA_DIR }}
+          DEPLOY_PRESET: ${{ vars.DEPLOY_PRESET }}
+          LINKGATE_URL: ${{ secrets.LINKGATE_URL }}
+          LINKGATE_CONSOLE_SECRET: ${{ secrets.LINKGATE_CONSOLE_SECRET }}
+        run: python tools/deploy.py --version "${GITHUB_REF_NAME#v}"

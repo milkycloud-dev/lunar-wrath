@@ -136,7 +136,7 @@ public final class EventManager {
          try {
             type = EntityType.valueOf(Util.str(m, "type", "ZOMBIE").toUpperCase(Locale.ROOT));
          } catch (IllegalArgumentException var6) {
-            this.plugin.getLogger().warning("horde.mobs: tipo inválido " + m.get("type"));
+            this.plugin.getLogger().warning("horde.mobs: invalid type " + m.get("type"));
             continue;
          }
 
@@ -253,7 +253,7 @@ public final class EventManager {
             this.plugin
                .getLogger()
                .warning(
-                  "No se puede fijar la hora en '" + w.getName() + "': el mundo no tiene reloj propio en esta versión de Paper; la noche fija no aplica ahí."
+                  "Cannot set the time in '" + w.getName() + "': this world has no own clock on this Paper version, night lock does not apply there."
                );
          }
       }
@@ -316,7 +316,7 @@ public final class EventManager {
          if (this.forceDifficulty && w.getDifficulty() == Difficulty.PEACEFUL) {
             s.originalDifficulty = Difficulty.PEACEFUL;
             w.setDifficulty(Difficulty.EASY);
-            this.plugin.getLogger().info("Dificultad de '" + w.getName() + "' subida a EASY durante el evento (estaba en Pacífico).");
+            this.plugin.getLogger().info("Difficulty of '" + w.getName() + "' raised to EASY for the moon (it was Peaceful).");
          }
 
          if (!resumed) {
@@ -328,10 +328,10 @@ public final class EventManager {
             if (mt == MoonType.BLACK) {
                String chat = this.plugin.getConfig().getString(
                   "moon-types.black.announcement.chat",
-                  "<gradient:#222222:#880088><bold>🌑 ЗАТМЕНИЕ ЧЁРНОЙ ЛУНЫ:</bold></gradient> <dark_gray><bold>Тьма поглотила небеса...</bold></dark_gray> <red>Взошла ЧЁРНАЯ ЛУНА! Порождения мрака стали на 50% сильнее и многочисленнее!</red>"
+                  "<gradient:#222222:#880088><bold>🌑 ECLIPSE OF THE BLACK MOON:</bold></gradient> <dark_gray><bold>Darkness swallowed the sky...</bold></dark_gray> <red>The BLACK MOON has risen! Its spawn are 50% stronger and more numerous!</red>"
                );
-               String titleStr = this.plugin.getConfig().getString("moon-types.black.announcement.title", "<gradient:#111111:#660066><bold>ЧЁРНАЯ ЛУНА</bold></gradient>");
-               String subStr = this.plugin.getConfig().getString("moon-types.black.announcement.subtitle", "<gray>Тьма накрыла мир. Сражайтесь!</gray>");
+               String titleStr = this.plugin.getConfig().getString("moon-types.black.announcement.title", "<gradient:#111111:#660066><bold>BLACK MOON</bold></gradient>");
+               String subStr = this.plugin.getConfig().getString("moon-types.black.announcement.subtitle", "<gray>Darkness covers the world. Fight!</gray>");
 
                Title t = Title.title(Util.mini(titleStr), Util.mini(subStr), Times.times(Duration.ofMillis(500L), Duration.ofSeconds(4L), Duration.ofSeconds(1L)));
                for (Player p : w.getPlayers()) {
@@ -346,10 +346,10 @@ public final class EventManager {
             } else if (mt == MoonType.PURPLE) {
                String chat = this.plugin.getConfig().getString(
                   "moon-types.purple.announcement.chat",
-                  "<gradient:#9900ff:#e000ff><bold>🔮 РАЗРЫВ ПУСТОТЫ:</bold></gradient> <light_purple>Небесный свод раскололся фиолетовым сиянием... Взошла ФИОЛЕТОВАЯ ЛУНА! Астральные твари проникли в этот мир!</light_purple>"
+                  "<gradient:#9900ff:#e000ff><bold>🔮 VOID RIFT:</bold></gradient> <light_purple>The sky splits with a violet glow... The PURPLE MOON has risen! Astral creatures have entered this world!</light_purple>"
                );
-               String titleStr = this.plugin.getConfig().getString("moon-types.purple.announcement.title", "<gradient:#8800ff:#ff00ff><bold>ФИОЛЕТОВАЯ ЛУНА</bold></gradient>");
-               String subStr = this.plugin.getConfig().getString("moon-types.purple.announcement.subtitle", "<light_purple>Разрыв пустоты открыт!</light_purple>");
+               String titleStr = this.plugin.getConfig().getString("moon-types.purple.announcement.title", "<gradient:#8800ff:#ff00ff><bold>PURPLE MOON</bold></gradient>");
+               String subStr = this.plugin.getConfig().getString("moon-types.purple.announcement.subtitle", "<light_purple>The void rift is open!</light_purple>");
 
                Title t = Title.title(Util.mini(titleStr), Util.mini(subStr), Times.times(Duration.ofMillis(500L), Duration.ofSeconds(4L), Duration.ofSeconds(1L)));
                for (Player p : w.getPlayers()) {
@@ -689,7 +689,7 @@ public final class EventManager {
             } catch (Exception var8) {
                this.plugin
                   .getLogger()
-                  .log(Level.WARNING, "Error en el tick del evento del mundo '" + sx.world.getName() + "': " + var8.getMessage(), (Throwable)var8);
+                  .log(Level.WARNING, "Moon tick failed in world '" + sx.world.getName() + "': " + var8.getMessage(), (Throwable)var8);
             }
          }
       }
@@ -825,10 +825,10 @@ public final class EventManager {
 
       if (s.moonType == MoonType.BLACK) {
          s.bar.color(net.kyori.adventure.bossbar.BossBar.Color.PURPLE);
-         s.bar.name(Util.mini("<gradient:#333333:#880088><bold>🌑 Чёрная Луна</bold></gradient> <gray>·</gray> <yellow>" + Util.dur(rem / 1000L) + "</yellow> <gray>(x" + Util.fmt(s.difficulty) + ")</gray>"));
+         s.bar.name(Util.mini(this.plugin.locales().get("text.event.m001", "time", String.valueOf(Util.dur(rem / 1000L)), "difficulty", String.valueOf(Util.fmt(s.difficulty)))));
       } else if (s.moonType == MoonType.PURPLE) {
          s.bar.color(net.kyori.adventure.bossbar.BossBar.Color.PURPLE);
-         s.bar.name(Util.mini("<gradient:#9900ff:#e000ff><bold>🔮 Фиолетовая Луна</bold></gradient> <gray>·</gray> <yellow>" + Util.dur(rem / 1000L) + "</yellow> <gray>(x" + Util.fmt(s.difficulty) + ")</gray>"));
+         s.bar.name(Util.mini(this.plugin.locales().get("text.event.m002", "time", String.valueOf(Util.dur(rem / 1000L)), "difficulty", String.valueOf(Util.fmt(s.difficulty)))));
       } else {
          s.bar.color(net.kyori.adventure.bossbar.BossBar.Color.RED);
          s.bar.name(this.plugin.messages().get("event.bar", "time", Util.dur(rem / 1000L), "difficulty", Util.fmt(s.difficulty)));
@@ -950,7 +950,7 @@ public final class EventManager {
                      }
                      String personalHorde = this.plugin.locales().get("event.horde-descending-personal");
                      if (personalHorde == null || personalHorde.isEmpty() || personalHorde.equals("event.horde-descending-personal")) {
-                        personalHorde = "<red><bold>⚡ Орда нападает на вас! ⚡</bold></red>";
+                        personalHorde = "<red><bold>⚡ A horde is coming for you! ⚡</bold></red>";
                      }
                      px.sendActionBar(Util.mini(personalHorde));
                      px.playSound(px.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 0.7F, 0.8F);

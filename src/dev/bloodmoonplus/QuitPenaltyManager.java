@@ -62,13 +62,13 @@ public final class QuitPenaltyManager implements Listener {
 
       this.chatWarning = cfg.getString(
          "quit-penalty.announcement.chat",
-         "<gradient:#ff0000:#880000><bold>☠ Эволюция кровавой луны:</bold></gradient> <red><bold>при выходе с сервера после начала кровавой луны вы умрёте!</bold></red>"
+         "<gradient:#ff0000:#880000><bold>☠ The Blood Moon evolves:</bold></gradient> <red><bold>leave the server after the moon rises and you die!</bold></red>"
       );
       this.titleDelaySeconds = cfg.getInt("quit-penalty.announcement.title-delay-seconds", 3);
-      this.screenTitle = cfg.getString("quit-penalty.announcement.title", "<dark_red><bold>НЕ ВЫХОДИТЕ!</bold></dark_red>");
+      this.screenTitle = cfg.getString("quit-penalty.announcement.title", "<dark_red><bold>DON'T LEAVE!</bold></dark_red>");
       this.screenSubtitle = cfg.getString(
          "quit-penalty.announcement.subtitle",
-         "<red>Выход из игры сейчас = смерть</red>"
+         "<red>Leaving now means death</red>"
       );
       this.fadeInTicks = cfg.getInt("quit-penalty.announcement.title-times.fade-in", 10);
       this.stayTicks = cfg.getInt("quit-penalty.announcement.title-times.stay", 120);
@@ -77,10 +77,10 @@ public final class QuitPenaltyManager implements Listener {
 
       this.joinWarning = cfg.getString(
          "quit-penalty.announcement.join-warning",
-         "<gradient:#ff0000:#770000><bold>☠ ВНИМАНИЕ:</bold></gradient> <red>Идёт Кровавая Луна! Выход с сервера в течение {remaining}с приведёт к немедленной смерти!</red>"
+         "<gradient:#ff0000:#770000><bold>☠ WARNING:</bold></gradient> <red>A Blood Moon is active! Leaving within {remaining}s means instant death!</red>"
       );
-      this.joinTitle = cfg.getString("quit-penalty.announcement.join-title", "<dark_red><bold>ЛУНА АКТИВНА</bold></dark_red>");
-      this.joinSubtitle = cfg.getString("quit-penalty.announcement.join-subtitle", "<red>Не выходите ещё {remaining} с</red>");
+      this.joinTitle = cfg.getString("quit-penalty.announcement.join-title", "<dark_red><bold>MOON IS ACTIVE</bold></dark_red>");
+      this.joinSubtitle = cfg.getString("quit-penalty.announcement.join-subtitle", "<red>Don't leave for {remaining}s</red>");
 
       this.killOnQuit = cfg.getBoolean("quit-penalty.on-quit.kill", true);
       this.dropItems = cfg.getBoolean("quit-penalty.on-quit.drop-items", true);
@@ -89,11 +89,11 @@ public final class QuitPenaltyManager implements Listener {
       this.broadcastDeath = cfg.getBoolean("quit-penalty.on-quit.broadcast", true);
       this.deathBroadcastMessage = cfg.getString(
          "quit-penalty.on-quit.death-message",
-         "<gradient:#ff2222:#880000><bold>☠ Игрок <yellow>{player}</yellow> струсил и попытался сбежать от Кровавой Луны, но был настигнут смертью!</gradient>"
+         "<gradient:#ff2222:#880000><bold>☠ <yellow>{player}</yellow> tried to flee the Blood Moon, but death caught up!</gradient>"
       );
       this.reconnectDeathMessage = cfg.getString(
          "quit-penalty.on-quit.reconnect-message",
-         "<dark_red><bold>☠ Вы были казнены за попытку побега от Кровавой Луны!</bold></dark_red>"
+         "<dark_red><bold>☠ You were executed for fleeing the Blood Moon!</bold></dark_red>"
       );
    }
 

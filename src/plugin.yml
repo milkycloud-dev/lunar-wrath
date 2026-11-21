@@ -1,5 +1,5 @@
 name: BloodMoonPlus
-version: '1.0.14'
+version: '1.1.0'
 main: dev.bloodmoonplus.BloodMoonPlus
 api-version: '26.2'
 load: POSTWORLD
@@ -9,14 +9,35 @@ website: https://github.com/milkycloud-dev/lunar-wrath
 softdepend: [PlaceholderAPI, Multiverse-Core, WorldGuard]
 commands:
   luna:
-    description: Управление Кровавой Луной
+    description: Control the Blood Moon
     aliases: [lunadesangre, bm, bloodmoon]
     permission: bloodmoon.use
     usage: /luna help
 permissions:
   bloodmoon.use:
-    description: Просмотр статуса и ближайших событий
+    description: View the moon status and upcoming moons
     default: true
   bloodmoon.admin:
-    description: Администрирование Кровавой Луны
+    description: Administer the Blood Moon
+    default: op
+  bloodmoon.bypass:
+    description: Exempt from the spectator lock
+    default: op
+  bloodmoon.bypass.blockplace:
+    description: Place blocks while block-placement.allow is false
+    default: op
+  bloodmoon.bypass.containerwrath:
+    description: Open chests and other containers during the moon
+    default: op
+  bloodmoon.bypass.dimensionwrath:
+    description: Stay in the Nether or the End during the moon without lightning
+    default: op
+  bloodmoon.bypass.elytrawrath:
+    description: Fly high on elytra during the moon without lightning
+    default: op
+  bloodmoon.bypass.dynamicdifficulty:
+    description: Camping does not raise the moon difficulty
+    default: op
+  bloodmoon.bypass.quitpenalty:
+    description: Leave the server during the moon without dying
     default: op

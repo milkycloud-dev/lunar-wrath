@@ -25,13 +25,5 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
-      - name: Validate syntax
-        run: |
-          python -c "
-          import yaml, json, glob
-          for y in glob.glob('**/*.yml', recursive=True) + glob.glob('**/*.yaml', recursive=True):
-              yaml.safe_load(open(y, encoding='utf-8'))
-          for j in glob.glob('**/*.json', recursive=True):
-              json.load(open(j, encoding='utf-8'))
-          print('All configuration and localization files are valid!')
-          "
+      - name: Validate configs and locales
+        run: python tools/check.py

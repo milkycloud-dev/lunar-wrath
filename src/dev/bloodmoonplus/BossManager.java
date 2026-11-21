@@ -91,7 +91,7 @@ public final class BossManager {
                      overlay = Overlay.valueOf(s.getString("bar-overlay", "NOTCHED_10").toUpperCase(Locale.ROOT));
                      break;
                   } catch (IllegalArgumentException var15) {
-                     this.plugin.getLogger().warning("bosses.yml: valor inválido en '" + id + "': " + var15.getMessage());
+                     this.plugin.getLogger().warning("bosses.yml: invalid value in '" + id + "': " + var15.getMessage());
                   }
                }
             }
@@ -106,7 +106,7 @@ public final class BossManager {
                         new BossManager.Ability(p[0].trim().toUpperCase(Locale.ROOT), Double.parseDouble(p[1].trim()), Arrays.copyOfRange(p, 2, p.length))
                      );
                   } catch (NumberFormatException var14) {
-                     this.plugin.getLogger().warning("bosses.yml: habilidad inválida '" + a + "' en " + id);
+                     this.plugin.getLogger().warning("bosses.yml: invalid ability '" + a + "' in " + id);
                   }
                }
             }
@@ -155,7 +155,7 @@ public final class BossManager {
             );
       }
 
-      this.plugin.getLogger().info("Jefes cargados: " + this.defs.size());
+      this.plugin.getLogger().info("Bosses loaded: " + this.defs.size());
    }
 
    public Set<String> ids() {

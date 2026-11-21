@@ -66,30 +66,30 @@ public final class DimensionWrathManager implements Listener {
       this.netherBroadcast = cfg.getString(
          "dimension-wrath.nether.broadcast-message",
          cfg.getString("nether-wrath.broadcast-message",
-         "<gradient:#ff4500:#990000><bold>⚡ ГНЕВ НЕЗЕРА:</bold></gradient> <red>В преисподней нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен адской молнией за попытку отсидеться в аду!</red>")
+         "<gradient:#ff4500:#990000><bold>⚡ NETHER WRATH:</bold></gradient> <red>There is no escape from the Blood Moon in the Nether! <yellow>{player}</yellow> was struck by hellish lightning for hiding there!</red>")
       );
       this.netherActionbar = cfg.getString(
          "dimension-wrath.nether.actionbar-message",
          cfg.getString("nether-wrath.actionbar-message",
-         "<gradient:#ff5500:#aa0000><bold>⚡ Разряд Незера поражает вас за бегство в ад! (-{hearts} ❤)</bold></gradient>")
+         "<gradient:#ff5500:#aa0000><bold>⚡ Nether lightning strikes you for fleeing! (-{hearts} ❤)</bold></gradient>")
       );
       this.netherDeath = cfg.getString(
          "dimension-wrath.nether.death-message",
          cfg.getString("nether-wrath.death-message",
-         "<gradient:#ff4500:#990000><bold>☠ Игрок <yellow>{player}</yellow> пытался спастись в аду от Кровавой Луны, но был испепелен адской молнией!</gradient>")
+         "<gradient:#ff4500:#990000><bold>☠ <yellow>{player}</yellow> tried to hide from the Blood Moon in the Nether and was burned to ash!</gradient>")
       );
 
       this.endBroadcast = cfg.getString(
          "dimension-wrath.end.broadcast-message",
-         "<gradient:#b000ff:#440077><bold>⚡ ГНЕВ ЭНДА:</bold></gradient> <red>В пустоте Края нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен астральной молнией за попытку отсидеться в Энде!</red>"
+         "<gradient:#b000ff:#440077><bold>⚡ END WRATH:</bold></gradient> <red>There is no escape from the Blood Moon in the void! <yellow>{player}</yellow> was struck by astral lightning for hiding in the End!</red>"
       );
       this.endActionbar = cfg.getString(
          "dimension-wrath.end.actionbar-message",
-         "<gradient:#c033ff:#660099><bold>⚡ Пустотный разряд Энда поражает вас за бегство в Край! (-{hearts} ❤)</bold></gradient>"
+         "<gradient:#c033ff:#660099><bold>⚡ Void lightning strikes you for fleeing to the End! (-{hearts} ❤)</bold></gradient>"
       );
       this.endDeath = cfg.getString(
          "dimension-wrath.end.death-message",
-         "<gradient:#b000ff:#440077><bold>☠ Игрок <yellow>{player}</yellow> пытался укрыться в Энде от Кровавой Луны, но был поглощен астральной молнией!</gradient>"
+         "<gradient:#b000ff:#440077><bold>☠ <yellow>{player}</yellow> tried to hide from the Blood Moon in the End and was consumed by astral lightning!</gradient>"
       );
    }
 

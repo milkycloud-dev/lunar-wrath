@@ -73,20 +73,20 @@ public final class ElytraWrathManager implements Listener {
       this.warnDamage = cfg.getDouble("elytra-wrath.warn-damage", 8.0);
       this.warnMessage = cfg.getString(
          "elytra-wrath.warn-message",
-         "<dark_red><bold>⚠ Небо отвергает вас!</bold></dark_red> <red>Каждый новый удар молнии сильнее прежнего: следующий отнимет <yellow>{hearts} ❤</yellow>. Немедленно приземлитесь!</red>"
+         "<dark_red><bold>⚠ The sky rejects you!</bold></dark_red> <red>Every strike hits harder than the last: the next one takes <yellow>{hearts} ❤</yellow>. Land now!</red>"
       );
 
       this.broadcastMessage = cfg.getString(
          "elytra-wrath.broadcast-message",
-         "<gradient:#00e5ff:#0055ff><bold>⚡ ГНЕВ НЕБЕС:</bold></gradient> <red>В небесах нет спасения от Кровавой Луны! Игрок <yellow>{player}</yellow> поражен небесной молнией за попытку летать на элитрах!</red>"
+         "<gradient:#00e5ff:#0055ff><bold>⚡ WRATH OF THE SKY:</bold></gradient> <red>There is no escape from the Blood Moon in the sky! <yellow>{player}</yellow> was struck by lightning for flying on elytra!</red>"
       );
       this.actionbarMessage = cfg.getString(
          "elytra-wrath.actionbar-message",
-         "<gradient:#00e5ff:#0088ff><bold>⚡ Небесный разряд Кровавой Луны сбивает вас с небес! (-{hearts} ❤)</bold></gradient>"
+         "<gradient:#00e5ff:#0088ff><bold>⚡ The Blood Moon's lightning knocks you out of the sky! (-{hearts} ❤)</bold></gradient>"
       );
       this.deathMessage = cfg.getString(
          "elytra-wrath.death-message",
-         "<gradient:#00e5ff:#0055ff><bold>☠ Игрок <yellow>{player}</yellow> пытался скрыться от Кровавой Луны в небесах на элитрах, но был испепелен молнией!</gradient>"
+         "<gradient:#00e5ff:#0055ff><bold>☠ <yellow>{player}</yellow> tried to escape the Blood Moon on elytra and was burned by lightning!</gradient>"
       );
    }
 

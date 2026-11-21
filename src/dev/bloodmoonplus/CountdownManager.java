@@ -104,23 +104,23 @@ public final class CountdownManager {
       this.tickSoundName = cfg.getString("countdown.tick-sound", "block.note_block.basedrum");
       this.chatMsg = cfg.getString(
          "countdown.chat",
-         "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! Приготовьтесь к кошмару!</red>"
+         "<dark_red><bold>☠ WARNING:</bold></dark_red> <red>The Blood Moon rises in <yellow>{time}</yellow>! Prepare for the nightmare!</red>"
       );
       this.chatWithParamsMsg = cfg.getString(
          "countdown.chat-with-params",
-         "<dark_red><bold>☠ ВНИМАНИЕ:</bold></dark_red> <red>Кровавая Луна начнется через <yellow>{time}</yellow>! <gray>(Сложность <red>x{difficulty}</red> · Длительность <white>{duration} мин</white>)</gray></red>"
+         "<dark_red><bold>☠ WARNING:</bold></dark_red> <red>The Blood Moon rises in <yellow>{time}</yellow>! <gray>(Difficulty <red>x{difficulty}</red> · Duration <white>{duration} min</white>)</gray></red>"
       );
-      this.titleMsg = cfg.getString("countdown.title", "<dark_red><bold>КРОВАВАЯ ЛУНА</bold></dark_red>");
-      this.subtitleMsg = cfg.getString("countdown.subtitle", "<red>Начало через {time}...</red>");
-      this.subtitleWithParamsMsg = cfg.getString("countdown.subtitle-with-params", "<red>Начало через {time} <gray>(x{difficulty})</gray></red>");
+      this.titleMsg = cfg.getString("countdown.title", "<dark_red><bold>BLOOD MOON</bold></dark_red>");
+      this.subtitleMsg = cfg.getString("countdown.subtitle", "<red>Rises in {time}...</red>");
+      this.subtitleWithParamsMsg = cfg.getString("countdown.subtitle-with-params", "<red>Rises in {time} <gray>(x{difficulty})</gray></red>");
 
       // 1. Normal
       this.normalChat = cfg.getString(
          "warning-types.normal.chat",
-         "<gradient:#ff4500:#b30000><bold>🌙 ЗНАМЕНИЕ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Небо на горизонте окрашивается в багровый цвет... Через <yellow>{time}</yellow> взойдет Кровавая Луна! Готовьте оружие и укрепляйте убежища!</red>"
+         "<gradient:#ff4500:#b30000><bold>🌙 OMEN OF THE BLOOD MOON:</bold></gradient> <red>The horizon turns crimson... The Blood Moon rises in <yellow>{time}</yellow>! Ready your weapons and fortify your shelters!</red>"
       );
-      this.normalTitle = cfg.getString("warning-types.normal.title", "<gradient:#ff5555:#aa0000><bold>КРОВАВАЯ ЛУНА</bold></gradient>");
-      this.normalSubtitle = cfg.getString("warning-types.normal.subtitle", "<gray>Взойдет через <yellow>{time}</yellow></gray>");
+      this.normalTitle = cfg.getString("warning-types.normal.title", "<gradient:#ff5555:#aa0000><bold>BLOOD MOON</bold></gradient>");
+      this.normalSubtitle = cfg.getString("warning-types.normal.subtitle", "<gray>Rises in <yellow>{time}</yellow></gray>");
       this.normalSound = cfg.getString("warning-types.normal.sound", "ambient.cave");
       this.normalVolume = (float)cfg.getDouble("warning-types.normal.volume", 1.0);
       this.normalPitch = (float)cfg.getDouble("warning-types.normal.pitch", 0.8);
@@ -129,10 +129,10 @@ public final class CountdownManager {
       // 2. Dangerous
       this.dangerChat = cfg.getString(
          "warning-types.dangerous.chat",
-         "<gradient:#ff0055:#990022><bold>☠ ЗЛОВЕЩЕЕ ПРЕДЗНАМЕНОВАНИЕ:</bold></gradient> <red>Воздух наполняется запахом пепла и серы... Приближается <bold><dark_red>ОПАСНАЯ Кровавая Луна</dark_red></bold> через <yellow>{time}</yellow>! Полчища древних тварей жаждут крови!</red>"
+         "<gradient:#ff0055:#990022><bold>☠ OMINOUS SIGN:</bold></gradient> <red>The air smells of ash and sulfur... A <bold><dark_red>DANGEROUS Blood Moon</dark_red></bold> rises in <yellow>{time}</yellow>! Ancient hordes thirst for blood!</red>"
       );
-      this.dangerTitle = cfg.getString("warning-types.dangerous.title", "<gradient:#ff0033:#770011><bold>ОПАСНАЯ ЛУНА</bold></gradient>");
-      this.dangerSubtitle = cfg.getString("warning-types.dangerous.subtitle", "<red>Через <yellow>{time}</yellow>! Спасайтесь!</red>");
+      this.dangerTitle = cfg.getString("warning-types.dangerous.title", "<gradient:#ff0033:#770011><bold>DANGEROUS MOON</bold></gradient>");
+      this.dangerSubtitle = cfg.getString("warning-types.dangerous.subtitle", "<red>In <yellow>{time}</yellow>! Run!</red>");
       this.dangerSound = cfg.getString("warning-types.dangerous.sound", "entity.ender_dragon.growl");
       this.dangerVolume = (float)cfg.getDouble("warning-types.dangerous.volume", 1.0);
       this.dangerPitch = (float)cfg.getDouble("warning-types.dangerous.pitch", 0.9);
@@ -141,10 +141,10 @@ public final class CountdownManager {
       // 3. Lethal
       this.lethalChat = cfg.getString(
          "warning-types.lethal.chat",
-         "<gradient:#880000:#ff0000><bold>⚡ СМЕРТОНОСНЫЙ РОК:</bold></gradient> <red><bold>Земля содрогается, а небеса плачут кровью...</bold> Через <yellow>{time}</yellow> взойдет <gradient:#ff0000:#330000><bold>СМЕРТЕЛЬНАЯ Кровавая Луна</bold></gradient>! Шансов выжить почти нет. Никакой пощады не будет!</red>"
+         "<gradient:#880000:#ff0000><bold>⚡ DEADLY DOOM:</bold></gradient> <red><bold>The ground shakes and the sky weeps blood...</bold> In <yellow>{time}</yellow> a <gradient:#ff0000:#330000><bold>LETHAL Blood Moon</bold></gradient> rises! Almost no one survives. There will be no mercy!</red>"
       );
-      this.lethalTitle = cfg.getString("warning-types.lethal.title", "<gradient:#330000:#ff0000><bold>ЛУНА СМЕРТИ</bold></gradient>");
-      this.lethalSubtitle = cfg.getString("warning-types.lethal.subtitle", "<dark_red>Через {time}. Живым не уйдёт никто</dark_red>");
+      this.lethalTitle = cfg.getString("warning-types.lethal.title", "<gradient:#330000:#ff0000><bold>MOON OF DEATH</bold></gradient>");
+      this.lethalSubtitle = cfg.getString("warning-types.lethal.subtitle", "<dark_red>In {time}. No one leaves alive</dark_red>");
       this.lethalSound = cfg.getString("warning-types.lethal.sound", "entity.wither.spawn");
       this.lethalVolume = (float)cfg.getDouble("warning-types.lethal.volume", 1.0);
       this.lethalPitch = (float)cfg.getDouble("warning-types.lethal.pitch", 0.6);
@@ -216,7 +216,7 @@ public final class CountdownManager {
 
    public void broadcastTypeWarning(WarningType type, int seconds, MoonType moonType) {
       String timeStr = this.formatTime(seconds);
-      String moonName = moonType != null ? moonType.getDisplayName() : "Кровавая Луна";
+      String moonName = (moonType != null ? moonType : MoonType.BLOOD).getDisplayName();
       String chat = this.normalChat;
       String title = this.normalTitle;
       String sub = this.normalSubtitle;
@@ -242,11 +242,7 @@ public final class CountdownManager {
 
       if (chat != null && !chat.isEmpty()) {
          String c = chat.replace("{time}", timeStr);
-         if (moonType == MoonType.BLACK) {
-            c = c.replace("Кровавая Луна", "Чёрная Луна").replace("Кровавой Луны", "Чёрной Луны").replace("Кровавой Луне", "Чёрной Луне");
-         } else if (moonType == MoonType.PURPLE) {
-            c = c.replace("Кровавая Луна", "Фиолетовая Луна").replace("Кровавой Луны", "Фиолетовой Луны").replace("Кровавой Луне", "Фиолетовой Луне");
-         }
+         c = this.renameMoon(c, moonType);
          Bukkit.broadcast(Util.mini(c));
       }
 
@@ -260,11 +256,7 @@ public final class CountdownManager {
       if (title != null && !title.isEmpty()) {
          String tStr = title.replace("{time}", timeStr);
          String sStr = sub != null ? sub.replace("{time}", timeStr) : "";
-         if (moonType == MoonType.BLACK) {
-            tStr = tStr.replace("КРОВАВАЯ", "ЧЁРНАЯ").replace("Кровавая", "Чёрная");
-         } else if (moonType == MoonType.PURPLE) {
-            tStr = tStr.replace("КРОВАВАЯ", "ФИОЛЕТОВАЯ").replace("Кровавая", "Фиолетовая");
-         }
+         tStr = this.renameMoon(tStr, moonType);
          Times times = Times.times(Duration.ofMillis(300L), Duration.ofMillis(3000L), Duration.ofMillis(500L));
          Title t = Title.title(Util.mini(tStr), Util.mini(sStr), times);
          for (Player p : Bukkit.getOnlinePlayers()) {
@@ -278,7 +270,7 @@ public final class CountdownManager {
          this.task.cancel();
          this.task = null;
          if (announce) {
-            Bukkit.broadcast(Util.mini("<yellow>⚡ Обратный отсчет до Кровавой Луны отменен.</yellow>"));
+            Bukkit.broadcast(Util.mini(this.plugin.locales().get("text.countdown.m001")));
          }
       }
    }
@@ -291,15 +283,27 @@ public final class CountdownManager {
       this.plugin.events().startIn(this.targets, this.difficulty, Math.max(1, this.durationMinutes), this.moonType);
    }
 
+   private String renameMoon(String text, MoonType moonType) {
+      if (text == null || moonType == null || moonType == MoonType.BLOOD) {
+         return text;
+      }
+      String rules = this.plugin.locales().get("moon.rename." + moonType.getId());
+      for (String rule : rules.split("\\|")) {
+         int i = rule.indexOf("=>");
+         if (i > 0) {
+            text = text.replace(rule.substring(0, i), rule.substring(i + 2));
+         }
+      }
+      return text;
+   }
+
    public String formatTime(int sec) {
       if (sec >= 60 && sec % 60 == 0) {
-         return (sec / 60) + " мин";
+         return this.plugin.locales().get("time.min", "min", String.valueOf(sec / 60));
       } else if (sec >= 60) {
-         int m = sec / 60;
-         int s = sec % 60;
-         return m + " мин " + s + " сек";
+         return this.plugin.locales().get("time.min-sec", "min", String.valueOf(sec / 60), "sec", String.valueOf(sec % 60));
       } else {
-         return sec + " сек";
+         return this.plugin.locales().get("time.sec", "sec", String.valueOf(sec));
       }
    }
 

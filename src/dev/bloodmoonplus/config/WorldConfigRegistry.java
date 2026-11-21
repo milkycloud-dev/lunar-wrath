@@ -75,7 +75,7 @@ public final class WorldConfigRegistry {
             try {
                Files.copy(template.toPath(), cfgFile.toPath());
             } catch (IOException var6) {
-               this.plugin.getLogger().warning("No se pudo crear config para '" + worldName + "': " + var6.getMessage());
+               this.plugin.getLogger().warning("Could not create config for '" + worldName + "': " + var6.getMessage());
             }
          }
       }

@@ -1,30 +1,30 @@
 rarities:
   COMUN:
-    display: <white>Обычный
+    display: <white>Common
     weight: 600
   POCO_COMUN:
-    display: <green>Необычный
+    display: <green>Uncommon
     weight: 250
   RARO:
-    display: <aqua>Редкий
+    display: <aqua>Rare
     weight: 100
     luck-affected: true
   EPICO:
-    display: <light_purple>Эпический
+    display: <light_purple>Epic
     weight: 40
     luck-affected: true
     broadcast: true
     pity-per-roll: 0.02
     pity-max-stacks: 150
   LEGENDARIO:
-    display: <gold>Легендарный
+    display: <gold>Legendary
     weight: 7
     luck-affected: true
     broadcast: true
     pity-per-roll: 0.03
     pity-max-stacks: 150
   MITICO:
-    display: <red><bold>Мифический
+    display: <red><bold>Mythic
     weight: 1
     luck-affected: true
     broadcast: true

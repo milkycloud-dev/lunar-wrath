@@ -20,7 +20,7 @@ public final class MythicBridge {
    public MythicBridge(BloodMoonPlus plugin) {
       this.plugin = plugin;
       if (Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
-         plugin.getLogger().info("MythicMobs no está instalado; modo MythicMobs deshabilitado.");
+         plugin.getLogger().info("MythicMobs is not installed; MythicMobs mode disabled.");
       } else {
          try {
             Class<?> mythicBukkit = Class.forName("io.lumine.mythic.bukkit.MythicBukkit");
@@ -34,9 +34,9 @@ public final class MythicBridge {
             this.getInternalName = Class.forName("io.lumine.mythic.core.mobs.MobExecutor").getMethod("getInternalName");
             this.isPresent = Class.forName("io.lumine.mythic.core.mobs.MobManager").getMethod("getMythicMob", String.class);
             this.available = true;
-            plugin.getLogger().info("MythicMobs enlazado correctamente.");
+            plugin.getLogger().info("MythicMobs hooked.");
          } catch (Exception var6) {
-            plugin.getLogger().log(Level.WARNING, "No se pudo enlazar MythicMobs (versión incompatible): " + var6.getMessage(), (Throwable)var6);
+            plugin.getLogger().log(Level.WARNING, "Could not hook MythicMobs (incompatible version): " + var6.getMessage(), (Throwable)var6);
             this.available = false;
          }
       }

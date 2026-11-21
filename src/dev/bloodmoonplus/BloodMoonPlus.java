@@ -38,7 +38,14 @@ public final class BloodMoonPlus extends JavaPlugin {
    private DynamicDifficultyManager dynamicDifficulty;
    private WitherControlManager witherControl;
 
+   private static BloodMoonPlus instance;
+
+   public static BloodMoonPlus instance() {
+      return instance;
+   }
+
    public void onEnable() {
+      instance = this;
       Keys.init(this);
       this.saveDefaultConfig();
 
@@ -105,7 +112,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       Bukkit.getPluginManager().registerEvents(this.dynamicDifficulty, this);
       if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
          new PapiHook(this).register();
-         this.getLogger().info("PlaceholderAPI enlazado (%bloodmoon_...%).");
+         this.getLogger().info("PlaceholderAPI hooked (%bloodmoon_...%).");
       }
 
       Bukkit.getScheduler().runTaskLater(this, () -> this.events.resume(), 100L);
@@ -194,7 +201,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       if (this.witherControl != null) {
          this.witherControl.reload();
       }
-      this.getLogger().info("BloodMoonPlus recargado.");
+      this.getLogger().info("LunarWrath reloaded.");
    }
 
    public Keys keys() {
@@ -260,7 +267,7 @@ public final class BloodMoonPlus extends JavaPlugin {
    }
 
    public String getLevelFormat() {
-      return this.getConfig().getString("difficulty.level.format", "<gray>[<gradient:#ff5555:#ffaa00>Ур. {level}</gradient>] {name}");
+      return this.getConfig().getString("difficulty.level.format", "<gray>[<gradient:#ff5555:#ffaa00>Lv. {level}</gradient>] {name}");
    }
 
    public Messages messages() {

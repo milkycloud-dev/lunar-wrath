@@ -90,11 +90,11 @@ public final class ContainerWrathManager implements Listener {
       this.bypassPermission = cfg.getString("container-wrath.bypass-permission", "bloodmoon.bypass.containerwrath");
       this.warnMessage = cfg.getString(
          "container-wrath.warn-message",
-         "<dark_red><bold>⚠ Не открывайте сундуки во время Кровавой Луны!</bold></dark_red> <red>Хранилища запечатаны, печать взрывается при касании. Следующая попытка пробудит то, что спит внутри.</red>"
+         "<dark_red><bold>⚠ Do not open chests during the Blood Moon!</bold></dark_red> <red>Storage is sealed and the seal explodes when touched. Try again and you wake what sleeps inside.</red>"
       );
       this.punishMessage = cfg.getString(
          "container-wrath.punish-message",
-         "<dark_red><bold>☠ Вы потревожили запечатанное хранилище!</bold></dark_red> <red>Из него вырывается страж Кровавой Луны.</red>"
+         "<dark_red><bold>☠ You disturbed a sealed container!</bold></dark_red> <red>A guardian of the Blood Moon breaks free.</red>"
       );
       this.attempts.clear();
    }

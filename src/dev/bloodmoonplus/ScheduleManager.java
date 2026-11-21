@@ -56,7 +56,7 @@ public final class ScheduleManager {
       try {
          this.zone = ZoneId.of(c.getString("schedule.timezone", "America/Mexico_City"));
       } catch (DateTimeException var22) {
-         this.plugin.getLogger().warning("Zona horaria inválida, usando America/Mexico_City");
+         this.plugin.getLogger().warning("Invalid timezone, using UTC");
          this.zone = ZoneId.of("America/Mexico_City");
       }
 
@@ -82,7 +82,7 @@ public final class ScheduleManager {
             for (String key : days.getKeys(false)) {
                List<DayOfWeek> targets = parseDays(key);
                if (targets.isEmpty()) {
-                  this.plugin.getLogger().warning("schedule.days: día desconocido '" + key + "'");
+                  this.plugin.getLogger().warning("schedule.days: unknown day '" + key + "'");
                } else {
                   for (Object o : days.getList(key, List.of())) {
                      LocalTime t = null;
@@ -107,7 +107,7 @@ public final class ScheduleManager {
                      }
 
                      if (t == null) {
-                        this.plugin.getLogger().warning("schedule.days." + key + ": hora inválida '" + o + "' (usa formato \"21:30\" entre comillas)");
+                        this.plugin.getLogger().warning("schedule.days." + key + ": invalid time '" + o + "' (use \"21:30\" in quotes)");
                      } else {
                         for (DayOfWeek d : targets) {
                            this.slots.add(new ScheduleManager.Slot(d, t, diff, dur, worlds));
@@ -117,7 +117,7 @@ public final class ScheduleManager {
                }
             }
 
-            this.plugin.getLogger().info("Horarios cargados: " + this.slots.size() + " (modo weekly, zona " + this.zone + ")");
+            this.plugin.getLogger().info("Schedule loaded: " + this.slots.size() + " slots (weekly mode, zone " + this.zone + ")");
          }
       }
    }
@@ -266,7 +266,7 @@ public final class ScheduleManager {
          for (String wn : slotWorlds) {
             World w = Bukkit.getWorld(wn);
             if (w == null) {
-               this.plugin.getLogger().warning("Mundo '" + wn + "' no está cargado.");
+               this.plugin.getLogger().warning("World '" + wn + "' is not loaded.");
             } else {
                out.add(w);
             }
@@ -295,7 +295,7 @@ public final class ScheduleManager {
       for (World w : worlds) {
          if (!this.plugin.events().isActive(w)) {
             if (this.skipEmpty && w.getPlayers().isEmpty()) {
-               this.plugin.getLogger().info("Evento omitido en '" + w.getName() + "': no hay jugadores.");
+               this.plugin.getLogger().info("Moon skipped in '" + w.getName() + "': no players.");
             } else {
                out.add(w);
             }
@@ -342,7 +342,7 @@ public final class ScheduleManager {
       List<World> targets = this.startable(this.resolveWorlds(List.of()));
       if (!targets.isEmpty()) {
          if (this.plugin.events().startIn(targets, defDiff, Math.max(1, defDur))) {
-            this.plugin.getLogger().info("Evento interval disparado globalmente en " + targets.size() + " mundo(s) (cada " + this.intervalHours + "h)");
+            this.plugin.getLogger().info("Interval moon started in " + targets.size() + " world(s) (every " + this.intervalHours + "h)");
          }
       }
    }

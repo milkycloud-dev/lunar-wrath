@@ -90,7 +90,7 @@ public final class WitherControlManager {
       }
       if (this.syncWorldGuard && Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
          this.setWorldGuardDenySpawn(w, false);
-         this.plugin.getLogger().info("WorldGuard: снят флаг deny-spawn для мира '" + w.getName() + "' на время Кровавой Луны.");
+         this.plugin.getLogger().info("WorldGuard: deny-spawn lifted in world '" + w.getName() + "' for the moon.");
       }
    }
 
@@ -100,7 +100,7 @@ public final class WitherControlManager {
       }
       if (this.syncWorldGuard && Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
          this.setWorldGuardDenySpawn(w, true);
-         this.plugin.getLogger().info("WorldGuard: возвращен флаг deny-spawn (minecraft:wither) для мира '" + w.getName() + "' по окончании Кровавой Луны.");
+         this.plugin.getLogger().info("WorldGuard: deny-spawn (minecraft:wither) restored in world '" + w.getName() + "' after the moon.");
       }
    }
 
@@ -132,7 +132,7 @@ public final class WitherControlManager {
          }
          Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
       } catch (Exception ex) {
-         this.plugin.getLogger().warning("Ошибка переключения флага WorldGuard deny-spawn: " + ex.getMessage());
+         this.plugin.getLogger().warning("Failed to toggle the WorldGuard deny-spawn flag: " + ex.getMessage());
       }
    }
 }

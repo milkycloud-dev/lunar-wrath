@@ -92,7 +92,7 @@ public final class LootManager {
          }
       }
 
-      this.plugin.getLogger().info("Loot: " + this.rarities.size() + " rarezas, " + this.tables.size() + " tablas.");
+      this.plugin.getLogger().info("Loot: " + this.rarities.size() + " rarities, " + this.tables.size() + " tables.");
    }
 
    private List<LootManager.Entry> parseEntries(List<Map<?, ?>> list) {
@@ -148,7 +148,7 @@ public final class LootManager {
       LootManager.Table t = this.tables.get(tableId);
       if (t == null) {
          if (this.unknownReported.add(tableId)) {
-            this.plugin.getLogger().warning("Tabla de loot inexistente: '" + tableId + "' (revísala en loot.yml); este drop no soltará nada.");
+            this.plugin.getLogger().warning("Unknown loot table '" + tableId + "' (check loot.yml); this drop gives nothing.");
          }
 
          return out;
@@ -289,18 +289,18 @@ public final class LootManager {
          if (this.plugin.locales().has("loot.broadcast-mythic")) {
             this.plugin.messages().all("loot.broadcast-mythic", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
-            this.plugin.messages().allDirect("<gradient:#ff0055:#aa00ff><bold>⚡ МИФИЧЕСКИЙ АРТЕФАКТ ⚡</bold></gradient> <white><bold>" + player.getName() + "</bold></white> <light_purple>пробудил древнюю реликвию:</light_purple> " + itemName + "<light_purple>!</light_purple>");
+            this.plugin.messages().allDirect("<gradient:#ff0055:#aa00ff><bold>⚡ MYTHIC ARTIFACT ⚡</bold></gradient> <white><bold>" + player.getName() + "</bold></white> <light_purple>awakened an ancient relic:</light_purple> " + itemName + "<light_purple>!</light_purple>");
          }
 
          w.playSound(loc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.5F, 0.8F);
          w.playSound(loc, Sound.BLOCK_BELL_RESONATE, 1.2F, 0.6F);
 
          player.showTitle(Title.title(
-            Util.mini("<gradient:#ff0055:#aa00ff><bold>МИФИЧЕСКИЙ ДРОП</bold></gradient>"),
+            Util.mini(this.plugin.locales().get("text.loot.m001")),
             Util.mini(itemName),
             Times.times(Duration.ofMillis(300L), Duration.ofMillis(2500L), Duration.ofMillis(500L))
          ));
-         player.sendActionBar(Util.mini("<gradient:#ff0055:#aa00ff><bold>⚡ Древняя реликвия пробуждена! ⚡</bold></gradient>"));
+         player.sendActionBar(Util.mini(this.plugin.locales().get("text.loot.m002")));
 
          w.spawnParticle(Particle.PORTAL, loc.clone().add(0, 1, 0), 60, 0.8, 1.0, 0.8, 0.1);
          w.spawnParticle(Particle.SOUL_FIRE_FLAME, loc.clone().add(0, 1, 0), 40, 0.5, 0.8, 0.5, 0.05);
@@ -309,18 +309,18 @@ public final class LootManager {
          if (this.plugin.locales().has("loot.broadcast-legendary")) {
             this.plugin.messages().all("loot.broadcast-legendary", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
-            this.plugin.messages().allDirect("<gold>★ <bold>ЛЕГЕНДАРНЫЙ ДРОП:</bold></gold> <white><bold>" + player.getName() + "</bold></white> <yellow>выбил реликвию</yellow> " + itemName + "<yellow>!</yellow>");
+            this.plugin.messages().allDirect("<gold>★ <bold>LEGENDARY DROP:</bold></gold> <white><bold>" + player.getName() + "</bold></white> <yellow>found the relic</yellow> " + itemName + "<yellow>!</yellow>");
          }
 
          player.playSound(loc, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2F, 1.0F);
-         player.sendActionBar(Util.mini("<gold>★ <bold>ЛЕГЕНДАРНЫЙ ПРЕДМЕТ ПОЛУЧЕН!</bold> " + itemName + "</gold>"));
+         player.sendActionBar(Util.mini(this.plugin.locales().get("text.loot.m003", "item-name", String.valueOf(itemName))));
          w.spawnParticle(Particle.TOTEM_OF_UNDYING, loc.clone().add(0, 1, 0), 35, 0.5, 0.8, 0.5, 0.3);
 
       } else if (rid.equals("EPICO") || rid.equals("EPIC")) {
          if (this.plugin.locales().has("loot.broadcast-epic")) {
             this.plugin.messages().all("loot.broadcast-epic", "player", player.getName(), "item", itemName, "rarity", ra.display());
          } else {
-            this.plugin.messages().allDirect("<light_purple>✦</light_purple> <white>" + player.getName() + "</white> <gray>получил эпический предмет:</gray> " + itemName);
+            this.plugin.messages().allDirect("<light_purple>✦</light_purple> <white>" + player.getName() + "</white> <gray>got an epic item:</gray> " + itemName);
          }
          player.playSound(loc, Sound.ENTITY_ITEM_PICKUP, 1.0F, 0.8F);
 
@@ -371,11 +371,11 @@ public final class LootManager {
       } else {
          List<String> lines = new ArrayList<>();
          lines.add(
-            "<gold>Tabla <white>"
+            "<gold>" + this.plugin.locales().get("text.loot.table") + " <white>"
                + id
-               + " <gray>· prob. base de drop: <white>"
+               + " <gray>· " + this.plugin.locales().get("text.loot.base-chance") + ": <white>"
                + String.format(Locale.ROOT, "%.1f%%", t.dropChance * 100.0)
-               + " <gray>· tiradas: <white>"
+               + " <gray>· " + this.plugin.locales().get("text.loot.rolls") + ": <white>"
                + t.rolls[0]
                + "-"
                + t.rolls[1]
@@ -423,7 +423,7 @@ public final class LootManager {
                      + " <gray>"
                      + String.format(Locale.ROOT, "%.2f%%", pct * ex.weight() / sum)
                      + dropInfo
-                     + (d.limit() > 0 ? " <red>(выдано: " + this.plugin.data().created(d.id()) + "/" + d.limit() + ")" : "")
+                     + (d.limit() > 0 ? " <red>" + this.plugin.locales().get("text.loot.issued", "created", String.valueOf(this.plugin.data().created(d.id())), "limit", String.valueOf(d.limit())) : "")
                );
             }
          }

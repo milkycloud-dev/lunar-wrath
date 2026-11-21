@@ -4,9 +4,9 @@ import java.util.Locale;
 import net.kyori.adventure.bossbar.BossBar;
 
 public enum MoonType {
-   BLOOD("blood", "Кровавая Луна", BossBar.Color.RED),
-   BLACK("black", "Чёрная Луна", BossBar.Color.PURPLE),
-   PURPLE("purple", "Фиолетовая Луна", BossBar.Color.PURPLE);
+   BLOOD("blood", "Blood Moon", BossBar.Color.RED),
+   BLACK("black", "Black Moon", BossBar.Color.PURPLE),
+   PURPLE("purple", "Purple Moon", BossBar.Color.PURPLE);
 
    private final String id;
    private final String displayName;
@@ -23,6 +23,10 @@ public enum MoonType {
    }
 
    public String getDisplayName() {
+      BloodMoonPlus pl = BloodMoonPlus.instance();
+      if (pl != null && pl.locales() != null && pl.locales().has("moon.name." + this.id)) {
+         return pl.locales().get("moon.name." + this.id);
+      }
       return this.displayName;
    }
 

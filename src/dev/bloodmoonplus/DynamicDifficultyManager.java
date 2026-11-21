@@ -85,15 +85,15 @@ public final class DynamicDifficultyManager implements Listener {
 
       this.broadcastEscalate = cfg.getString(
          "dynamic-difficulty.announcement.escalate",
-         "<gradient:#ff2200:#ff8800><bold>⚡ ЯРОСТЬ КРОВАВОЙ ЛУНЫ:</bold></gradient> <red>Игрок <yellow>{player}</yellow> отсиживается вместо боя, и Луна распаляется! Сложность возросла до <yellow>x{difficulty}</yellow>!</red>"
+         "<gradient:#ff2200:#ff8800><bold>⚡ BLOOD MOON FURY:</bold></gradient> <red><yellow>{player}</yellow> is hiding instead of fighting and the moon grows angry! Difficulty rose to <yellow>x{difficulty}</yellow>!</red>"
       );
       this.camperWarning = cfg.getString(
          "dynamic-difficulty.announcement.camper-warning",
-         "<gradient:#ff0000:#aa0000><bold>☠ Кровавая Луна чует ваш страх! Вы прячетесь от боя! Сражайтесь или навлечёте беду!</bold></gradient>"
+         "<gradient:#ff0000:#aa0000><bold>☠ The Blood Moon smells your fear! Stop hiding and fight!</bold></gradient>"
       );
       this.broadcastDecay = cfg.getString(
          "dynamic-difficulty.announcement.decay",
-         "<gradient:#00ff88:#00aa55><bold>✔ ВОЛЯ ВЫЖИВШИХ:</bold></gradient> <green><yellow>{players}</yellow> истребляют порождения луны, и её ярость стихает! Сложность снизилась до <yellow>x{difficulty}</yellow>.</green>"
+         "<gradient:#00ff88:#00aa55><bold>✔ SURVIVORS' WILL:</bold></gradient> <green><yellow>{players}</yellow> are slaying the moon's spawn and its fury fades! Difficulty dropped to <yellow>x{difficulty}</yellow>.</green>"
       );
    }
 
@@ -221,7 +221,7 @@ public final class DynamicDifficultyManager implements Listener {
                            .replace("{difficulty}", String.format(Locale.ROOT, "%.2f", nextDiff));
                         Bukkit.broadcast(Util.mini(msg));
                      } else {
-                        p.sendMessage(Util.mini("<red>⚡ Пассивность распаляет зло! Сложность Луны возросла до <yellow>x" + String.format(Locale.ROOT, "%.2f", nextDiff) + "</yellow>!</red>"));
+                        p.sendMessage(Util.mini(this.plugin.locales().get("text.dynamicdifficulty.m001", "next-diff", String.valueOf(String.format(Locale.ROOT, "%.2f", nextDiff)))));
                      }
 
                      w.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 0.5F, 1.2F);

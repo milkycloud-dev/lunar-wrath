@@ -1,6 +1,6 @@
-# BloodMoonPlus — Ejemplo de MythicMobs
-# Coloca este archivo en plugins/MythicMobs/MythicMobs/ (o packs/).
-# Configura BloodMoonPlus/Boss.MythicMobs.InternalName con uno de estos IDs:
+# LunarWrath: MythicMobs example
+# Put this file in plugins/MythicMobs/Mobs/ (or a pack).
+# Set Boss.MythicMobs.InternalName in plugins/BloodMoonPlus/worlds/<world>/config.yml to one of these IDs:
 #   - BloodMoonBoss_EN
 #   - BloodMoonBoss_ES
 

@@ -1,6 +1,6 @@
 bosses:
   rey_zombi:
-    name: <dark_red><bold>Кровавый Король Зомби
+    name: <dark_red><bold>Blood Zombie King
     type: ZOMBIE
     health: 300
     damage: 2.0
@@ -22,7 +22,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 500
   arquera_carmesi:
-    name: <red><bold>Багровая Лучница
+    name: <red><bold>Crimson Archer
     type: SKELETON
     health: 220
     damage: 1.8
@@ -40,7 +40,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 400
   verdugo_noche:
-    name: <dark_purple><bold>Ночной Палач
+    name: <dark_purple><bold>Night Executioner
     type: WITHER_SKELETON
     health: 400
     damage: 2.5
@@ -63,7 +63,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 800
   nigromante_carmesí:
-    name: <dark_red><bold>Багровый Некромант
+    name: <dark_red><bold>Crimson Necromancer
     type: EVOKER
     health: 320
     damage: 2.2
@@ -83,7 +83,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 600
   cazador_sombras:
-    name: <black><bold>Охотник Теней
+    name: <black><bold>Shadow Hunter
     type: STRAY
     health: 260
     damage: 2.8
@@ -101,7 +101,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 500
   centinela_hueso:
-    name: <white><bold>Костяной Страж
+    name: <white><bold>Bone Sentinel
     type: SKELETON
     health: 280
     damage: 2.0
@@ -125,7 +125,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 550
   devastador_sangre:
-    name: <dark_red><bold>Древний Разоритель
+    name: <dark_red><bold>Ancient Ravager
     type: RAVAGER
     health: 380
     damage: 2.4
@@ -145,7 +145,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 700
   warden_abismal:
-    name: <dark_aqua><bold>Страж Бездны
+    name: <dark_aqua><bold>Abyssal Warden
     type: WARDEN
     health: 750
     damage: 3.6
@@ -166,7 +166,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 1100
   azote_carmesi:
-    name: <dark_gray><bold>Багровый Бич
+    name: <dark_gray><bold>Crimson Scourge
     type: WITHER
     health: 900
     damage: 4.0
@@ -190,7 +190,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 1500
   dragon_negro:
-    name: <gradient:#1a0033:#7700aa><bold>Чёрный Дракон Края</bold></gradient>
+    name: <gradient:#1a0033:#7700aa><bold>Black Dragon of the End</bold></gradient>
     type: ENDER_DRAGON
     health: 800
     damage: 3.5
@@ -210,7 +210,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 2000
   wither_sombra:
-    name: <gradient:#222222:#aa0000><bold>Теневой Исушитель</bold></gradient>
+    name: <gradient:#222222:#aa0000><bold>Shadow Wither</bold></gradient>
     type: WITHER
     health: 700
     damage: 3.5

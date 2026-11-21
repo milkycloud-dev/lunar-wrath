@@ -1,31 +1,31 @@
 # ============================================================
-#  BloodMoonPlus — Configuración por mundo
-#  Edita este archivo para personalizar este mundo específico.
-#  Las claves que no estén definidas heredan del config.yml global.
-#  Estructura igual a BloodMoon-Reborn para compatibilidad.
+#  LunarWrath: per-world settings
+#  A copy of this file is created for every world in worlds/<world>/config.yml.
+#  Keys you leave out fall back to the global config.yml.
+#  Layout matches BloodMoon-Reborn for easy migration.
 # ============================================================
 
-# Si está en true, el mundo siempre está bajo Luna de Sangre (no se puede detener).
+# If true, this world is permanently under the moon (it cannot be stopped).
 WorldPermanent: false
 
-# Bloquea dormir durante el evento.
+# Block sleeping during the moon.
 BedNotAllowed: true
 
-# Si está en true, morir durante el evento elimina el inventario.
+# If true, dying during the moon wipes the inventory.
 DyingLossesInventory: false
 
-# Si está en true, morir durante el evento reinicia la experiencia.
+# If true, dying during the moon resets experience.
 DyingLossesExperience: false
 
-# Comandos al iniciar el evento.
-# Sufijos: ;s = consola una vez, ;f = consola por jugador, ;p = jugador ejecuta
+# Commands run when the moon starts.
+# Suffixes: ;s = console once, ;f = console for every player, ;p = run by the player
 # Placeholders: %player%, %world%, %difficulty%
 CommandsOnStart: []
 
-# Comandos al terminar el evento.
+# Commands run when the moon ends.
 CommandsOnEnd: []
 
-# ---------------- Recompensa de supervivientes ----------------
+# ---------------- Survivor rewards ----------------
 SurvivorRewards:
   Enabled: false
   RequireOnlineAtEnd: true
@@ -36,12 +36,12 @@ SurvivorRewards:
   DisqualifyOnDisconnect: false
   RewardOncePerSession: true
   Messages:
-    - "&aВы пережили Кровавую Луну!"
+    - "&aYou survived the Blood Moon!"
   Commands:
     - "give %player% minecraft:diamond 1;f"
     - "experience add %player% 100 points;f"
 
-# ---------------- Configuración del jefe ----------------
+# ---------------- Boss settings ----------------
 Boss:
   Mode: VANILLA                    # VANILLA | MYTHICMOBS | NONE
   VanillaBossBar:

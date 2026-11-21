@@ -126,7 +126,7 @@ public final class BloodMoonCommand implements TabExecutor {
                case "evolution":
                   if (this.plugin.quitPenalty() != null) {
                      this.plugin.quitPenalty().broadcastEvolutionAlert();
-                     s.sendMessage(Util.mini("<green>✔ Оповещение об эволюции Кровавой Луны отправлено всем игрокам!</green>"));
+                     s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m001")));
                   }
                   break;
                case "black":
@@ -143,7 +143,7 @@ public final class BloodMoonCommand implements TabExecutor {
                   break;
                case "cancel":
                   this.plugin.countdown().cancel(true);
-                  s.sendMessage(Util.mini("<yellow>⚡ Обратный отсчет отменен.</yellow>"));
+                  s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m002")));
                   break;
                case "lightning":
                   this.lightning(s, a);
@@ -474,7 +474,7 @@ public final class BloodMoonCommand implements TabExecutor {
             ? List.of(Bukkit.getWorld(worldName))
             : this.plugin.events().defaultWorlds();
          this.plugin.countdown().start(countdownSec, dv, Math.max(1, mv), targets, s, CountdownManager.WarningType.NORMAL, moonType);
-         s.sendMessage(Util.mini("<green>✔ Запущен обратный отсчет до " + moonType.getDisplayName() + " (" + countdownSec + " сек).</green>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m003", "display-name", String.valueOf(moonType.getDisplayName()), "countdown-sec", String.valueOf(countdownSec))));
          return;
       }
 
@@ -507,13 +507,13 @@ public final class BloodMoonCommand implements TabExecutor {
          startedLabel = targets.size() == 1 ? targets.get(0).getName() : "global";
       }
 
-      s.sendMessage(Util.mini("<green>✔ Взошла " + moonType.getDisplayName() + " (" + startedLabel + ")!</green>"));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m004", "display-name", String.valueOf(moonType.getDisplayName()), "started-label", String.valueOf(startedLabel))));
    }
 
    private void countdown(CommandSender s, String[] a) {
       if (a.length > 0 && (a[0].equalsIgnoreCase("cancel") || a[0].equalsIgnoreCase("stop") || a[0].equalsIgnoreCase("abort"))) {
          this.plugin.countdown().cancel(true);
-         s.sendMessage(Util.mini("<yellow>⚡ Обратный отсчет отменен.</yellow>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m005")));
          return;
       }
       Integer sec = null;
@@ -597,20 +597,20 @@ public final class BloodMoonCommand implements TabExecutor {
       List<World> targets = worldName != null ? List.of(Bukkit.getWorld(worldName)) : this.plugin.events().defaultWorlds();
 
       this.plugin.countdown().start(finalSec, dv, Math.max(1, mv), targets, s, warnType, moonType);
-      s.sendMessage(Util.mini("<green>✔ Запущен обратный отсчет до " + moonType.getDisplayName() + " (" + this.plugin.countdown().formatTime(finalSec) + ", сложность: x" + Util.fmt(dv) + ", тип: " + warnType.name() + ").</green>"));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m006", "display-name", String.valueOf(moonType.getDisplayName()), "final-sec", String.valueOf(this.plugin.countdown().formatTime(finalSec)), "difficulty", String.valueOf(Util.fmt(dv)), "name", String.valueOf(warnType.name()))));
    }
 
    private void warn(CommandSender s, String[] a) {
       if (a.length == 0) {
-         s.sendMessage(Util.mini("<gold>Команда предупреждений о Луне:</gold>"));
-         s.sendMessage(Util.mini("<yellow>/luna warn <время> [тип] [вид_луны] [start]</yellow>"));
-         s.sendMessage(Util.mini("<gray>Типы предупреждений: <white>normal</white> (обычная), <white>dangerous</white> (опасная), <white>lethal</white> (смертельная)</gray>"));
-         s.sendMessage(Util.mini("<gray>Виды луны: <red>blood</red> (кровавая), <dark_gray>black</dark_gray> (чёрная), <light_purple>purple</light_purple> (фиолетовая)</gray>"));
-         s.sendMessage(Util.mini("<gray>Примеры:</gray>"));
-         s.sendMessage(Util.mini("<gray>- <yellow>/luna warn 10m</yellow> (обычное оповещение за 10 мин)</gray>"));
-         s.sendMessage(Util.mini("<gray>- <yellow>/luna warn 10m dangerous</yellow> (оповещение об опасной луне)</gray>"));
-         s.sendMessage(Util.mini("<gray>- <yellow>/luna warn 10m lethal black</yellow> (смертельная чёрная луна)</gray>"));
-         s.sendMessage(Util.mini("<gray>- <yellow>/luna warn 10m lethal black start</yellow> (оповестить и начать отсчет!)</gray>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m007")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m008")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m009")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m010")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m011")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m012")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m013")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m014")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m015")));
          return;
       }
 
@@ -658,10 +658,10 @@ public final class BloodMoonCommand implements TabExecutor {
          double dv = this.plugin.countdown().getDefaultDifficulty(warnType);
          int mv = this.plugin.getConfig().getInt("event.duration-minutes", 20);
          this.plugin.countdown().start(sec, dv, mv, this.plugin.events().defaultWorlds(), s, warnType, moonType);
-         s.sendMessage(Util.mini("<green>✔ Оповещение отправлено, запущен отсчет до " + moonType.getDisplayName() + " (" + this.plugin.countdown().formatTime(sec) + ")!</green>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m016", "display-name", String.valueOf(moonType.getDisplayName()), "sec", String.valueOf(this.plugin.countdown().formatTime(sec)))));
       } else {
          this.plugin.countdown().broadcastTypeWarning(warnType, sec, moonType);
-         s.sendMessage(Util.mini("<green>✔ Оповещение отправлено: <yellow>" + warnType.name() + " " + moonType.getDisplayName() + " (" + this.plugin.countdown().formatTime(sec) + ")</yellow>.</green>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m017", "name", String.valueOf(warnType.name()), "display-name", String.valueOf(moonType.getDisplayName()), "sec", String.valueOf(this.plugin.countdown().formatTime(sec)))));
       }
    }
 
@@ -956,21 +956,21 @@ public final class BloodMoonCommand implements TabExecutor {
 
    private void lightning(CommandSender s, String[] a) {
       if (a.length == 0 || a[0].equalsIgnoreCase("help") || a[0].equalsIgnoreCase("помощь")) {
-         s.sendMessage(Util.mini("<dark_red><bold>⚡ УПРАВЛЕНИЕ МОЛНИЯМИ КРОВАВОЙ ЛУНЫ:</bold></dark_red>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning storm [игрок|all] [уд/сек] [радиус] [сек]</yellow> <gray>- Периметр молний вокруг игрока</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning smite <игрок> [интервал_сек] [урон_хп] [сек]</yellow> <gray>- Прицельные удары с уроном</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning strike <игрок> [урон_хп]</yellow> <gray>- Одиночный удар молнии</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning frequency <storm|smite> <игрок|all> <значение></yellow> <gray>- Частота идущих молний: storm в ударах/сек, smite интервал в сек</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning stop [игрок|all]</yellow> <gray>- Остановить эффекты молний</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna lightning status</yellow> <gray>- Показать активные эффекты</gray>"));
-         s.sendMessage(Util.mini("<gray>Подсказка: 1.0 HP = 0.5 ❤ (полсердечка), 2.0 HP = 1 ❤, 20.0 HP = полное здоровье.</gray>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m018")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m019")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m020")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m021")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m022")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m023")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m024")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m025")));
          return;
       }
 
       String action = a[0].toLowerCase(Locale.ROOT);
       LightningEffectManager lm = this.plugin.lightning();
       if (lm == null) {
-         s.sendMessage(Util.mini("<red>Модуль молний не инициализирован.</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m026")));
          return;
       }
 
@@ -979,18 +979,18 @@ public final class BloodMoonCommand implements TabExecutor {
          case "шторм": {
             if (a.length > 1 && a[1].equalsIgnoreCase("stop")) {
                lm.stopStorm(LightningEffectManager.ALL_PLAYERS);
-               s.sendMessage(Util.mini("<green>✔ Все штормовые молнии остановлены.</green>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m027")));
                return;
             }
 
             UUID targetId = LightningEffectManager.ALL_PLAYERS;
-            String targetName = "всех игроков";
+            String targetName = this.plugin.locales().get("text.command.all-players");
 
             int argIdx = 1;
             if (a.length > 1) {
                if (a[1].equalsIgnoreCase("all") || a[1].equalsIgnoreCase("все")) {
                   targetId = LightningEffectManager.ALL_PLAYERS;
-                  targetName = "всех игроков";
+                  targetName = this.plugin.locales().get("text.command.all-players");
                   argIdx = 2;
                } else {
                   Player p = Bukkit.getPlayerExact(a[1]);
@@ -999,7 +999,7 @@ public final class BloodMoonCommand implements TabExecutor {
                      targetName = p.getName();
                      argIdx = 2;
                   } else if (!isDouble(a[1]) && !isInteger(a[1])) {
-                     s.sendMessage(Util.mini("<red>Игрок '" + a[1] + "' не найден.</red>"));
+                     s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m028", "input", String.valueOf(a[1]))));
                      return;
                   }
                }
@@ -1023,15 +1023,15 @@ public final class BloodMoonCommand implements TabExecutor {
             }
 
             lm.startStorm(targetId, rate, radius, duration);
-            String durStr = duration > 0 ? " на " + duration + " сек." : " (постоянно)";
-            s.sendMessage(Util.mini("<green>✔ Запущен периметр молний вокруг <yellow>" + targetName + "</yellow> (<white>" + rate + " уд/сек</white>, радиус <white>" + radius + "м</white>)" + durStr + "!</green>"));
+            String durStr = duration > 0 ? this.plugin.locales().get("text.command.for-seconds", "seconds", String.valueOf(duration)) : this.plugin.locales().get("text.command.permanent");
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m029", "target-name", String.valueOf(targetName), "rate", String.valueOf(rate), "radius", String.valueOf(radius), "dur-str", String.valueOf(durStr))));
             break;
          }
          case "smite":
          case "кара": {
             if (a.length < 2) {
-               s.sendMessage(Util.mini("<yellow>Использование: /luna lightning smite <игрок> [интервал_сек] [урон_хп] [длительность_сек]</yellow>"));
-               s.sendMessage(Util.mini("<gray>Пример: /luna lightning smite mike 2 1.0 30 (каждые 2 сек по 0.5 ❤ на 30 сек)</gray>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m030")));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m031")));
                return;
             }
 
@@ -1039,14 +1039,14 @@ public final class BloodMoonCommand implements TabExecutor {
                Player p = Bukkit.getPlayerExact(a[1]);
                if (p != null) {
                   lm.stopSmite(p.getUniqueId());
-                  s.sendMessage(Util.mini("<green>✔ Прицельные молнии для <yellow>" + p.getName() + "</yellow> остановлены.</green>"));
+                  s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m032", "player", String.valueOf(p.getName()))));
                }
                return;
             }
 
             Player p = Bukkit.getPlayerExact(a[1]);
             if (p == null) {
-               s.sendMessage(Util.mini("<red>Игрок '" + a[1] + "' не найден.</red>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m033", "input", String.valueOf(a[1]))));
                return;
             }
 
@@ -1067,20 +1067,20 @@ public final class BloodMoonCommand implements TabExecutor {
 
             lm.startSmite(p.getUniqueId(), damage, interval, duration);
             double hearts = damage / 2.0;
-            String durStr = duration > 0 ? " на " + duration + " сек." : " (до остановки)";
-            s.sendMessage(Util.mini("<green>✔ Запущена прицельная кара молниями по игроку <yellow>" + p.getName() + "</yellow>: каждые <white>" + interval + "с</white> урон <red>" + damage + " HP (" + hearts + " ❤)</red>" + durStr + "!</green>"));
+            String durStr = duration > 0 ? this.plugin.locales().get("text.command.for-seconds", "seconds", String.valueOf(duration)) : this.plugin.locales().get("text.command.until-stopped");
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m034", "player", String.valueOf(p.getName()), "interval", String.valueOf(interval), "damage", String.valueOf(damage), "hearts", String.valueOf(hearts), "dur-str", String.valueOf(durStr))));
             break;
          }
          case "strike":
          case "молния": {
             if (a.length < 2) {
-               s.sendMessage(Util.mini("<yellow>Использование: /luna lightning strike <игрок> [урон_хп]</yellow>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m035")));
                return;
             }
 
             Player p = Bukkit.getPlayerExact(a[1]);
             if (p == null) {
-               s.sendMessage(Util.mini("<red>Игрок '" + a[1] + "' не найден.</red>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m036", "input", String.valueOf(a[1]))));
                return;
             }
 
@@ -1090,7 +1090,7 @@ public final class BloodMoonCommand implements TabExecutor {
             }
 
             lm.singleStrike(p, damage);
-            s.sendMessage(Util.mini("<green>✔ Прицельная молния ударила в игрока <yellow>" + p.getName() + "</yellow> (урон: <red>" + damage + " HP</red>)!</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m037", "player", String.valueOf(p.getName()), "damage", String.valueOf(damage))));
             break;
          }
          case "stop":
@@ -1099,13 +1099,13 @@ public final class BloodMoonCommand implements TabExecutor {
                Player p = Bukkit.getPlayerExact(a[1]);
                if (p != null) {
                   lm.stopAll(p.getUniqueId());
-                  s.sendMessage(Util.mini("<green>✔ Все эффекты молний для игрока <yellow>" + p.getName() + "</yellow> остановлены.</green>"));
+                  s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m038", "player", String.valueOf(p.getName()))));
                } else {
-                  s.sendMessage(Util.mini("<red>Игрок '" + a[1] + "' не найден.</red>"));
+                  s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m039", "input", String.valueOf(a[1]))));
                }
             } else {
                lm.stopAllGlobal();
-               s.sendMessage(Util.mini("<green>✔ Все активные штормы и прицельные молнии остановлены для всех игроков.</green>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m040")));
             }
             break;
          }
@@ -1113,16 +1113,16 @@ public final class BloodMoonCommand implements TabExecutor {
          case "freq":
          case "частота": {
             if (a.length < 4 || (!a[1].equalsIgnoreCase("storm") && !a[1].equalsIgnoreCase("smite"))) {
-               s.sendMessage(Util.mini("<yellow>Использование: /luna lightning frequency <storm|smite> <игрок|all> <значение></yellow>"));
-               s.sendMessage(Util.mini("<gray>storm: ударов в секунду вокруг игрока (0.05-50). smite: секунд между прицельными ударами (от 0.1).</gray>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m041")));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m042")));
                return;
             }
             UUID target = null;
-            String targetName = "всех";
+            String targetName = this.plugin.locales().get("text.command.everyone");
             if (!a[2].equalsIgnoreCase("all")) {
                Player p = Bukkit.getPlayerExact(a[2]);
                if (p == null) {
-                  s.sendMessage(Util.mini("<red>Игрок '" + a[2] + "' не найден.</red>"));
+                  s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m043", "input", String.valueOf(a[2]))));
                   return;
                }
                target = p.getUniqueId();
@@ -1132,17 +1132,17 @@ public final class BloodMoonCommand implements TabExecutor {
             try {
                value = Double.parseDouble(a[3].replace(',', '.'));
             } catch (NumberFormatException ex) {
-               s.sendMessage(Util.mini("<red>Значение должно быть числом: " + a[3] + "</red>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m044", "input", String.valueOf(a[3]))));
                return;
             }
             boolean storm = a[1].equalsIgnoreCase("storm");
             int changed = storm ? lm.setStormRate(target, value) : lm.setSmiteInterval(target, value);
             if (changed == 0) {
-               s.sendMessage(Util.mini("<gray>Для <yellow>" + targetName + "</yellow> нет активных эффектов " + (storm ? "storm" : "smite") + ".</gray>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m045", "target-name", String.valueOf(targetName), "type", String.valueOf((storm ? "storm" : "smite")))));
             } else if (storm) {
-               s.sendMessage(Util.mini("<green>✔ Частота шторма для <yellow>" + targetName + "</yellow>: <white>" + Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, value)) + " уд/сек</white> (эффектов: " + changed + ").</green>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m046", "target-name", String.valueOf(targetName), "value", String.valueOf(Math.max(LightningEffectManager.MIN_STORM_RATE, Math.min(LightningEffectManager.MAX_STORM_RATE, value))), "changed", String.valueOf(changed))));
             } else {
-               s.sendMessage(Util.mini("<green>✔ Интервал прицельных молний для <yellow>" + targetName + "</yellow>: <white>" + Math.max(LightningEffectManager.MIN_SMITE_INTERVAL, value) + " сек</white> (эффектов: " + changed + ").</green>"));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m047", "target-name", String.valueOf(targetName), "value", String.valueOf(Math.max(LightningEffectManager.MIN_SMITE_INTERVAL, value)), "changed", String.valueOf(changed))));
             }
             break;
          }
@@ -1150,54 +1150,54 @@ public final class BloodMoonCommand implements TabExecutor {
          case "статус": {
             int stormCount = lm.getStorms().size();
             int smiteCount = lm.getSmites().size();
-            s.sendMessage(Util.mini("<gold>Статус системы молний:</gold>"));
-            s.sendMessage(Util.mini("<gray>- Активных штормов периметра: <yellow>" + stormCount + "</yellow></gray>"));
-            s.sendMessage(Util.mini("<gray>- Активных прицельных кар (smite): <yellow>" + smiteCount + "</yellow></gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m048")));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m049", "storm-count", String.valueOf(stormCount))));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m050", "smite-count", String.valueOf(smiteCount))));
             break;
          }
          default:
-            s.sendMessage(Util.mini("<red>Неизвестное действие. Введите /luna lightning help для подсказок.</red>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m051")));
       }
    }
 
    private void help(CommandSender s) {
-      s.sendMessage(Util.mini("<dark_red><bold>🌙 Команды Кровавой Луны</bold></dark_red> <gray>(Tab подсказывает аргументы)</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna</yellow> <gray>- статус текущей луны</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna next</yellow> <gray>- ближайшие луны по расписанию</gray>"));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m052")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m053")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m054")));
       if (!s.hasPermission("bloodmoon.admin")) {
          return;
       }
-      s.sendMessage(Util.mini("<gold>Запуск и остановка</gold>"));
-      s.sendMessage(Util.mini("<yellow>/luna start [мир] [xN] [время] [blood|black|purple]</yellow> <gray>- запустить луну</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna blood|black|purple [мир] [время] [xN]</yellow> <gray>- запустить луну нужного вида</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna stop [мир|all]</yellow> <gray>- остановить луну</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna warn <время> [normal|dangerous|lethal] [вид] [start]</yellow> <gray>- оповестить о луне</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna countdown <время> [тип] [вид] [мир]</yellow> <gray>- отсчёт до старта</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna cancel</yellow> <gray>- отменить отсчёт</gray>"));
-      s.sendMessage(Util.mini("<gold>Ход луны</gold>"));
-      s.sendMessage(Util.mini("<yellow>/luna time <status|add|take|set> [время] [мир|all]</yellow> <gray>- оставшееся время</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna difficulty <xN> [мир]</yellow> <gray>- задать сложность</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna dynamic <status|on|off|reset> [мир|all]</yellow> <gray>- рост сложности за отсиживание</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna boss <id> [мир|игрок]</yellow> <gray>- призвать босса</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna horde [мир]</yellow> <gray>- волна орды</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna killmobs [мир]</yellow> <gray>- убрать мобов луны</gray>"));
-      s.sendMessage(Util.mini("<gold>Эффекты</gold>"));
-      s.sendMessage(Util.mini("<yellow>/luna lightning <storm|smite|strike|frequency|stop|status></yellow> <gray>- молнии, подробнее /luna lightning help</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna sound <звук|random> [all|мир|игрок] [громкость]</yellow> <gray>- жуткий звук</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna evolution</yellow> <gray>- оповещение об эволюции луны</gray>"));
-      s.sendMessage(Util.mini("<gold>Предметы и настройки</gold>"));
-      s.sendMessage(Util.mini("<yellow>/luna give <игрок> <предмет> [кол-во]</yellow> <gray>- выдать предмет</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna items</yellow> <gray>- список предметов</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna chances <таблица></yellow> <gray>- шансы лута</gray>"));
-      s.sendMessage(Util.mini("<yellow>/luna reload</yellow> <gray>- перечитать конфиги</gray>"));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m055")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m056")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m057")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m058")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m059")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m060")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m061")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m062")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m063")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m064")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m065")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m066")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m067")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m068")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m069")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m070")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m071")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m072")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m073")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m074")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m075")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m076")));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m077")));
    }
 
    private void sound(CommandSender s, String[] a) {
       if (a.length == 0) {
-         s.sendMessage(Util.mini("<yellow>Использование: /luna sound <звук|random> [all|мир|игрок] [громкость]</yellow>"));
-         StringBuilder sb = new StringBuilder("<gray>Звуки:");
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m078")));
+         StringBuilder sb = new StringBuilder("<gray>" + this.plugin.locales().get("text.command.sounds-header"));
          for (Map.Entry<String, ScarySound> en : SCARY_SOUNDS.entrySet()) {
-            sb.append(" <white>").append(en.getKey()).append("</white> (").append(en.getValue().label()).append(")");
+            sb.append(" <white>").append(en.getKey()).append("</white> (").append(this.plugin.locales().get("text.sound." + en.getValue().label())).append(")");
          }
          s.sendMessage(Util.mini(sb.append("</gray>").toString()));
          return;
@@ -1211,11 +1211,11 @@ public final class BloodMoonCommand implements TabExecutor {
          snd = SCARY_SOUNDS.get(key);
       }
       if (snd == null) {
-         s.sendMessage(Util.mini("<red>Неизвестный звук '" + a[0] + "'. Нажмите Tab для списка.</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m079", "input", String.valueOf(a[0]))));
          return;
       }
       List<Player> targets = new ArrayList<>();
-      String targetName = "всех";
+      String targetName = this.plugin.locales().get("text.command.everyone");
       if (a.length < 2 || a[1].equalsIgnoreCase("all")) {
          targets.addAll(Bukkit.getOnlinePlayers());
       } else {
@@ -1223,12 +1223,12 @@ public final class BloodMoonCommand implements TabExecutor {
          Player p = Bukkit.getPlayerExact(a[1]);
          if (w != null) {
             targets.addAll(w.getPlayers());
-            targetName = "мир " + w.getName();
+            targetName = this.plugin.locales().get("text.command.world-target", "world", w.getName());
          } else if (p != null) {
             targets.add(p);
             targetName = p.getName();
          } else {
-            s.sendMessage(Util.mini("<red>Мир или игрок '" + a[1] + "' не найден.</red>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m080", "input", String.valueOf(a[1]))));
             return;
          }
       }
@@ -1239,50 +1239,46 @@ public final class BloodMoonCommand implements TabExecutor {
       for (Player p : targets) {
          p.playSound(p.getLocation(), snd.sound(), SoundCategory.MASTER, volume, snd.pitch());
       }
-      s.sendMessage(Util.mini("<green>✔ Звук <white>" + snd.label() + "</white> проигран для <yellow>" + targetName + "</yellow> (игроков: " + targets.size() + ").</green>"));
+      s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m081", "label", String.valueOf(this.plugin.locales().get("text.sound." + snd.label())), "target-name", String.valueOf(targetName), "size", String.valueOf(targets.size()))));
    }
 
    private void time(CommandSender s, String[] a) {
       if (a.length == 0 || a[0].equalsIgnoreCase("status") || a[0].equalsIgnoreCase("статус")) {
          Collection<EventManager.Session> sessions = this.plugin.events().sessions();
          if (sessions.isEmpty()) {
-            s.sendMessage(Util.mini("<gray>Сейчас нет активной Кровавой Луны.</gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m082")));
             return;
          }
          long now = System.currentTimeMillis();
-         s.sendMessage(Util.mini("<gold>Статус длительности Кровавой Луны:</gold>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m083")));
          for (EventManager.Session ses : sessions) {
             long remMs = Math.max(0L, ses.endMs - now);
             long totalSec = remMs / 1000L;
             long m = totalSec / 60L;
             long sec = totalSec % 60L;
-            s.sendMessage(Util.mini(
-               "<gray>- Мир <white>" + ses.world.getName() + "</white>: <yellow>"
-               + m + "м " + sec + "с</yellow> (сложность: <yellow>x"
-               + String.format(Locale.ROOT, "%.2f", ses.difficulty) + "</yellow>)</gray>"
-            ));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m084", "name", String.valueOf(ses.world.getName()), "min", String.valueOf(m), "sec", String.valueOf(sec), "difficulty", String.valueOf(String.format(Locale.ROOT, "%.2f", ses.difficulty)))));
          }
          return;
       }
 
       String action = a[0].toLowerCase(Locale.ROOT);
       if (action.equals("help") || action.equals("помощь") || action.equals("?")) {
-         s.sendMessage(Util.mini("<gold>Команды управления таймером Кровавой Луны:</gold>"));
-         s.sendMessage(Util.mini("<yellow>/luna time status</yellow> <gray>- просмотр оставшегося времени</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna time add <время> [мир]</yellow> <gray>- добавить время (пример: /luna time add 5m)</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna time take <время> [мир]</yellow> <gray>- сократить время (пример: /luna time take 2m)</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna time set <время> [мир]</yellow> <gray>- установить оставшееся время (пример: /luna time set 3m)</gray>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m085")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m086")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m087")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m088")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m089")));
          return;
       }
 
       if (a.length < 2) {
-         s.sendMessage(Util.mini("<red>Использование: /luna time add|take|set <время (например 5m, 30s)> [мир]</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m090")));
          return;
       }
 
       Long durMs = parseDurationMs(a[1]);
       if (durMs == null || durMs <= 0L) {
-         s.sendMessage(Util.mini("<red>Некорректный формат времени. Примеры: 30s, 2m, 5m, 1h или число секунд.</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m091")));
          return;
       }
 
@@ -1290,7 +1286,7 @@ public final class BloodMoonCommand implements TabExecutor {
       if (a.length >= 3 && !a[2].equalsIgnoreCase("all") && !a[2].equalsIgnoreCase("все")) {
          targetWorld = Bukkit.getWorld(a[2]);
          if (targetWorld == null) {
-            s.sendMessage(Util.mini("<red>Мир '" + a[2] + "' не найден.</red>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m092", "input", String.valueOf(a[2]))));
             return;
          }
       }
@@ -1298,50 +1294,46 @@ public final class BloodMoonCommand implements TabExecutor {
       if (action.equals("add") || action.equals("добавить") || action.equals("+")) {
          int count = this.plugin.events().adjustDuration(targetWorld, durMs);
          if (count == 0) {
-            s.sendMessage(Util.mini("<gray>Нет активной Кровавой Луны в указанном мире.</gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m093")));
          } else {
-            s.sendMessage(Util.mini("<green>✔ Длительность Кровавой Луны увеличена на <yellow>" + formatDuration(durMs) + "</yellow> (затронуто миров: " + count + ").</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m094", "duration", String.valueOf(formatDuration(durMs)), "count", String.valueOf(count))));
          }
       } else if (action.equals("take") || action.equals("sub") || action.equals("убавить") || action.equals("отнять") || action.equals("-")) {
          int count = this.plugin.events().adjustDuration(targetWorld, -durMs);
          if (count == 0) {
-            s.sendMessage(Util.mini("<gray>Нет активной Кровавой Луны в указанном мире.</gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m095")));
          } else {
-            s.sendMessage(Util.mini("<green>✔ Длительность Кровавой Луны сокращена на <yellow>" + formatDuration(durMs) + "</yellow> (затронуто миров: " + count + ").</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m096", "duration", String.valueOf(formatDuration(durMs)), "count", String.valueOf(count))));
          }
       } else if (action.equals("set") || action.equals("установить") || action.equals("задать")) {
          int count = this.plugin.events().setDurationRemaining(targetWorld, durMs);
          if (count == 0) {
-            s.sendMessage(Util.mini("<gray>Нет активной Кровавой Луны в указанном мире.</gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m097")));
          } else {
-            s.sendMessage(Util.mini("<green>✔ Оставшееся время Кровавой Луны установлено на <yellow>" + formatDuration(durMs) + "</yellow> (затронуто миров: " + count + ").</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m098", "duration", String.valueOf(formatDuration(durMs)), "count", String.valueOf(count))));
          }
       } else {
-         s.sendMessage(Util.mini("<red>Неизвестное действие. Введите /luna time help для справки.</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m099")));
       }
    }
 
    private void dynamic(CommandSender s, String[] a) {
       DynamicDifficultyManager dm = this.plugin.dynamicDifficulty();
       if (dm == null) {
-         s.sendMessage(Util.mini("<red>Модуль динамической сложности недоступен.</red>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m100")));
          return;
       }
 
       if (a.length == 0 || a[0].equalsIgnoreCase("status") || a[0].equalsIgnoreCase("статус")) {
-         s.sendMessage(Util.mini("<gold>Статус динамической сложности:</gold>"));
-         s.sendMessage(Util.mini("<gray>- Включено в конфиге: <yellow>" + dm.isEnabled() + "</yellow></gray>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m101")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m102", "is-enabled", String.valueOf(dm.isEnabled()))));
          Collection<EventManager.Session> sessions = this.plugin.events().sessions();
          if (sessions.isEmpty()) {
-            s.sendMessage(Util.mini("<gray>- Сейчас нет активных сессий Кровавой Луны.</gray>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m103")));
          } else {
             for (EventManager.Session ses : sessions) {
                double base = dm.getBaseDifficulty(ses.world.getName());
-               s.sendMessage(Util.mini(
-                  "<gray>- Мир <white>" + ses.world.getName() + "</white>: текущая сложность <yellow>x"
-                  + String.format(Locale.ROOT, "%.2f", ses.difficulty) + "</yellow> (базовая: x"
-                  + String.format(Locale.ROOT, "%.2f", base) + ")</gray>"
-               ));
+               s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m104", "name", String.valueOf(ses.world.getName()), "difficulty", String.valueOf(String.format(Locale.ROOT, "%.2f", ses.difficulty)), "base", String.valueOf(String.format(Locale.ROOT, "%.2f", base)))));
             }
          }
          return;
@@ -1350,25 +1342,25 @@ public final class BloodMoonCommand implements TabExecutor {
       String action = a[0].toLowerCase(Locale.ROOT);
       if (action.equals("on") || action.equals("enable") || action.equals("вкл")) {
          dm.setEnabled(true);
-         s.sendMessage(Util.mini("<green>✔ Динамическая сложность включена.</green>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m105")));
       } else if (action.equals("off") || action.equals("disable") || action.equals("выкл")) {
          dm.setEnabled(false);
-         s.sendMessage(Util.mini("<yellow>⚡ Динамическая сложность отключена.</yellow>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m106")));
       } else if (action.equals("reset") || action.equals("сброс")) {
          if (a.length >= 2 && !a[1].equalsIgnoreCase("all")) {
             dm.resetDifficulty(a[1]);
-            s.sendMessage(Util.mini("<green>✔ Сложность сброшена к базовой в мире " + a[1] + ".</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m107", "input", String.valueOf(a[1]))));
          } else {
             for (EventManager.Session ses : this.plugin.events().sessions()) {
                dm.resetDifficulty(ses.world.getName());
             }
-            s.sendMessage(Util.mini("<green>✔ Сложность сброшена к базовой во всех активных мирах.</green>"));
+            s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m108")));
          }
       } else {
-         s.sendMessage(Util.mini("<gold>Команды динамической сложности:</gold>"));
-         s.sendMessage(Util.mini("<yellow>/luna dynamic status</yellow> <gray>- текущий статус и сложность</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna dynamic on|off</yellow> <gray>- включить/выключить эскалацию</gray>"));
-         s.sendMessage(Util.mini("<yellow>/luna dynamic reset [мир]</yellow> <gray>- сбросить сложность к базовой</gray>"));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m109")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m110")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m111")));
+         s.sendMessage(Util.mini(this.plugin.locales().get("text.command.m112")));
       }
    }
 
@@ -1400,13 +1392,13 @@ public final class BloodMoonCommand implements TabExecutor {
       }
    }
 
-   private static String formatDuration(long ms) {
+   private String formatDuration(long ms) {
       long totalSec = Math.max(0L, ms / 1000L);
       long m = totalSec / 60L;
       long s = totalSec % 60L;
-      if (m > 0 && s > 0) return m + "м " + s + "с";
-      if (m > 0) return m + "м";
-      return s + "с";
+      if (m > 0 && s > 0) return this.plugin.locales().get("time.short-min-sec", "min", String.valueOf(m), "sec", String.valueOf(s));
+      if (m > 0) return this.plugin.locales().get("time.short-min", "min", String.valueOf(m));
+      return this.plugin.locales().get("time.short-sec", "sec", String.valueOf(s));
    }
 
    private static boolean isDouble(String str) {
@@ -1456,18 +1448,18 @@ public final class BloodMoonCommand implements TabExecutor {
       ALIASES.put("?", "help");
       ALIASES.put("sound", "sound");
       ALIASES.put("звук", "sound");
-      SCARY_SOUNDS.put("wither", new ScarySound(Sound.ENTITY_WITHER_SPAWN, 0.6F, "рождение иссушителя"));
-      SCARY_SOUNDS.put("dragon", new ScarySound(Sound.ENTITY_ENDER_DRAGON_GROWL, 0.5F, "рык дракона"));
-      SCARY_SOUNDS.put("warden", new ScarySound(Sound.ENTITY_WARDEN_EMERGE, 0.8F, "появление хранителя"));
-      SCARY_SOUNDS.put("roar", new ScarySound(Sound.ENTITY_WARDEN_ROAR, 0.7F, "рёв хранителя"));
-      SCARY_SOUNDS.put("heartbeat", new ScarySound(Sound.ENTITY_WARDEN_HEARTBEAT, 0.6F, "сердцебиение"));
-      SCARY_SOUNDS.put("sonic", new ScarySound(Sound.ENTITY_WARDEN_SONIC_BOOM, 0.6F, "звуковой удар"));
-      SCARY_SOUNDS.put("curse", new ScarySound(Sound.ENTITY_ELDER_GUARDIAN_CURSE, 0.7F, "проклятие древнего стража"));
-      SCARY_SOUNDS.put("ghast", new ScarySound(Sound.ENTITY_GHAST_SCREAM, 0.5F, "крик гаста"));
-      SCARY_SOUNDS.put("scream", new ScarySound(Sound.ENTITY_ENDERMAN_SCREAM, 0.5F, "вопль эндермена"));
-      SCARY_SOUNDS.put("cave", new ScarySound(Sound.AMBIENT_CAVE, 0.8F, "шёпот пещеры"));
-      SCARY_SOUNDS.put("horn", new ScarySound(Sound.EVENT_RAID_HORN, 0.7F, "рог рейда"));
-      SCARY_SOUNDS.put("bell", new ScarySound(Sound.BLOCK_BELL_RESONATE, 0.5F, "гул колокола"));
-      SCARY_SOUNDS.put("thunder", new ScarySound(Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.5F, "далёкий гром"));
+      SCARY_SOUNDS.put("wither", new ScarySound(Sound.ENTITY_WITHER_SPAWN, 0.6F, "wither"));
+      SCARY_SOUNDS.put("dragon", new ScarySound(Sound.ENTITY_ENDER_DRAGON_GROWL, 0.5F, "dragon"));
+      SCARY_SOUNDS.put("warden", new ScarySound(Sound.ENTITY_WARDEN_EMERGE, 0.8F, "warden"));
+      SCARY_SOUNDS.put("roar", new ScarySound(Sound.ENTITY_WARDEN_ROAR, 0.7F, "roar"));
+      SCARY_SOUNDS.put("heartbeat", new ScarySound(Sound.ENTITY_WARDEN_HEARTBEAT, 0.6F, "heartbeat"));
+      SCARY_SOUNDS.put("sonic", new ScarySound(Sound.ENTITY_WARDEN_SONIC_BOOM, 0.6F, "sonic"));
+      SCARY_SOUNDS.put("curse", new ScarySound(Sound.ENTITY_ELDER_GUARDIAN_CURSE, 0.7F, "curse"));
+      SCARY_SOUNDS.put("ghast", new ScarySound(Sound.ENTITY_GHAST_SCREAM, 0.5F, "ghast"));
+      SCARY_SOUNDS.put("scream", new ScarySound(Sound.ENTITY_ENDERMAN_SCREAM, 0.5F, "scream"));
+      SCARY_SOUNDS.put("cave", new ScarySound(Sound.AMBIENT_CAVE, 0.8F, "cave"));
+      SCARY_SOUNDS.put("horn", new ScarySound(Sound.EVENT_RAID_HORN, 0.7F, "horn"));
+      SCARY_SOUNDS.put("bell", new ScarySound(Sound.BLOCK_BELL_RESONATE, 0.5F, "bell"));
+      SCARY_SOUNDS.put("thunder", new ScarySound(Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.5F, "thunder"));
    }
 }

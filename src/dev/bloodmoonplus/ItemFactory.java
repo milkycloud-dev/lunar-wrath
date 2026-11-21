@@ -52,7 +52,7 @@ public final class ItemFactory {
                   if (!this.plugin.loot().hasRarity(rarity)) {
                      this.plugin
                         .getLogger()
-                        .warning("items.yml: rareza '" + rarity + "' de '" + id + "' no existe en loot.yml (rarities); caerá como COMUN. Añádela a loot.yml.");
+                        .warning("items.yml: rarity '" + rarity + "' of '" + id + "' is missing in loot.yml (rarities); using COMUN. Add it to loot.yml.");
                   }
 
                   this.defs
@@ -74,12 +74,12 @@ public final class ItemFactory {
                         )
                      );
                } else {
-                  this.plugin.getLogger().warning("items.yml: material inválido en '" + id + "'");
+                  this.plugin.getLogger().warning("items.yml: invalid material in '" + id + "'");
                }
             }
          }
 
-         this.plugin.getLogger().info("Items cargados: " + this.defs.size());
+         this.plugin.getLogger().info("Items loaded: " + this.defs.size());
       }
    }
 
@@ -142,7 +142,7 @@ public final class ItemFactory {
          for (Entry<String, Integer> e : d.enchants().entrySet()) {
             Enchantment en = Reg.enchantment(e.getKey());
             if (en == null) {
-               this.plugin.getLogger().warning("items.yml: encantamiento desconocido '" + e.getKey() + "' en " + d.id());
+               this.plugin.getLogger().warning("items.yml: unknown enchantment '" + e.getKey() + "' in " + d.id());
             } else {
                meta.addEnchant(en, Math.min(this.maxEnchantLevel, Math.max(1, e.getValue())), true);
             }

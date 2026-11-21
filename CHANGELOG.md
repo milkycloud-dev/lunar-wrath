@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 (2026-11-21)
+
+- Full English translation for the public release. English is the default language; bundled `config.yml`, `items.yml`, `loot.yml`, `bosses.yml`, the world template and the MythicMobs example are in English, and every chat, title and admin message goes through `locales/<lang>.yml` (about 150 new keys under `text`, `moon`, `time`, `mob`).
+- Russian stays complete: `locales/ru.yml` has every key, and `presets/ru/` holds the Russian `config.yml`, `items.yml`, `loot.yml`, `bosses.yml` and `locales.yml`. Releases ship it as `LunarWrath-russian-preset.zip`.
+- Server logs are in English instead of Spanish and Russian.
+- Black and purple moon renaming of warning texts is configurable per language (`moon.rename`), moon names come from `moon.name`.
+- `plugin.yml` declares all `bloodmoon.bypass.*` permissions with descriptions.
+- Default schedule for new installs: Friday and Saturday at 21:00 UTC.
+- Releases: CI checks that the tag matches `plugin.yml`, that the changelog has the version, that `en.yml` and `ru.yml` have the same keys and placeholders, that presets cover every option and that English defaults contain no Russian text. Release notes start with install steps.
+- `tools/deploy.py`: optional automatic deploy of a release to your own server over SFTP with a remote console reload check, enabled per repository with `DEPLOY_ENABLED`.
+- Removed the unused `messages.yml`.
+
 ## 1.0.14 (2026-11-21)
 
 - `/luna chances`: limited items show `(выдано: N/M)` instead of the Spanish `(únicos: N/M)`.
