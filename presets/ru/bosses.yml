@@ -1,3 +1,12 @@
+# Поля босса: name, type, health, damage (множитель урона в ближнем бою и снарядами),
+# ability-damage (множитель урона способностей, по умолчанию 1.0), speed, scale,
+# knockback-resistance, bar-color, bar-overlay, equipment, abilities, enrage-at,
+# enrage-cooldown, enrage-damage, loot-table, top-damage-table, exp,
+# max-hit (потолок урона одного удара по игроку после брони, заменяет
+# difficulty.bosses.max-hit из config.yml, 0 = действует только max-hit-fraction),
+# skin (id из раздела skins в config.yml).
+# Урон боссов растёт со сложностью по difficulty.scaling.boss-damage.
+# SUMMON:<кд>:<кол-во>:<ТИП_СУЩНОСТИ или id моба орды>
 bosses:
   rey_zombi:
     name: <dark_red><bold>Кровавый Король Зомби
@@ -21,6 +30,7 @@ bosses:
     loot-table: boss_rey_zombi
     top-damage-table: boss_top_damage
     exp: 500
+    max-hit: 10.0
   arquera_carmesi:
     name: <red><bold>Багровая Лучница
     type: SKELETON
@@ -39,6 +49,7 @@ bosses:
     loot-table: boss_arquera
     top-damage-table: boss_top_damage
     exp: 400
+    max-hit: 8.0
   verdugo_noche:
     name: <dark_purple><bold>Ночной Палач
     type: WITHER_SKELETON
@@ -62,6 +73,7 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 800
+    max-hit: 12.0
   nigromante_carmesí:
     name: <dark_red><bold>Багровый Некромант
     type: EVOKER
@@ -82,6 +94,7 @@ bosses:
     loot-table: boss_rey_zombi
     top-damage-table: boss_top_damage
     exp: 600
+    max-hit: 8.0
   cazador_sombras:
     name: <black><bold>Охотник Теней
     type: STRAY
@@ -100,6 +113,7 @@ bosses:
     loot-table: boss_arquera
     top-damage-table: boss_top_damage
     exp: 500
+    max-hit: 8.0
   centinela_hueso:
     name: <white><bold>Костяной Страж
     type: SKELETON
@@ -124,6 +138,7 @@ bosses:
     loot-table: boss_arquera
     top-damage-table: boss_top_damage
     exp: 550
+    max-hit: 10.0
   devastador_sangre:
     name: <dark_red><bold>Древний Разоритель
     type: RAVAGER
@@ -144,11 +159,12 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 700
+    max-hit: 12.0
   warden_abismal:
     name: <dark_aqua><bold>Страж Бездны
     type: WARDEN
     health: 750
-    damage: 3.6
+    damage: 1.0
     speed: 1.15
     scale: 1.2
     knockback-resistance: 1.0
@@ -165,19 +181,20 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 1100
+    max-hit: 14.0
   azote_carmesi:
     name: <dark_gray><bold>Багровый Бич
     type: WITHER
     health: 900
-    damage: 4.0
+    damage: 1.5
     speed: 1.25
     scale: 1.0
     knockback-resistance: 0.95
     bar-color: PURPLE
     bar-overlay: NOTCHED_12
     abilities:
-    - SKULL:5:4
-    - EXPLODE:10:10:12
+    - SKULL:5:3
+    - EXPLODE:10:8:9
     - PULL:16:20:1.6
     - AURA:12:16:wither:8:1
     - SUMMON:20:4:WITHER_SKELETON
@@ -189,11 +206,12 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 1500
+    max-hit: 14.0
   dragon_negro:
     name: <gradient:#1a0033:#7700aa><bold>Чёрный Дракон Края</bold></gradient>
     type: ENDER_DRAGON
     health: 800
-    damage: 3.5
+    damage: 1.3
     speed: 1.2
     scale: 1.0
     knockback-resistance: 1.0
@@ -201,7 +219,7 @@ bosses:
     bar-overlay: NOTCHED_20
     abilities:
     - ROAR:15:20:darkness:6:1
-    - LIGHTNING:20:3:8
+    - LIGHTNING:20:3:6
     - PULL:25:25:1.5
     enrage-at: 0.5
     enrage-cooldown: 0.6
@@ -209,11 +227,12 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 2000
+    max-hit: 16.0
   wither_sombra:
     name: <gradient:#222222:#aa0000><bold>Теневой Исушитель</bold></gradient>
     type: WITHER
     health: 700
-    damage: 3.5
+    damage: 1.4
     speed: 1.2
     scale: 1.1
     knockback-resistance: 0.95
@@ -221,7 +240,7 @@ bosses:
     bar-overlay: NOTCHED_12
     abilities:
     - SKULL:4:4
-    - EXPLODE:8:9:10
+    - EXPLODE:8:8:8
     - PULL:14:18:1.5
     - AURA:14:15:wither:8:1
     - SUMMON:25:3:WITHER_SKELETON
@@ -232,6 +251,32 @@ bosses:
     loot-table: boss_verdugo
     top-damage-table: boss_top_damage
     exp: 1500
+    max-hit: 12.0
+  mad_eturnercus:
+    name: <dark_red><bold>Безумный Eturnercus
+    type: ZOMBIE
+    skin: eturnercus
+    health: 450
+    damage: 1.6
+    speed: 1.1
+    scale: 2.6
+    knockback-resistance: 0.8
+    bar-color: RED
+    bar-overlay: NOTCHED_10
+    equipment:
+      main-hand: NETHERITE_AXE
+    abilities:
+    - SUMMON:20:3:little_eturnercus
+    - SLAM:12:7:6
+    - CHARGE:16:1.5:8
+    - ROAR:26:14:slowness:5:1
+    enrage-at: 0.4
+    enrage-cooldown: 0.65
+    enrage-damage: 1.4
+    loot-table: boss_rey_zombi
+    top-damage-table: boss_top_damage
+    exp: 900
+    max-hit: 12.0
 spawns:
 - boss: rey_zombi
   delay-seconds: 90
@@ -297,5 +342,11 @@ spawns:
   delay-seconds: 600
   chance: 0.6
   min-difficulty: 2.0
+  count: 1
+  scale-count: true
+- boss: mad_eturnercus
+  delay-seconds: 270
+  chance: 0.6
+  min-difficulty: 1.0
   count: 1
   scale-count: true

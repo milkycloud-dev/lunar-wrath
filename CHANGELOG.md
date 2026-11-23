@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 (2026-11-23)
+
+- Boss damage no longer one-shots players. Ability damage (slam, explosion, lightning, sonic boom, charge) was multiplied twice by the mob damage scale; now it is scaled once. Bosses get their own difficulty scaling `difficulty.scaling.boss-damage` (default +10% per level, capped at x10 by `boss-damage-max-difficulty`) instead of the mob `damage` scaling.
+- Per-hit damage cap for bosses: `difficulty.bosses.max-hit` (health points after armor, default 14) and `difficulty.bosses.max-hit-fraction` (share of the player's max health, default 0.75), the lower one wins. Covers melee, projectiles, Wither skulls, explosions, dragon breath, abilities and mobs a boss summons. Each boss can override it with `max-hit` in `bosses.yml`; new `ability-damage` multiplier per boss.
+- Retuned bosses: both Withers, the Ender Dragon and the Warden deal much less raw damage, every boss has a `max-hit` between 8 and 16.
+- Horde odds: skeletons weight 34 (was 25), zombies 22 (was 35), husks 10 (was 12). Incendium piglins have weights `difficulty.incendium.weights` (elytra paratrooper 3, crossbowman 1, pyromancer 1) and their own `difficulty.incendium.min-difficulty` (default 1.0, was tied to epic effects at x3).
+- Player skins for mobs: new `skins` section in `config.yml` (texture hash, textures.minecraft.net URL, base64 value or a player name fetched from Mojang) with optional leather armor colors. Horde mobs and bosses take `skin: <id>`; horde mobs also take `id` and `scale`, and `SUMMON` can summon a horde mob by id.
+- Russian preset: Little Eturnercus (horde zombie with the eturnercus skin) and the boss Mad Eturnercus (giant zombie with the same skin that summons Little Eturnercus).
+
 ## 1.1.1 (2026-11-21)
 
 - `/luna lightning storm` and `/luna lightning frequency` no longer cap the storm at 50 strikes per second. New option `lightning.max-strikes-per-second` in `config.yml`: `0` (default) means no limit, any positive value sets a cap. Applied on `/luna reload`.

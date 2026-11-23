@@ -53,6 +53,11 @@ public final class BossManager {
    private final Map<UUID, BossManager.Instance> alive = new HashMap<>();
    private long defeatedCount = 0L;
    private static volatile boolean spawningBoss = false;
+   private static boolean abilityHit = false;
+
+   static boolean isAbilityHit() {
+      return abilityHit;
+   }
 
    static boolean isSpawningBoss() {
       return spawningBoss;
@@ -134,7 +139,10 @@ public final class BossManager {
                      s.getInt("exp", 0),
                      s.getDouble("enrage-at", 0.0),
                      s.getDouble("enrage-cooldown", 0.6),
-                     s.getDouble("enrage-damage", 1.5)
+                     s.getDouble("enrage-damage", 1.5),
+                     s.getDouble("ability-damage", 1.0),
+                     s.getDouble("max-hit", -1.0),
+                     s.getString("skin")
                   )
                );
          }
@@ -309,7 +317,11 @@ public final class BossManager {
          }
 
          le.getPersistentDataContainer().set(Keys.BOSS, PersistentDataType.STRING, d.id());
+         le.getPersistentDataContainer().set(Keys.SCALE, PersistentDataType.DOUBLE, d.damage() * this.damageScale(w, difficulty));
          le.setCustomNameVisible(true);
+         if (d.skin() != null) {
+            this.plugin.skins().apply(le, d.skin());
+         }
          if (d.scale() > 0.0) {
             AttributeInstance sc = le.getAttribute(Attribute.SCALE);
             if (sc != null) {
@@ -358,6 +370,7 @@ public final class BossManager {
 
       le.addScoreboardTag("bloodmoon_boss");
       BossManager.Instance inst = new BossManager.Instance(le.getUniqueId(), d, difficulty, w);
+      inst.abilityScale = d.abilityDamage() * this.damageScale(w, difficulty);
       inst.lastLoc = le.getLocation();
       this.alive.put(le.getUniqueId(), inst);
       return true;
@@ -519,11 +532,13 @@ public final class BossManager {
                   switch (var9) {
             case "SUMMON":
                int countSummon = (int)arg(a, 0, 3.0);
-               EntityType typeSummon;
-               try {
-                  typeSummon = EntityType.valueOf((a.args().length > 1 ? a.args()[1] : "ZOMBIE").trim().toUpperCase(Locale.ROOT));
-               } catch (IllegalArgumentException var21) {
-                  return false;
+               String typeSummon = (a.args().length > 1 ? a.args()[1] : "ZOMBIE").trim();
+               if (this.plugin.events().mobById(typeSummon) == null) {
+                  try {
+                     EntityType.valueOf(typeSummon.toUpperCase(Locale.ROOT));
+                  } catch (IllegalArgumentException var21) {
+                     return false;
+                  }
                }
 
                int nSummon = Math.max(1, (int)Math.round((double)countSummon * this.plugin.scaled(bi.diff, "horde-size")));
@@ -531,7 +546,10 @@ public final class BossManager {
                for (int ix = 0; ix < nSummon; ix++) {
                   Location loc = this.plugin.events().findSpawn(boss.getLocation(), 2.0, 6.0);
                   if (loc != null) {
-                     this.plugin.events().spawnMinion(loc, typeSummon, bi.diff, near.get(rnd.nextInt(near.size())));
+                     LivingEntity minion = this.plugin.events().spawnMinion(loc, typeSummon, bi.diff, near.get(rnd.nextInt(near.size())));
+                     if (minion != null) {
+                        minion.getPersistentDataContainer().set(Keys.MINION_OF, PersistentDataType.STRING, bi.def.id());
+                     }
                   }
                }
 
@@ -547,7 +565,7 @@ public final class BossManager {
                }
 
                for (Player px : hitSlam) {
-                  px.damage(dmgSlam * em, boss);
+                  this.hurt(bi, px, dmgSlam * em, boss);
                   Vector dirSlam = px.getLocation().toVector().subtract(boss.getLocation().toVector()).setY(0);
                   if (dirSlam.lengthSquared() < 0.01) {
                      dirSlam = new Vector(rnd.nextDouble() - 0.5, 0.0, rnd.nextDouble() - 0.5);
@@ -567,7 +585,7 @@ public final class BossManager {
                for (int i = 0; i < Math.min(countLightning, near.size()); i++) {
                   Player p = near.get(i);
                   w.strikeLightningEffect(p.getLocation());
-                  p.damage(dmgLightning * em, boss);
+                  this.hurt(bi, p, dmgLightning * em, boss);
                }
 
                return true;
@@ -601,7 +619,7 @@ public final class BossManager {
                }
 
                for (Player px : hitSonic) {
-                  px.damage(dmgSonic * em, boss);
+                  this.hurt(bi, px, dmgSonic * em, boss);
                   Vector dirSonic = px.getLocation().toVector().subtract(boss.getLocation().toVector()).setY(0);
                   if (dirSonic.lengthSquared() < 0.01) {
                      dirSonic = new Vector(rnd.nextDouble() - 0.5, 0.0, rnd.nextDouble() - 0.5);
@@ -664,7 +682,7 @@ public final class BossManager {
                w.playSound(expLoc, Sound.ENTITY_GENERIC_EXPLODE, 2.0F, 0.7F);
                w.playSound(expLoc, Sound.ENTITY_WITHER_DEATH, 1.5F, 0.8F);
                for (Player px : this.nearbyPlayers(boss, radiusExp)) {
-                  px.damage(dmgExp * em, boss);
+                  this.hurt(bi, px, dmgExp * em, boss);
                   Vector away = px.getLocation().toVector().subtract(boss.getLocation().toVector()).setY(0.4);
                   if (away.lengthSquared() > 0.01) {
                      px.setVelocity(away.normalize().multiply(1.5));
@@ -693,7 +711,7 @@ public final class BossManager {
                               if (!px.isDead()
                                  && (px.getGameMode() == GameMode.SURVIVAL || px.getGameMode() == GameMode.ADVENTURE)
                                  && px.getLocation().distanceSquared(boss.getLocation()) <= 9.0) {
-                                 px.damage(dmgCharge * em, boss);
+                                 this.hurt(bi, px, dmgCharge * em, boss);
                                  Vector away = px.getLocation().toVector().subtract(boss.getLocation().toVector()).setY(0);
                                  if (away.lengthSquared() > 0.01) {
                                     px.setVelocity(away.normalize().multiply(1.2).setY(0.5));
@@ -756,6 +774,47 @@ public final class BossManager {
                return false;
          }
       }
+   }
+
+   private void hurt(BossManager.Instance bi, Player p, double amount, LivingEntity boss) {
+      abilityHit = true;
+      try {
+         p.damage(amount * bi.abilityScale, boss);
+      } finally {
+         abilityHit = false;
+      }
+   }
+
+   double damageScale(World w, double difficulty) {
+      return this.plugin.scaled(difficulty, "boss-damage") * this.plugin.events().moonDamageMultiplier(w);
+   }
+
+   BossManager.BossDef defOf(Entity e) {
+      if (e == null) {
+         return null;
+      }
+      BossManager.Instance bi = this.alive.get(e.getUniqueId());
+      if (bi != null) {
+         return bi.def;
+      }
+      String id = e.getPersistentDataContainer().get(Keys.BOSS, PersistentDataType.STRING);
+      if (id == null) {
+         id = e.getPersistentDataContainer().get(Keys.MINION_OF, PersistentDataType.STRING);
+      }
+      return id == null ? null : this.defs.get(id);
+   }
+
+   double hitCap(BossManager.BossDef d, Player victim) {
+      double abs = d.maxHit() >= 0.0 ? d.maxHit() : this.plugin.getConfig().getDouble("difficulty.bosses.max-hit", 0.0);
+      double frac = this.plugin.getConfig().getDouble("difficulty.bosses.max-hit-fraction", 0.75);
+      double cap = Double.MAX_VALUE;
+      if (abs > 0.0) {
+         cap = abs;
+      }
+      if (frac > 0.0) {
+         cap = Math.min(cap, frac * Util.maxHealth(victim));
+      }
+      return cap;
    }
 
    public void addDamage(Entity boss, Player attacker, double amount) {
@@ -903,7 +962,10 @@ public final class BossManager {
       int exp,
       double enrageAt,
       double enrageCooldown,
-      double enrageDamage
+      double enrageDamage,
+      double abilityDamage,
+      double maxHit,
+      String skin
    ) {
    }
 
@@ -916,6 +978,7 @@ public final class BossManager {
       final Map<UUID, Double> damage = new HashMap<>();
       final long[] nextUse;
       boolean enraged = false;
+      double abilityScale = 1.0;
       Location lastLoc;
 
       Instance(UUID id, BossManager.BossDef def, double diff, World world) {

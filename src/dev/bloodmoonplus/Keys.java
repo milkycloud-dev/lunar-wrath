@@ -20,6 +20,8 @@ final class Keys {
    static NamespacedKey LEVEL;
    static NamespacedKey QUIT_PENALIZED;
    static NamespacedKey MOON_TYPE;
+   static NamespacedKey SKIN;
+   static NamespacedKey MINION_OF;
    private static Keys instance;
 
    private Keys() {
@@ -47,5 +49,7 @@ final class Keys {
       LEVEL = new NamespacedKey(p, "level");
       QUIT_PENALIZED = new NamespacedKey(p, "quit_penalized");
       MOON_TYPE = new NamespacedKey(p, "moon_type");
+      SKIN = new NamespacedKey(p, "skin");
+      MINION_OF = new NamespacedKey(p, "minion_of");
    }
 }

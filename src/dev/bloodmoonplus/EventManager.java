@@ -151,7 +151,10 @@ public final class EventManager {
                   Util.str(m, "name", null),
                   parseEquipment(m.get("equipment")),
                   Util.num(m, "equipment-chance", 1.0),
-                  Util.str(m, "loot-table", null)
+                  Util.str(m, "loot-table", null),
+                  Util.str(m, "id", null),
+                  Util.str(m, "skin", null),
+                  Util.num(m, "scale", 0.0)
                )
             );
       }
@@ -967,27 +970,18 @@ public final class EventManager {
                            }
                         }
 
-                        boolean spawnInc = s.difficulty >= this.plugin.epicEffects().getMinDifficulty()
+                        boolean spawnInc = s.difficulty >= this.plugin.getConfig().getDouble("difficulty.incendium.min-difficulty", this.plugin.epicEffects().getMinDifficulty())
                            && this.plugin.getConfig().getBoolean("difficulty.incendium.enabled", true)
                            && ThreadLocalRandom.current().nextDouble() <= this.plugin.getConfig().getDouble("difficulty.incendium.chance-in-horde", 0.20);
 
                         LivingEntity le = null;
-                        if (spawnInc) {
-                           List<String> types = new ArrayList<>();
-                           types.add("paratrooper");
-                           types.add("crossbowman");
-                           double pyroMin = this.plugin.getConfig().getDouble("difficulty.incendium.pyromancer.min-difficulty", 6.0);
-                           if (s.difficulty >= pyroMin) {
-                              types.add("pyromancer");
-                           }
-                           String incType = types.get(ThreadLocalRandom.current().nextInt(types.size()));
+                        String incType = spawnInc ? this.pickIncendiumType(s.difficulty) : null;
+                        if (incType != null) {
                            le = this.plugin.epicEffects().spawnIncendiumMob(w, loc, incType, s.difficulty);
                         } else {
                            EventManager.MobDef d = Util.pick(this.mobs, EventManager.MobDef::weight);
                            if (d != null) {
-                              le = this.spawn(
-                                 loc, d.type(), d.health(), d.damage(), d.speed(), d.name(), d.equipment(), d.equipChance(), s.difficulty, d.table(), px
-                              );
+                              le = this.spawnDef(loc, d, s.difficulty, px);
                            }
                         }
                         if (le != null) {
@@ -1005,14 +999,92 @@ public final class EventManager {
       }
    }
 
-   public LivingEntity spawnMinion(Location loc, EntityType type, double diff, Player target) {
+   private String pickIncendiumType(double diff) {
+      List<String> types = new ArrayList<>();
+      List<Double> weights = new ArrayList<>();
+      double pyroMin = this.plugin.getConfig().getDouble("difficulty.incendium.pyromancer.min-difficulty", 6.0);
+      for (String t : List.of("paratrooper", "crossbowman", "pyromancer")) {
+         if (t.equals("pyromancer") && diff < pyroMin) {
+            continue;
+         }
+         double wgt = this.plugin.getConfig().getDouble("difficulty.incendium.weights." + t, 1.0);
+         if (wgt > 0.0) {
+            types.add(t);
+            weights.add(wgt);
+         }
+      }
+      double total = weights.stream().mapToDouble(Double::doubleValue).sum();
+      if (total <= 0.0) {
+         return null;
+      }
+      double r = ThreadLocalRandom.current().nextDouble() * total;
+      for (int i = 0; i < types.size(); i++) {
+         r -= weights.get(i);
+         if (r < 0.0) {
+            return types.get(i);
+         }
+      }
+      return types.get(types.size() - 1);
+   }
+
+   public EventManager.MobDef mobById(String id) {
+      if (id == null) {
+         return null;
+      }
       for (EventManager.MobDef d : this.mobs) {
-         if (d.type() == type) {
-            return this.spawn(loc, type, d.health(), d.damage(), d.speed(), d.name(), d.equipment(), d.equipChance(), diff, d.table(), target);
+         if (id.equalsIgnoreCase(d.id())) {
+            return d;
+         }
+      }
+      return null;
+   }
+
+   public LivingEntity spawnDef(Location loc, EventManager.MobDef d, double diff, Player target) {
+      LivingEntity le = this.spawn(loc, d.type(), d.health(), d.damage(), d.speed(), d.name(), d.equipment(), d.equipChance(), diff, d.table(), target);
+      if (le == null) {
+         return null;
+      }
+      if (d.scale() > 0.0) {
+         AttributeInstance sc = le.getAttribute(Attribute.SCALE);
+         if (sc != null) {
+            sc.setBaseValue(d.scale());
+         }
+      }
+      if (d.skin() != null) {
+         this.plugin.skins().apply(le, d.skin());
+      }
+      return le;
+   }
+
+   public LivingEntity spawnMinion(Location loc, String mob, double diff, Player target) {
+      EventManager.MobDef byId = this.mobById(mob);
+      if (byId != null) {
+         return this.spawnDef(loc, byId, diff, target);
+      }
+      EntityType type;
+      try {
+         type = EntityType.valueOf(mob.trim().toUpperCase(Locale.ROOT));
+      } catch (IllegalArgumentException e) {
+         return null;
+      }
+      for (EventManager.MobDef d : this.mobs) {
+         if (d.type() == type && d.skin() == null) {
+            return this.spawnDef(loc, d, diff, target);
          }
       }
 
       return this.spawn(loc, type, 0.0, 1.0, 1.0, null, Map.of(), 1.0, diff, null, target);
+   }
+
+   public double moonDamageMultiplier(World w) {
+      EventManager.Session s = this.session(w);
+      MoonType mt = s != null ? s.moonType : MoonType.BLOOD;
+      if (mt == MoonType.BLACK) {
+         return this.plugin.getConfig().getDouble("moon-types.black.damage-multiplier", 1.5);
+      } else if (mt == MoonType.PURPLE) {
+         return this.plugin.getConfig().getDouble("moon-types.purple.damage-multiplier", 1.3);
+      }
+      return 1.0;
    }
 
    public int spawnPunishmentHorde(Player target, int count, double diff) {
@@ -1025,7 +1097,7 @@ public final class EventManager {
          }
          EventManager.MobDef d = Util.pick(this.mobs, EventManager.MobDef::weight);
          if (d != null) {
-            LivingEntity le = this.spawn(loc, d.type(), d.health(), d.damage(), d.speed(), d.name(), d.equipment(), d.equipChance(), diff, d.table(), target);
+            LivingEntity le = this.spawnDef(loc, d, diff, target);
             if (le != null) {
                spawned++;
             }
@@ -1220,7 +1292,10 @@ public final class EventManager {
       String name,
       Map<EquipmentSlot, Material> equipment,
       double equipChance,
-      String table
+      String table,
+      String id,
+      String skin,
+      double scale
    ) {
    }
 

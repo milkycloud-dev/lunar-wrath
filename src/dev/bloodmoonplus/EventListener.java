@@ -48,6 +48,12 @@ public final class EventListener implements Listener {
    }
 
    private static Entity source(Entity damager) {
+      if (damager instanceof org.bukkit.entity.ComplexEntityPart part) {
+         return part.getParent();
+      }
+      if (damager instanceof org.bukkit.entity.AreaEffectCloud cloud && cloud.getSource() instanceof Entity owner) {
+         return owner;
+      }
       if (damager instanceof Projectile p) {
          ProjectileSource var3 = p.getShooter();
          if (var3 instanceof Entity) {
@@ -63,6 +69,9 @@ public final class EventListener implements Listener {
       ignoreCancelled = true
    )
    public void onMobDamage(EntityDamageByEntityEvent e) {
+      if (BossManager.isAbilityHit()) {
+         return;
+      }
       if (source(e.getDamager()) instanceof LivingEntity le && EventManager.isTagged(le)) {
          Double scale = (Double)le.getPersistentDataContainer().get(Keys.SCALE, PersistentDataType.DOUBLE);
          if (scale != null && scale != 1.0) {
@@ -70,6 +79,24 @@ public final class EventListener implements Listener {
          }
 
          return;
+      }
+   }
+
+   @EventHandler(
+      priority = EventPriority.HIGHEST,
+      ignoreCancelled = true
+   )
+   public void onBossHitCap(EntityDamageByEntityEvent e) {
+      if (!(e.getEntity() instanceof Player victim)) {
+         return;
+      }
+      BossManager.BossDef d = this.plugin.bosses().defOf(source(e.getDamager()));
+      if (d == null) {
+         return;
+      }
+      double cap = this.plugin.bosses().hitCap(d, victim);
+      for (int i = 0; i < 4 && e.getFinalDamage() > cap && e.getDamage() > 0.0; i++) {
+         e.setDamage(e.getDamage() * cap / e.getFinalDamage());
       }
    }
 

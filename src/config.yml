@@ -501,6 +501,11 @@ difficulty:
     store-pdc: true       # store the level in PDC (Keys.LEVEL and levelledmobs:level)
   bosses:
     scale-count-max: 1    # exactly 1 boss per spawn (only stats and rewards scale)
+    # Per-hit damage cap for every boss hit on a player: melee, projectiles, explosions,
+    # dragon breath, abilities and mobs the boss summons. It limits the damage left after armor, so no boss
+    # can kill a player from full health in one hit. A boss can override max-hit in bosses.yml.
+    max-hit: 14.0         # hard cap in health points per hit (2.0 = one heart), 0 = off
+    max-hit-fraction: 0.75 # cap as a share of the player's max health, 0 = off; the lower cap wins
   scaling:
     health: 0.35         # mob health (+35% per difficulty level)
     damage: 0.35         # mob damage (+35% per difficulty level)
@@ -513,6 +518,8 @@ difficulty:
     loot-chance-max-difficulty: 5.0 # loot chance stops growing above x5
     rarity-luck: 0.45    # luck for rare loot categories
     rarity-luck-max-difficulty: 5.0 # luck stops growing above x5
+    boss-damage: 0.1     # boss damage (+10% per difficulty level), separate from mob damage
+    boss-damage-max-difficulty: 10.0 # boss damage stops growing above x10
   epic-effects:
     enabled: true
     min-difficulty: 3.0   # epic effects from x3
@@ -552,7 +559,12 @@ difficulty:
         rocket-count: 3
   incendium:
     enabled: true
-    chance-in-horde: 0.20 # chance of a paratrooper, pyromancer or crossbowman in a wave
+    chance-in-horde: 0.20 # chance that a horde mob is a paratrooper, pyromancer or crossbowman
+    min-difficulty: 1.0   # from which difficulty these piglins join the horde
+    weights:              # relative odds between the three piglin types, 0 = never
+      paratrooper: 3.0    # piglin brute gliding on elytra
+      crossbowman: 1.0
+      pyromancer: 1.0
     pyromancer:
       min-difficulty: 6.0 # pyromancers appear only from x6
       temp-fire: true     # fire is put out and cleaned up when the moon ends
@@ -574,7 +586,7 @@ horde:
     materials: [DIAMOND, NETHERITE]
   mobs:
     - type: ZOMBIE
-      weight: 35
+      weight: 22
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
@@ -582,7 +594,7 @@ horde:
       equipment: { head: IRON_HELMET, main-hand: IRON_SWORD }
       equipment-chance: 0.4
     - type: SKELETON
-      weight: 25
+      weight: 34
       health: 35
       damage-multiplier: 1.4
       speed-multiplier: 1.02
@@ -590,7 +602,7 @@ horde:
       equipment: { head: IRON_HELMET }
       equipment-chance: 0.4
     - type: HUSK
-      weight: 12
+      weight: 10
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
@@ -636,6 +648,24 @@ horde:
       damage-multiplier: 1.35
       name: "<dark_red>Lesser Executioner"
       loot-table: mob_elite
+
+# ------------------------------------------------------------
+#  SKINS
+#  Player skins for horde mobs and bosses. A mob gets the skin with
+#  `skin: <id>` in horde.mobs or in bosses.yml. The skin is shown as
+#  the player's head; the optional armor colors dye leather armor to
+#  match the skin's clothes. Effective with /luna reload.
+#
+#  skins:
+#    my_skin:
+#      texture: 0123abcd...   # texture hash, textures.minecraft.net URL or base64 "textures" value
+#      player: SomePlayer     # only used when texture is empty: fetched from Mojang at load
+#      armor: { chest: "#D8D8D8", legs: "#A0A0A0", feet: "#2A1A14" }
+#
+#  Horde mobs also take `id` (used by SUMMON:<cooldown>:<count>:<id> in
+#  bosses.yml) and `scale` (model size, 1.0 = normal).
+# ------------------------------------------------------------
+skins: {}
 
 # ------------------------------------------------------------
 #  LOOT

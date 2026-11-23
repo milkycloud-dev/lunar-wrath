@@ -24,6 +24,7 @@ public final class BloodMoonPlus extends JavaPlugin {
    private LootManager loot;
    private EventManager events;
    private BossManager bosses;
+   private SkinManager skins;
    private ScheduleManager schedule;
    private ItemAbilities abilities;
    private EpicEffectsManager epicEffects;
@@ -67,6 +68,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       this.loot = new LootManager(this);
       this.events = new EventManager(this);
       this.bosses = new BossManager(this);
+      this.skins = new SkinManager(this);
       this.schedule = new ScheduleManager(this);
       this.abilities = new ItemAbilities(this);
       this.snapshots = new PlaceholderSnapshotService(this, this.stats);
@@ -171,6 +173,7 @@ public final class BloodMoonPlus extends JavaPlugin {
       this.messages.reload();
       this.loot.reload();
       this.items.reload();
+      this.skins.reload();
       this.bosses.reload();
       this.events.reload();
       this.schedule.reload();
@@ -323,6 +326,10 @@ public final class BloodMoonPlus extends JavaPlugin {
 
    public BossManager bosses() {
       return this.bosses;
+   }
+
+   public SkinManager skins() {
+      return this.skins;
    }
 
    public ScheduleManager schedule() {

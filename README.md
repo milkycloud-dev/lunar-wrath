@@ -67,8 +67,8 @@ All files live in `plugins/BloodMoonPlus/` and are created on first start.
 
 | File | What is in it |
 |---|---|
-| `config.yml` | worlds, schedule, event, hordes, difficulty, anti-camping (dynamic difficulty, dimension, elytra and container wrath, quit penalty), countdown, announcements. Every option is commented. |
-| `bosses.yml` | bosses and their abilities (`TYPE:cooldown:args`), boss spawn plan |
+| `config.yml` | worlds, schedule, event, hordes, difficulty, anti-camping (dynamic difficulty, dimension, elytra and container wrath, quit penalty), countdown, announcements, player skins for mobs. Every option is commented. |
+| `bosses.yml` | bosses, their abilities (`TYPE:cooldown:args`), per-hit damage cap (`max-hit`), skins, boss spawn plan |
 | `items.yml` | custom items: material, name, lore, enchantments, abilities, passives |
 | `loot.yml` | rarities, pity, loot tables for mobs, bosses and survivors |
 | `locales/locales.yml` | `Language: en`, `ru` or `es` |
@@ -82,6 +82,9 @@ Most used settings:
 - `dynamic-difficulty.max-difficulty`: `0` for no limit.
 - `container-wrath.explosion.enabled`, `container-wrath.boss-enabled`, `warnings-before-punish`.
 - `announce.*`: switch chat categories on or off.
+- `difficulty.bosses.max-hit` and `max-hit-fraction`: the most damage one boss hit can deal to a player after armor, so bosses never kill from full health in one hit. `difficulty.scaling.boss-damage` sets how boss damage grows with difficulty.
+- `horde.mobs[].weight` and `difficulty.incendium.weights`: spawn odds of horde mobs and of the elytra paratroopers, crossbowmen and pyromancers.
+- `skins`: player skins for horde mobs and bosses (`skin: <id>`), given as a texture hash, URL, base64 value or a player name.
 
 Texts use [MiniMessage](https://docs.advntr.dev/minimessage/format.html). Keep screen titles short (about 15 bold characters) so they fit any screen.
 
@@ -197,7 +200,7 @@ Proprietary, see [LICENSE](LICENSE). Based on BloodMoonPlus 1.0.1; rights to the
 
 Все файлы в `plugins/BloodMoonPlus/`, создаются при первом запуске: `config.yml` (миры, расписание, орды, сложность, защита от отсиживания, отсчёт, оповещения, каждая опция с комментарием), `bosses.yml`, `items.yml`, `loot.yml`, `locales/locales.yml` (язык), `locales/<язык>.yml` (все сообщения), `worlds/<мир>/config.yml` (настройки мира).
 
-Чаще всего меняют: `schedule.mode`, `schedule.timezone`, `schedule.days`; `event.global`; `dynamic-difficulty.max-difficulty` (`0` без потолка); `container-wrath.explosion.enabled` и `container-wrath.boss-enabled`; `announce.*`. Тексты в формате [MiniMessage](https://docs.advntr.dev/minimessage/format.html), титулы на экране держите короткими, около 15 жирных символов.
+Чаще всего меняют: `schedule.mode`, `schedule.timezone`, `schedule.days`; `event.global`; `dynamic-difficulty.max-difficulty` (`0` без потолка); `container-wrath.explosion.enabled` и `container-wrath.boss-enabled`; `announce.*`; потолок урона одного удара босса `difficulty.bosses.max-hit` и `max-hit-fraction` (после брони, с полного здоровья босс не убивает); шансы мобов орды `horde.mobs[].weight` и пиглинов `difficulty.incendium.weights`; скины игроков для мобов и боссов `skins`. Тексты в формате [MiniMessage](https://docs.advntr.dev/minimessage/format.html), титулы на экране держите короткими, около 15 жирных символов.
 
 ### Команды и права
 

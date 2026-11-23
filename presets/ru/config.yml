@@ -568,6 +568,11 @@ difficulty:
     store-pdc: true       # сохранять уровень в PDC (Keys.LEVEL и levelledmobs:level)
   bosses:
     scale-count-max: 1    # строго 1 босс за спавн (масштабируются только характеристики и награды)
+    # Потолок урона одного удара босса по игроку: ближний бой, снаряды, взрывы,
+    # дыхание дракона, способности и призванные боссом мобы. Считается по урону после брони, поэтому ни один
+    # босс не убьёт игрока с полного здоровья одним ударом. В bosses.yml можно задать свой max-hit.
+    max-hit: 14.0         # жёсткий потолок в единицах здоровья за удар (2.0 = одно сердце), 0 = выкл
+    max-hit-fraction: 0.75 # потолок как доля макс. здоровья игрока, 0 = выкл; действует меньший из двух
   scaling:
     health: 0.35         # здоровье мобов (+35% за уровень сложности)
     damage: 0.35         # урон мобов (+35% за уровень сложности)
@@ -580,6 +585,8 @@ difficulty:
     loot-chance-max-difficulty: 5.0 # выше x5 шанс лута не растёт
     rarity-luck: 0.45    # удача для редких категорий лута
     rarity-luck-max-difficulty: 5.0 # выше x5 удача не растёт (сложность теперь без потолка)
+    boss-damage: 0.1     # урон боссов (+10% за уровень сложности), отдельно от урона мобов
+    boss-damage-max-difficulty: 10.0 # выше x10 урон боссов не растёт
   epic-effects:
     enabled: true
     min-difficulty: 3.0   # активация эпичных эффектов на сложностях от x3
@@ -619,7 +626,12 @@ difficulty:
         rocket-count: 3
   incendium:
     enabled: true
-    chance-in-horde: 0.20 # шанс спавна десантника, пироманта или арбалетчика в волне
+    chance-in-horde: 0.20 # шанс, что моб орды будет десантником, пиромантом или арбалетчиком
+    min-difficulty: 1.0   # с какой сложности эти пиглины появляются в орде
+    weights:              # относительные шансы трёх типов пиглинов, 0 = никогда
+      paratrooper: 3.0    # брутальный пиглин-десантник на элитрах
+      crossbowman: 1.0
+      pyromancer: 1.0
     pyromancer:
       min-difficulty: 6.0 # Пиромант появляется только со сложности x6 и выше
       temp-fire: true     # автоматическое тушение огня и очистка при завершении луны
@@ -641,7 +653,7 @@ horde:
     materials: [DIAMOND, NETHERITE]
   mobs:
     - type: ZOMBIE
-      weight: 35
+      weight: 22
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
@@ -649,7 +661,7 @@ horde:
       equipment: { head: IRON_HELMET, main-hand: IRON_SWORD }
       equipment-chance: 0.4
     - type: SKELETON
-      weight: 25
+      weight: 34
       health: 35
       damage-multiplier: 1.4
       speed-multiplier: 1.02
@@ -657,7 +669,7 @@ horde:
       equipment: { head: IRON_HELMET }
       equipment-chance: 0.4
     - type: HUSK
-      weight: 12
+      weight: 10
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
@@ -703,6 +715,33 @@ horde:
       damage-multiplier: 1.35
       name: "<dark_red>Малый палач"
       loot-table: mob_elite
+    - id: little_eturnercus
+      type: ZOMBIE
+      skin: eturnercus
+      weight: 6
+      health: 40
+      damage-multiplier: 1.5
+      speed-multiplier: 1.04
+      name: "<gray>Маленький Eturnercus"
+      equipment: { main-hand: IRON_SWORD }
+      equipment-chance: 0.5
+
+# ------------------------------------------------------------
+#  СКИНЫ
+#  Скины игроков для мобов орды и боссов. Моб получает скин строкой
+#  `skin: <id>` в horde.mobs или в bosses.yml. Скин виден как голова
+#  игрока; armor красит кожаную броню под одежду скина (необязательно).
+#  Применяется по /luna reload.
+#    texture: хеш текстуры, ссылка textures.minecraft.net или base64 "textures"
+#    player: ник, используется только при пустом texture (запрос к Mojang при загрузке)
+#  У мобов орды есть ещё `id` (для SUMMON:<кд>:<кол-во>:<id> в bosses.yml)
+#  и `scale` (размер модели, 1.0 = обычный).
+# ------------------------------------------------------------
+skins:
+  eturnercus:
+    texture: 994d7a108c53d4b1d5ceac62b21f0f4271680bea1bdcd96ba9d2d25d5c500048
+    player: eturnercus
+    armor: { chest: "#D8D8D8", legs: "#A0A0A0", feet: "#2A1A14" }
 
 # ------------------------------------------------------------
 #  LOOT
