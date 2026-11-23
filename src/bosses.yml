@@ -4,9 +4,13 @@
 # enrage-cooldown, enrage-damage, loot-table, top-damage-table, exp,
 # max-hit (per-hit cap on damage to a player after armor, overrides
 # difficulty.bosses.max-hit in config.yml, 0 = only max-hit-fraction applies),
+# max-damage (cap on raw damage before armor, overrides difficulty.bosses.max-damage),
+# bar-radius (boss bar range in blocks, overrides difficulty.bosses.bar-radius),
 # skin (id from the skins section of config.yml).
 # Boss damage grows with difficulty by difficulty.scaling.boss-damage.
 # SUMMON:<cooldown>:<count>:<ENTITY_TYPE or horde mob id>
+# spawns: every entry is a separate roll per moon (boss, delay-seconds, chance, min-difficulty, count);
+# several entries for one boss give it several chances per moon.
 bosses:
   rey_zombi:
     name: <dark_red><bold>Blood Zombie King
@@ -228,6 +232,7 @@ bosses:
     top-damage-table: boss_top_damage
     exp: 2000
     max-hit: 16.0
+    bar-radius: 100.0
   wither_sombra:
     name: <gradient:#222222:#aa0000><bold>Shadow Wither</bold></gradient>
     type: WITHER
@@ -274,7 +279,7 @@ spawns:
 - boss: nigromante_carmesí
   delay-seconds: 240
   chance: 0.7
-  min-difficulty: 1.5
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: cazador_sombras
@@ -286,36 +291,36 @@ spawns:
 - boss: devastador_sangre
   delay-seconds: 300
   chance: 0.6
-  min-difficulty: 1.5
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: verdugo_noche
   delay-seconds: 330
   chance: 0.6
-  min-difficulty: 1.5
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: warden_abismal
   delay-seconds: 540
-  chance: 0.8
-  min-difficulty: 2.0
+  chance: 0.6
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: azote_carmesi
   delay-seconds: 660
-  chance: 0.5
-  min-difficulty: 2.5
+  chance: 0.6
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: wither_sombra
   delay-seconds: 450
-  chance: 0.7
-  min-difficulty: 1.5
+  chance: 0.6
+  min-difficulty: 1.0
   count: 1
   scale-count: true
 - boss: dragon_negro
   delay-seconds: 600
   chance: 0.6
-  min-difficulty: 2.0
+  min-difficulty: 1.0
   count: 1
   scale-count: true

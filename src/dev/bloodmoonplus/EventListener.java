@@ -90,11 +90,24 @@ public final class EventListener implements Listener {
       if (!(e.getEntity() instanceof Player victim)) {
          return;
       }
-      BossManager.BossDef d = this.plugin.bosses().defOf(source(e.getDamager()));
-      if (d == null) {
+      Entity src = source(e.getDamager());
+      BossManager.BossDef d = this.plugin.bosses().defOf(src);
+      double raw;
+      double cap;
+      if (d != null) {
+         raw = this.plugin.bosses().rawCap(d);
+         cap = this.plugin.bosses().hitCap(d, victim);
+      } else if (src != null && EventManager.isTagged(src)) {
+         raw = this.plugin.getConfig().getDouble("horde.max-damage", 0.0);
+         cap = BossManager.finalCap(
+            this.plugin.getConfig().getDouble("horde.max-hit", 0.0), this.plugin.getConfig().getDouble("horde.max-hit-fraction", 0.0), victim
+         );
+      } else {
          return;
       }
-      double cap = this.plugin.bosses().hitCap(d, victim);
+      if (raw > 0.0 && e.getDamage() > raw) {
+         e.setDamage(raw);
+      }
       for (int i = 0; i < 4 && e.getFinalDamage() > cap && e.getDamage() > 0.0; i++) {
          e.setDamage(e.getDamage() * cap / e.getFinalDamage());
       }
@@ -386,8 +399,13 @@ public final class EventListener implements Listener {
 
    @EventHandler
    public void onEntitiesLoad(EntitiesLoadEvent e) {
+      boolean active = this.plugin.events().isActive(e.getWorld());
       for (Entity ent : e.getEntities()) {
-         this.plugin.bosses().dropOrphan(ent);
+         if (!active && ent instanceof LivingEntity && EventManager.isTagged(ent)) {
+            ent.remove();
+         } else {
+            this.plugin.bosses().dropOrphan(ent);
+         }
       }
    }
 

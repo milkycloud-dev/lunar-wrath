@@ -1238,7 +1238,7 @@ public final class EventManager {
       int n = 0;
 
       for (LivingEntity le : w.getLivingEntities()) {
-         if (isTagged(le)) {
+         if (le.isValid() && (isTagged(le) || le.getPersistentDataContainer().has(Keys.BOSS, PersistentDataType.STRING))) {
             le.remove();
             n++;
          }

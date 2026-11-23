@@ -573,6 +573,9 @@ difficulty:
     # босс не убьёт игрока с полного здоровья одним ударом. В bosses.yml можно задать свой max-hit.
     max-hit: 14.0         # жёсткий потолок в единицах здоровья за удар (2.0 = одно сердце), 0 = выкл
     max-hit-fraction: 0.75 # потолок как доля макс. здоровья игрока, 0 = выкл; действует меньший из двух
+    bar-radius: 50.0      # полоса босса видна только игрокам ближе этого числа блоков к боссу, 0 = весь мир
+    max-damage: 40.0      # потолок сырого урона до брони, 0 = выкл. Броня и Защита режут уже его,
+                          # поэтому игрок в незерите получает намного меньше, чем без брони
   scaling:
     health: 0.35         # здоровье мобов (+35% за уровень сложности)
     damage: 0.35         # урон мобов (+35% за уровень сложности)
@@ -646,6 +649,13 @@ horde:
   base-size: 3
   wave-max-size: 10
   max-alive-per-player: 12
+  # Потолок урона одного удара мобов орды (и их стрел, взрывов, фейерверков).
+  # max-damage ограничивает сырой урон до брони, чтобы незерит и Защита работали на любой
+  # сложности; max-hit и max-hit-fraction ограничивают остаток после брони, чтобы один моб
+  # не убивал с полного здоровья. 0 = выкл.
+  max-damage: 30.0
+  max-hit: 10.0
+  max-hit-fraction: 0.5
   spawn-distance: { min: 16, max: 28 }
   require-armor:
     enabled: false
@@ -718,11 +728,11 @@ horde:
     - id: little_eturnercus
       type: ZOMBIE
       skin: eturnercus
-      weight: 6
+      weight: 7
       health: 40
       damage-multiplier: 1.5
       speed-multiplier: 1.04
-      name: "<gray>Маленький Eturnercus"
+      name: "<gray>Маленький eturnercus"
       equipment: { main-hand: IRON_SWORD }
       equipment-chance: 0.5
 

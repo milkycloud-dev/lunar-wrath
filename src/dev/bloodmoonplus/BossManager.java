@@ -142,6 +142,8 @@ public final class BossManager {
                      s.getDouble("enrage-damage", 1.5),
                      s.getDouble("ability-damage", 1.0),
                      s.getDouble("max-hit", -1.0),
+                     s.getDouble("max-damage", -1.0),
+                     s.getDouble("bar-radius", -1.0),
                      s.getString("skin")
                   )
                );
@@ -368,6 +370,9 @@ public final class BossManager {
          }
       }
 
+      if (le instanceof org.bukkit.entity.Boss vb && vb.getBossBar() != null) {
+         vb.getBossBar().setVisible(false);
+      }
       le.addScoreboardTag("bloodmoon_boss");
       BossManager.Instance inst = new BossManager.Instance(le.getUniqueId(), d, difficulty, w);
       inst.abilityScale = d.abilityDamage() * this.damageScale(w, difficulty);
@@ -393,12 +398,19 @@ public final class BossManager {
             double frac = Math.max(0.0, Math.min(1.0, le.getHealth() / Util.maxHealth(le)));
             bi.bar.progress((float)frac);
 
+            double barRadius = bi.def.barRadius() >= 0.0 ? bi.def.barRadius() : this.plugin.getConfig().getDouble("difficulty.bosses.bar-radius", 50.0);
+            Location bossLoc = le.getLocation();
             for (Player p : Bukkit.getOnlinePlayers()) {
-               if (p.getWorld().equals(le.getWorld())) {
+               if (p.getWorld().equals(le.getWorld()) && (barRadius <= 0.0 || p.getLocation().distanceSquared(bossLoc) <= barRadius * barRadius)) {
                   p.showBossBar(bi.bar);
                } else {
                   p.hideBossBar(bi.bar);
                }
+            }
+
+            if (le instanceof org.bukkit.entity.Boss vb && vb.getBossBar() != null) {
+               vb.getBossBar().setVisible(false);
+               vb.getBossBar().removeAll();
             }
 
             if (!bi.enraged && bi.def.enrageAt() > 0.0 && frac <= bi.def.enrageAt()) {
@@ -806,7 +818,14 @@ public final class BossManager {
 
    double hitCap(BossManager.BossDef d, Player victim) {
       double abs = d.maxHit() >= 0.0 ? d.maxHit() : this.plugin.getConfig().getDouble("difficulty.bosses.max-hit", 0.0);
-      double frac = this.plugin.getConfig().getDouble("difficulty.bosses.max-hit-fraction", 0.75);
+      return finalCap(abs, this.plugin.getConfig().getDouble("difficulty.bosses.max-hit-fraction", 0.75), victim);
+   }
+
+   double rawCap(BossManager.BossDef d) {
+      return d.maxDamage() >= 0.0 ? d.maxDamage() : this.plugin.getConfig().getDouble("difficulty.bosses.max-damage", 0.0);
+   }
+
+   static double finalCap(double abs, double frac, Player victim) {
       double cap = Double.MAX_VALUE;
       if (abs > 0.0) {
          cap = abs;
@@ -903,13 +922,13 @@ public final class BossManager {
          BossManager.Instance bi = it.next();
          if (bi.world.equals(w)) {
             Entity ent = Bukkit.getEntity(bi.id);
-            if (ent != null) {
+            if (ent != null && ent.isValid()) {
                ent.remove();
+               n++;
             }
 
             this.hideBar(bi);
             it.remove();
-            n++;
          }
       }
 
@@ -965,6 +984,8 @@ public final class BossManager {
       double enrageDamage,
       double abilityDamage,
       double maxHit,
+      double maxDamage,
+      double barRadius,
       String skin
    ) {
    }

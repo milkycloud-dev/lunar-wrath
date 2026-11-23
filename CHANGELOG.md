@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1 (2026-11-23)
+
+- Horde mobs get per-hit caps too: `horde.max-damage` (raw damage before armor, default 30), `horde.max-hit` (after armor, default 10) and `horde.max-hit-fraction` (default 0.5). Bosses get `difficulty.bosses.max-damage` (default 40) and a per-boss `max-damage`. Capping raw damage before armor keeps Netherite and Protection useful at any difficulty: at x10 Black Moon a full Netherite Protection IV player takes at most 4.75 per horde hit, an unarmored one 10.
+- `/luna killmobs` now clears every world, bosses included, also when no moon is running (before it removed nothing without an active moon and left bosses called with `/luna boss`). Moon mobs found in chunks loaded later, in a world with no active moon, are removed.
+- Boss bar is shown only near the boss: `difficulty.bosses.bar-radius` (default 50 blocks, 0 = whole world). Before it was shown to every player in the world. Each boss can override it with `bar-radius` in `bosses.yml`; the Ender Dragon uses 100 because it circles wide.
+- Russian preset: Little eturnercus weight 7 (slightly below the common horde mobs), names written in lower case. Mad eturnercus spawns with chance 0.4 at 4.5 minutes.
+- Every boss can spawn on a regular moon: `min-difficulty` is 1.0 for all of them in `bosses.yml` (before the Warden and the Ender Dragon needed x2.0 and the Crimson Scourge x2.5, so with scheduled moons at x1.4 to x1.6 they never appeared, and four more bosses needed x1.5). The Warden, the Ender Dragon and both Withers roll at 0.6 like the other bosses (0.5 to 0.7), the Blood Zombie King stays the most frequent at 1.0.
+- The vanilla boss bar of Withers and the Ender Dragon spawned as bosses is hidden, so only the plugin bar with its radius is shown.
+
 ## 1.2.0 (2026-11-23)
 
 - Boss damage no longer one-shots players. Ability damage (slam, explosion, lightning, sonic boom, charge) was multiplied twice by the mob damage scale; now it is scaled once. Bosses get their own difficulty scaling `difficulty.scaling.boss-damage` (default +10% per level, capped at x10 by `boss-damage-max-difficulty`) instead of the mob `damage` scaling.
@@ -7,7 +16,7 @@
 - Retuned bosses: both Withers, the Ender Dragon and the Warden deal much less raw damage, every boss has a `max-hit` between 8 and 16.
 - Horde odds: skeletons weight 34 (was 25), zombies 22 (was 35), husks 10 (was 12). Incendium piglins have weights `difficulty.incendium.weights` (elytra paratrooper 3, crossbowman 1, pyromancer 1) and their own `difficulty.incendium.min-difficulty` (default 1.0, was tied to epic effects at x3).
 - Player skins for mobs: new `skins` section in `config.yml` (texture hash, textures.minecraft.net URL, base64 value or a player name fetched from Mojang) with optional leather armor colors. Horde mobs and bosses take `skin: <id>`; horde mobs also take `id` and `scale`, and `SUMMON` can summon a horde mob by id.
-- Russian preset: Little Eturnercus (horde zombie with the eturnercus skin) and the boss Mad Eturnercus (giant zombie with the same skin that summons Little Eturnercus).
+- Russian preset: Little eturnercus (horde zombie with the eturnercus skin) and the boss Mad eturnercus (giant zombie with the same skin that summons Little eturnercus).
 
 ## 1.1.1 (2026-11-21)
 

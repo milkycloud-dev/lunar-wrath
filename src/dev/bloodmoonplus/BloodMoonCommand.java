@@ -813,19 +813,14 @@ public final class BloodMoonCommand implements TabExecutor {
    }
 
    private void killmobs(CommandSender s, String[] a) {
-      Collection<EventManager.Session> all = this.plugin.events().sessions();
-      if (all.isEmpty()) {
-         this.m().send(s, "cmd.killed", "count", "0");
-      } else {
-         int removed = 0;
+      int removed = 0;
 
-         for (EventManager.Session ses : all) {
-            this.plugin.bosses().removeAll(ses.world);
-            removed += this.plugin.events().removeTagged(ses.world);
-         }
-
-         this.m().send(s, "cmd.killed", "count", String.valueOf(removed));
+      for (World w : Bukkit.getWorlds()) {
+         removed += this.plugin.bosses().removeAll(w);
+         removed += this.plugin.events().removeTagged(w);
       }
+
+      this.m().send(s, "cmd.killed", "count", String.valueOf(removed));
    }
 
    private void give(CommandSender s, String[] a) {
